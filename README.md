@@ -1,8 +1,29 @@
 # ⚡ CodeQuest — Web-Based Programming Learning Game
 
+[![Live HUD Preview](https://img.shields.io/badge/Live_HUD_Preview-GitHub_Pages-00f5a0?style=for-the-badge&logo=github)](https://dilipkumarprudhvi-a11y.github.io/CodeQuest/)
+[![Local Development Server](https://img.shields.io/badge/Local_Tomcat_URL-http%3A%2F%2Flocalhost%3A8080%2FCodeQuest-00d9f5?style=for-the-badge&logo=apache-tomcat)](http://localhost:8080/CodeQuest/)
+[![Jakarta EE 10](https://img.shields.io/badge/Jakarta_EE-10_Servlet_6.0-ffb800?style=for-the-badge&logo=java)](https://jakarta.ee/)
+[![Apache Tomcat 10.1](https://img.shields.io/badge/Apache_Tomcat-10.1-ff4444?style=for-the-badge&logo=apache-tomcat)](https://tomcat.apache.org/)
+
 > **Academic Submission Grade**: Enterprise Dynamic Web Project  
+> **Repository**: [https://github.com/dilipkumarprudhvi-a11y/CodeQuest](https://github.com/dilipkumarprudhvi-a11y/CodeQuest)  
 > **Technologies**: Jakarta EE 10 / Servlets, JSP (Scriptlets strictly, zero JSTL/EL), JDBC, MySQL, HTML5, CSS3, Web Audio API  
 > **Container**: Apache Tomcat 10.1 | **JDK**: Java 17 | **IDE**: Eclipse Enterprise IDE
+
+---
+
+## 🌐 Live Deployment & Development Links
+
+| Environment | Purpose | Direct URL |
+| :--- | :--- | :--- |
+| **Online Live HUD** | Interactive Web Preview (Particle Mesh & Web Audio Synth) | 🔗 [https://dilipkumarprudhvi-a11y.github.io/CodeQuest/](https://dilipkumarprudhvi-a11y.github.io/CodeQuest/) |
+| **Local Game Arena** | Full Dynamic Enterprise Runtime (Tomcat 10.1 + MySQL) | 🔗 [http://localhost:8080/CodeQuest/](http://localhost:8080/CodeQuest/) |
+| **Student Login** | Authenticate student warrior with session security | 🔗 [http://localhost:8080/CodeQuest/login.jsp](http://localhost:8080/CodeQuest/login.jsp) |
+| **Student Registration** | Create new cadet account with 0 XP & Level 1 default | 🔗 [http://localhost:8080/CodeQuest/register.jsp](http://localhost:8080/CodeQuest/register.jsp) |
+| **Missions Deck** | Java, SQL & DSA challenges with ACID evaluation | 🔗 [http://localhost:8080/CodeQuest/missions](http://localhost:8080/CodeQuest/missions) |
+| **Student Dashboard** | Real-time XP progress bar, rank title & mission log | 🔗 [http://localhost:8080/CodeQuest/dashboard](http://localhost:8080/CodeQuest/dashboard) |
+| **Global Leaderboard** | Real-time rankings & 3D Olympic Podium (Gold/Silver/Bronze) | 🔗 [http://localhost:8080/CodeQuest/leaderboard](http://localhost:8080/CodeQuest/leaderboard) |
+| **Admin Console** | Question vault, difficulty & XP bounty manager | 🔗 [http://localhost:8080/CodeQuest/admin-login.jsp](http://localhost:8080/CodeQuest/admin-login.jsp) |
 
 ---
 
@@ -35,6 +56,7 @@ CodeQuest is a high-octane gamified programming platform designed to transform t
 - **Web Audio API Synth Engine (`js/audio-synth.js`)**: Real-time procedural audio for button hovers, radio select blips, victory fanfares, and defeat buzzes. Includes persistent mute cookie. Zero external MP3/WAV dependencies!
 - **Interactive Canvas Mesh (`js/game-fx.js`)**: Dynamic constellation particle grid responding smoothly to layout dimensions.
 - **Strict Constraint Adherence**: **100% pure JSP scriptlets (`<% ... %>`, `<%= ... %>`)** — absolutely zero JSTL tags or JSP Expression Language `${...}`.
+- **OWASP Hardened**: HTML output encoding via `SecurityUtil.encodeHtml` against XSS, salted SHA-256 (`CQ256`) password hashing, session fixation countermeasures, and SQL exception suppression.
 
 ---
 
@@ -52,23 +74,25 @@ CodeQuest is a high-octane gamified programming platform designed to transform t
    `apache-tomcat-10.1.60\webapps\CodeQuest`
 2. Start Tomcat by running `startup.bat` from `apache-tomcat-10.1.60\bin\startup.bat`.
 3. Open your browser and navigate to:  
-   👉 **`http://localhost:8080/CodeQuest`**
+   👉 **`http://localhost:8080/CodeQuest/`**
 
 ### 3. Open in Eclipse IDE
-1. Launch Eclipse IDE for Enterprise Java (jee-2026-092).
+1. Launch Eclipse IDE for Enterprise Java.
 2. Go to **File -> Open Projects from File System...**
-3. Select `C:\Users\DILIP KUMAR\Development\CodeQuest`.
+3. Select this directory (`C:\Users\DILIP KUMAR\Development\CodeQuest`).
 4. Right-click project -> **Run As -> Run on Server** -> Select **Apache Tomcat v10.1**.
 
 ---
 
 ## 🔑 Default Credentials
 
-- **Admin Account**:
-  - Username: `admin`
-  - Password: `admin123`
-- **Pre-Seeded Sample Students**:
-  - `CyberKnight` / `pass123`
-  - `NeonCoder` / `pass123`
-  - Or register your own cadet from the `Initiate Quest` button!
+### Administrator Portal
+- **URL**: `http://localhost:8080/CodeQuest/admin-login.jsp`
+- **Username**: `admin`
+- **Password**: `admin123`
 
+### Seeded Student Warriors
+- `CyberKnight` / `Warrior123!` (Level 3 • 320 XP)
+- `NeonCoder` / `Warrior123!` (Level 3 • 250 XP)
+- `BinaryPhantom` / `Warrior123!` (Level 2 • 180 XP)
+- *(Or register your own new cadet from the registration portal!)*

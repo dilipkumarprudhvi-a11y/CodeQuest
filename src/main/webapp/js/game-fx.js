@@ -161,5 +161,17 @@ document.addEventListener('DOMContentLoaded', function() {
             progressFill.style.width = targetPercent + '%';
         }, 150);
     }
+
+    // 6. GitHub Pages Static Preview Toast Notification
+    if (window.location.hostname && window.location.hostname.endsWith('github.io')) {
+        const dynamicLinks = document.querySelectorAll('a[href$=".jsp"], a[href="missions"], a[href="leaderboard"], a[href="dashboard"]');
+        dynamicLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (window.GameAudio) window.GameAudio.playBlip();
+                window.showToast("⚡ GitHub Pages Static Preview: To execute dynamic servlets & save XP to MySQL, run locally on Apache Tomcat: http://localhost:8080/CodeQuest/", "info");
+            });
+        });
+    }
 });
 
