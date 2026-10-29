@@ -3,25 +3,32 @@
  * Zero external audio assets needed - synthesized in realtime via Web Audio API.
  */
 (function() {
+    'use strict';
     let audioCtx = null;
     let isMuted = false;
 
-    // Read cookie for persistent mute state
-    const match = document.cookie.match(new RegExp('(^| )codequest_muted=([^;]+)'));
-    if (match && match[2] === 'true') {
-        isMuted = true;
-    }
+    // Read cookie or localStorage for persistent mute state
+    try {
+        const match = document.cookie.match(new RegExp('(^| )codequest_muted=([^;]+)'));
+        if (match && match[2] === 'true') {
+            isMuted = true;
+        } else if (localStorage.getItem('cq_muted') === 'true') {
+            isMuted = true;
+        }
+    } catch (e) {}
 
     function initAudio() {
-        if (!audioCtx) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (AudioContext) {
-                audioCtx = new AudioContext();
+        try {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    audioCtx = new AudioContext();
+                }
             }
-        }
-        if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        } catch (e) {}
     }
 
     // Expose sound functions globally
@@ -31,7 +38,10 @@
         },
         toggleMute: function() {
             isMuted = !isMuted;
-            document.cookie = "codequest_muted=" + isMuted + "; path=/; max-age=" + (30 * 24 * 60 * 60);
+            try {
+                document.cookie = "codequest_muted=" + isMuted + "; path=/; max-age=" + (30 * 24 * 60 * 60);
+                localStorage.setItem('cq_muted', isMuted ? 'true' : 'false');
+            } catch (e) {}
             const btn = document.getElementById('sound-toggle-btn');
             if (btn) {
                 btn.classList.toggle('muted', isMuted);
@@ -66,8 +76,8 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.05); // A5
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.05);
                 gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
                 osc.connect(gain);
@@ -81,7 +91,7 @@
             initAudio();
             if (!audioCtx) return;
             try {
-                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 triumphant chord
+                const notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, idx) => {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
@@ -95,6 +105,9 @@
                     osc.stop(audioCtx.currentTime + (idx * 0.08) + 0.35);
                 });
             } catch (e) {}
+        },
+        playVictory: function() {
+            this.playSuccess();
         },
         playError: function() {
             if (isMuted) return;
@@ -114,12 +127,15 @@
                 osc.stop(audioCtx.currentTime + 0.22);
             } catch (e) {}
         },
+        playDefeat: function() {
+            this.playError();
+        },
         playLevelUp: function() {
             if (isMuted) return;
             initAudio();
             if (!audioCtx) return;
             try {
-                const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51]; // A major fanfare
+                const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51];
                 notes.forEach((freq, idx) => {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
@@ -159,4 +175,3 @@
         });
     });
 })();
-

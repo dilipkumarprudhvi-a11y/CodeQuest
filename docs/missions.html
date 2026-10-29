@@ -24,6 +24,7 @@
                 <li><a href="missions.html" class="active"><span>⚔️</span> Missions</a></li>
                 <li><a href="leaderboard.html"><span>🏆</span> Leaderboard</a></li>
                 <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
+                <li><a href="admin.html"><span>🛡️</span> Admin Console</a></li>
                 <li><a href="login.html"><span>🔑</span> Cadet Portal</a></li>
             </ul>
 
@@ -47,12 +48,13 @@
                         Correct answers grant XP bounties and level promotions!
                     </p>
 
-                    <!-- Filter Control Cluster -->
-                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px;">
+                    <!-- Filter Control Cluster & Reset Button -->
+                    <div style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 25px;">
                         <button class="filter-pill active" data-filter="All">All Domains</button>
                         <button class="filter-pill" data-filter="Java">Java</button>
                         <button class="filter-pill" data-filter="SQL">SQL</button>
                         <button class="filter-pill" data-filter="DSA">Data Structures</button>
+                        <button id="reset-progress-btn" class="btn btn-outline btn-sm" style="margin-left: 15px; border-color: rgba(255,255,255,0.2);" title="Reset solved status for all challenges">🔄 Reset Solved Missions</button>
                     </div>
                 </div>
 
@@ -73,7 +75,9 @@
                 <a href="missions.html">Missions</a>
                 <a href="leaderboard.html">Leaderboard</a>
                 <a href="dashboard.html">Dashboard</a>
+                <a href="admin.html">Admin Console</a>
                 <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
                 <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
             </div>
             <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
@@ -85,19 +89,30 @@
     <script src="js/game-fx.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const user = CodeQuestEngine.getCurrentUser();
+            let user = CodeQuestEngine.getCurrentUser();
             document.getElementById('hud-username').textContent = user.username;
             document.getElementById('hud-xp').textContent = user.xp;
 
-            const missions = CodeQuestEngine.getMissions();
+            let activeFilter = 'All';
             const container = document.getElementById('missions-container');
             const resultBox = document.getElementById('result-notification-box');
 
             function renderMissions(filterCategory = 'All') {
+                activeFilter = filterCategory;
+                user = CodeQuestEngine.getCurrentUser();
+                document.getElementById('hud-username').textContent = user.username;
+                document.getElementById('hud-xp').textContent = user.xp;
+
+                const missions = CodeQuestEngine.getMissions();
                 container.innerHTML = '';
                 const filtered = (filterCategory === 'All') 
                     ? missions 
                     : missions.filter(m => m.category.toLowerCase() === filterCategory.toLowerCase());
+
+                if (filtered.length === 0) {
+                    container.innerHTML = `<div class="card" style="text-align: center; padding: 40px; color: var(--text-muted); grid-column: 1 / -1;">No missions found in this domain.</div>`;
+                    return;
+                }
 
                 filtered.forEach(m => {
                     const isSolved = user.submissions && user.submissions[m.id];
@@ -107,7 +122,7 @@
                     card.className = `quest-card ${isSolved ? 'solved-quest' : ''}`;
                     card.setAttribute('data-category', m.category);
 
-                    let statusBadge = `<span class="badge badge-cyan">⚡ +${m.xp} XP</span>`;
+                    let statusBadge = `<span class="badge badge-cyan">⚡ +${m.xp} XP Bounty</span>`;
                     if (isSolved) {
                         statusBadge = subRecord.isCorrect 
                             ? `<span class="badge badge-emerald">✓ COMPLETED (+${subRecord.xpAwarded} XP)</span>`
@@ -152,21 +167,23 @@
 
                             <div style="margin-top: 20px;">
                                 ${isSolved 
-                                    ? `<button type="button" class="btn btn-outline" disabled style="opacity: 0.6; cursor: not-allowed; width: 100%;">🔒 Attempt Locked</button>`
+                                    ? `<button type="button" class="btn btn-outline" disabled style="opacity: 0.6; cursor: not-allowed; width: 100%;">🔒 Protocol Attempt Locked</button>`
                                     : `<button type="submit" class="btn btn-primary" style="width: 100%;">⚔️ Lock & Submit Answer</button>`
                                 }
                             </div>
                         </form>
                     `;
 
-                    // Add option click sound & select styling
+                    // Handle Option Selection
                     const labels = card.querySelectorAll('.option-item');
                     labels.forEach(lbl => {
-                        lbl.addEventListener('click', function() {
+                        lbl.addEventListener('click', function(e) {
                             if (isSolved) return;
                             labels.forEach(l => l.classList.remove('selected'));
                             this.classList.add('selected');
-                            if (window.GameAudio) window.GameAudio.playSelect();
+                            const radio = this.querySelector('input[type="radio"]');
+                            if (radio) radio.checked = true;
+                            if (window.GameAudio && window.GameAudio.playSelect) window.GameAudio.playSelect();
                         });
                     });
 
@@ -176,7 +193,7 @@
                         e.preventDefault();
                         const selectedRadio = form.querySelector('input[type="radio"]:checked');
                         if (!selectedRadio) {
-                            if (window.GameAudio) window.GameAudio.playError();
+                            if (window.GameAudio && window.GameAudio.playError) window.GameAudio.playError();
                             alert('Please select an option before submitting!');
                             return;
                         }
@@ -188,7 +205,7 @@
                             document.getElementById('hud-xp').textContent = result.totalXp;
 
                             if (result.isCorrect) {
-                                if (window.GameAudio) window.GameAudio.playVictory();
+                                if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
                                 resultBox.innerHTML = `
                                     <div class="alert alert-emerald" style="padding: 20px; border-radius: 12px; border: 1px solid var(--neon-emerald); background: rgba(0,245,160,0.15); box-shadow: 0 0 25px rgba(0,245,160,0.25);">
                                         <h3 style="color: var(--neon-emerald); margin-bottom: 8px;">🎉 Triumphant Solution!</h3>
@@ -197,7 +214,7 @@
                                     </div>
                                 `;
                             } else {
-                                if (window.GameAudio) window.GameAudio.playDefeat();
+                                if (window.GameAudio && window.GameAudio.playDefeat) window.GameAudio.playDefeat();
                                 resultBox.innerHTML = `
                                     <div class="alert alert-crimson" style="padding: 20px; border-radius: 12px; border: 1px solid var(--neon-crimson); background: rgba(255,59,92,0.15);">
                                         <h3 style="color: var(--neon-crimson); margin-bottom: 8px;">💀 Quest Failed!</h3>
@@ -207,9 +224,9 @@
                             }
                             resultBox.style.display = 'block';
                             resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                            renderMissions(filterCategory);
+                            renderMissions(activeFilter);
                         } else {
-                            if (window.GameAudio) window.GameAudio.playError();
+                            if (window.GameAudio && window.GameAudio.playError) window.GameAudio.playError();
                             alert(result.message);
                         }
                     });
@@ -226,12 +243,21 @@
                 p.addEventListener('click', function() {
                     pills.forEach(el => el.classList.remove('active'));
                     this.classList.add('active');
-                    if (window.GameAudio) window.GameAudio.playBlip();
+                    if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
                     renderMissions(this.getAttribute('data-filter'));
                 });
+            });
+
+            // Reset progress button
+            document.getElementById('reset-progress-btn').addEventListener('click', function() {
+                if (confirm('Reset your solved mission history to test again?')) {
+                    CodeQuestEngine.resetProgress();
+                    if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
+                    resultBox.style.display = 'none';
+                    renderMissions(activeFilter);
+                }
             });
         });
     </script>
 </body>
 </html>
-
