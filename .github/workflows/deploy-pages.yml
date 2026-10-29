@@ -1,4 +1,4 @@
-name: Deploy CodeQuest Static HUD to GitHub Pages
+name: Deploy CodeQuest Live Application to GitHub Pages
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'src/main/webapp'
+          path: 'docs'
 
       - name: Deploy to GitHub Pages
         id: deployment

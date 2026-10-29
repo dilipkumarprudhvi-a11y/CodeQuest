@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Game-Based Programming Arena (Live Application)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <canvas id="cyber-canvas"></canvas>
+
+    <div class="hud-layout">
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon">CQ</div>
+                <div class="brand-text">CodeQuest</div>
+                <span class="brand-badge">LIVE APP</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="active"><span>🏠</span> Home</a></li>
+                <li><a href="missions.html"><span>⚔️</span> Missions</a></li>
+                <li><a href="leaderboard.html"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
+                <li><a href="login.html"><span>🔑</span> Cadet Portal</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <a href="missions.html" class="btn btn-primary btn-sm">⚡ Play Arena</a>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-wrapper">
+            <section class="hero">
+                <div class="hero-pill">
+                    <span class="pulse-dot"></span>
+                    <span>OFFICIAL GITHUB PAGES LIVE APPLICATION</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Level Up Your Code. <br>
+                    Conquer the <span class="highlight-emerald">Programming</span> <span class="highlight-cyan">Colosseum</span>.
+                </h1>
+
+                <p class="hero-lead">
+                    Transform abstract syntax into real-time combat experience. Solve Java, SQL, and Data Structure 
+                    challenges, climb the global ranking ladder, unlock legendary titles, and prove your algorithmic supremacy.
+                </p>
+
+                <div class="hero-cta">
+                    <a href="missions.html" class="btn btn-primary btn-lg">⚡ Play Live Missions</a>
+                    <a href="leaderboard.html" class="btn btn-outline-cyan btn-lg">🏆 View 3D Podium</a>
+                    <a href="dashboard.html" class="btn btn-cyber btn-lg">📊 Cadet Cockpit</a>
+                    <a href="login.html" class="btn btn-admin btn-lg">🔑 Cadet Login</a>
+                </div>
+
+                <!-- Live Metrics Ticker -->
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-value emerald">100%</div>
+                        <div class="stat-label">Gamified Progression</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value cyan">3+</div>
+                        <div class="stat-label">Core Tech Domains</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value gold">680+</div>
+                        <div class="stat-label">Available XP Bounty</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value crimson">Web Audio</div>
+                        <div class="stat-label">Procedural Synth FX</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Grid -->
+            <section class="container">
+                <div class="section-header">
+                    <span class="section-tagline">Battle-Ready Architecture</span>
+                    <h2 class="section-title">The CodeQuest Protocol</h2>
+                    <p class="section-desc">
+                        Full-stack gamified learning system. Play instantly in this browser web application, or deploy to Apache Tomcat 10.1 for enterprise Jakarta EE servlet + MySQL evaluation.
+                    </p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧩</div>
+                        <h3 class="feature-title">Algorithmic Quests</h3>
+                        <p class="feature-desc">
+                            Tackle hand-crafted challenges in Java fundamentals, relational SQL optimization, 
+                            and advanced Data Structures with strict single-attempt evaluation.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Real-Time XP Progress</h3>
+                        <p class="feature-desc">
+                            Earn bounties on every victory. Advance from Novice Cadet (Level 1) to Cyber Grandmaster 
+                            (Level 5) with animated progression metrics.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3 class="feature-title">3D Olympic Podium</h3>
+                        <p class="feature-desc">
+                            Live competitive scoreboard featuring 3D gold crown podium elevation for the Top 3 
+                            champions and dynamic rank tracking.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔊</div>
+                        <h3 class="feature-title">Web Audio Synthesizer</h3>
+                        <p class="feature-desc">
+                            Procedural real-time sound synthesis delivers acoustic feedback on quest selections, 
+                            victories, and level-ups with zero third-party audio bloat.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="missions.html">Missions</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="login.html">Login</a>
+                <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
+            </div>
+            <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script src="js/audio-synth.js"></script>
+    <script src="js/codequest-live.js"></script>
+    <script src="js/game-fx.js"></script>
+</body>
+</html>

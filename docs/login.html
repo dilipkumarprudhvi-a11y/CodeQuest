@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Cadet Authentication (Live)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <canvas id="cyber-canvas"></canvas>
+
+    <div class="hud-layout">
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon">CQ</div>
+                <div class="brand-text">CodeQuest</div>
+                <span class="brand-badge">LIVE APP</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html"><span>🏠</span> Home</a></li>
+                <li><a href="missions.html"><span>⚔️</span> Missions</a></li>
+                <li><a href="leaderboard.html"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
+                <li><a href="login.html" class="active"><span>🔑</span> Cadet Portal</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <a href="register.html" class="btn btn-outline btn-sm">Join Roster</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content-wrapper" style="display: flex; align-items: center; justify-content: center; padding: 40px 20px;">
+            <div class="card" style="max-width: 480px; width: 100%; padding: 35px; border: 1px solid rgba(0, 245, 160, 0.25); box-shadow: 0 10px 40px rgba(0,0,0,0.6);">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">⚡</div>
+                    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--neon-emerald);">Cadet Check-In</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Enter your warrior credentials to enter the combat grid.</p>
+                </div>
+
+                <form id="login-form">
+                    <div class="form-group" style="margin-bottom: 18px;">
+                        <label class="form-label">Cadet Identifier (Username or Email)</label>
+                        <input type="text" id="username-input" class="form-control" required placeholder="e.g. CyberKnight or Cadet_Dilip" value="Cadet_Dilip">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="form-label">Access Passphrase</label>
+                        <input type="password" id="password-input" class="form-control" required placeholder="Enter password" value="Warrior123!">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 800; font-size: 1.05rem;">
+                        ⚡ Access Combat Cockpit
+                    </button>
+                </form>
+
+                <!-- Quick Presets -->
+                <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center;">
+                    <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 10px;">Quick Test Profiles:</span>
+                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-outline btn-sm quick-btn" data-user="CyberKnight">CyberKnight</button>
+                        <button type="button" class="btn btn-outline btn-sm quick-btn" data-user="NeonCoder">NeonCoder</button>
+                        <button type="button" class="btn btn-outline btn-sm quick-btn" data-user="Cadet_Dilip">Cadet_Dilip</button>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted);">New Cadet?</span> 
+                    <a href="register.html" style="color: var(--neon-cyan); font-weight: 700; margin-left: 5px;">Register Account →</a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="missions.html">Missions</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="login.html">Login</a>
+                <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
+            </div>
+            <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script src="js/audio-synth.js"></script>
+    <script src="js/codequest-live.js"></script>
+    <script src="js/game-fx.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('login-form');
+            const usernameInput = document.getElementById('username-input');
+
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    usernameInput.value = this.getAttribute('data-user');
+                    if (window.GameAudio) window.GameAudio.playBlip();
+                });
+            });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const uname = usernameInput.value.trim();
+                if (!uname) return;
+
+                CodeQuestEngine.login(uname);
+                if (window.GameAudio) window.GameAudio.playVictory();
+                window.location.href = 'dashboard.html';
+            });
+        });
+    </script>
+</body>
+</html>
