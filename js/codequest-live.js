@@ -7,7 +7,7 @@
     'use strict';
 
     // Default Seeded Missions (mirrors database/codequest_db.sql)
-    const DEFAULT_MISSIONS = [
+    const INITIAL_MISSIONS = [
         {
             id: 1,
             title: 'String Immutability Protocol',
@@ -146,12 +146,25 @@
     }
 
     // Storage Helpers
+    function getStoredMissions() {
+        try {
+            const data = localStorage.getItem('cq_missions');
+            if (data) return JSON.parse(data);
+        } catch (e) {}
+        localStorage.setItem('cq_missions', JSON.stringify(INITIAL_MISSIONS));
+        return INITIAL_MISSIONS;
+    }
+
+    function saveMissions(list) {
+        localStorage.setItem('cq_missions', JSON.stringify(list));
+    }
+
     function getStoredUser() {
-        const data = localStorage.getItem('cq_current_user');
-        if (data) {
-            try { return JSON.parse(data); } catch(e) {}
-        }
-        // Default guest user
+        try {
+            const data = localStorage.getItem('cq_current_user');
+            if (data) return JSON.parse(data);
+        } catch (e) {}
+
         const guest = {
             id: 99,
             username: 'Cadet_Dilip',
@@ -189,7 +202,7 @@
     // Public API
     window.CodeQuestEngine = {
         getMissions: function() {
-            return DEFAULT_MISSIONS;
+            return getStoredMissions();
         },
         getCurrentUser: function() {
             return getStoredUser();
@@ -198,15 +211,25 @@
         getLeaderboard: function() {
             return getAllPlayers();
         },
-        login: function(username, password) {
+        login: function(username) {
             let user = getStoredUser();
             user.username = username || 'WarriorCadet';
+            user.email = `${user.username.toLowerCase()}@codequest.dev`;
             saveUser(user);
             return user;
         },
         logout: function() {
             localStorage.removeItem('cq_current_user');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
+        },
+        resetProgress: function() {
+            const user = getStoredUser();
+            user.xp = 0;
+            user.level = 1;
+            user.submissions = {};
+            saveUser(user);
+            saveMissions(INITIAL_MISSIONS);
+            return user;
         },
         submitMission: function(missionId, optionChar) {
             const user = getStoredUser();
@@ -215,15 +238,16 @@
             if (user.submissions[missionId]) {
                 return {
                     status: 'ALREADY_SUBMITTED',
-                    message: 'Mission already attempted! In accordance with CodeQuest protocols, each challenge permits exactly one submission.',
+                    message: 'Mission already attempted! Each challenge permits exactly one submission.',
                     submission: user.submissions[missionId]
                 };
             }
 
-            const mission = DEFAULT_MISSIONS.find(m => m.id === Number(missionId));
-            if (!mission) return { status: 'ERROR', message: 'Mission not found.' };
+            const missions = getStoredMissions();
+            const mission = missions.find(m => m.id === Number(missionId));
+            if (!mission) return { status: 'ERROR', message: 'Mission protocol not found.' };
 
-            const isCorrect = (optionChar.toUpperCase() === mission.correct);
+            const isCorrect = (optionChar.toUpperCase() === mission.correct.toUpperCase());
             const xpGained = isCorrect ? mission.xp : 0;
             const oldLevel = user.level;
 
@@ -258,7 +282,32 @@
                 correctOption: mission.correct,
                 selectedOption: optionChar.toUpperCase()
             };
+        },
+        addMission: function(m) {
+            const list = getStoredMissions();
+            const newId = list.length > 0 ? Math.max(...list.map(x => x.id)) + 1 : 1;
+            const created = {
+                id: newId,
+                title: m.title,
+                description: m.description,
+                category: m.category,
+                difficulty: m.difficulty,
+                optionA: m.optionA,
+                optionB: m.optionB,
+                optionC: m.optionC,
+                optionD: m.optionD,
+                correct: m.correct,
+                xp: Number(m.xp) || 50
+            };
+            list.push(created);
+            saveMissions(list);
+            return created;
+        },
+        deleteMission: function(id) {
+            let list = getStoredMissions();
+            list = list.filter(m => m.id !== Number(id));
+            saveMissions(list);
+            return list;
         }
     };
 })();
-

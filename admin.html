@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Admin Command Center (Live)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+</head>
+<body>
+    <canvas id="cyber-canvas"></canvas>
+
+    <div class="hud-layout">
+        <!-- Main Navigation Bar -->
+        <nav class="navbar" style="border-bottom-color: rgba(255, 59, 92, 0.3);">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon" style="background: var(--neon-crimson); box-shadow: 0 0 15px rgba(255,59,92,0.4);">🛡️</div>
+                <div class="brand-text">CodeQuest <span style="color: var(--neon-crimson); font-size: 0.9rem;">ADMIN</span></div>
+                <span class="brand-badge" style="background: rgba(255,59,92,0.2); color: var(--neon-crimson);">ROOT ACCESS</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html"><span>🏠</span> Home</a></li>
+                <li><a href="missions.html"><span>⚔️</span> Missions</a></li>
+                <li><a href="leaderboard.html"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
+                <li><a href="admin.html" class="active"><span>🛡️</span> Admin Console</a></li>
+                <li><a href="login.html"><span>🔑</span> Cadet Portal</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <a href="missions.html" class="btn btn-outline btn-sm">Exit Admin</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content-wrapper">
+            <div class="container">
+                <!-- Admin Header -->
+                <div class="section-header">
+                    <span class="section-tagline" style="color: var(--neon-crimson);">System Operations Protocol</span>
+                    <h2 class="section-title">Question Vault & Mission Control</h2>
+                    <p class="section-desc">
+                        Manage active combat challenges, inspect system telemetry, and dispatch new algorithmic missions.
+                    </p>
+                </div>
+
+                <!-- Telemetry Cards -->
+                <div class="hero-stats" style="margin-bottom: 35px;">
+                    <div class="stat-card" style="border-color: rgba(255,59,92,0.25);">
+                        <div class="stat-value crimson" id="telemetry-count">9</div>
+                        <div class="stat-label">Active Missions</div>
+                    </div>
+                    <div class="stat-card" style="border-color: rgba(0,245,160,0.25);">
+                        <div class="stat-value emerald">ACTIVE</div>
+                        <div class="stat-label">InnoDB Transaction Pool</div>
+                    </div>
+                    <div class="stat-card" style="border-color: rgba(0,217,245,0.25);">
+                        <div class="stat-value cyan">6.0</div>
+                        <div class="stat-label">Jakarta Servlet Protocol</div>
+                    </div>
+                    <div class="stat-card" style="border-color: rgba(255,184,0,0.25);">
+                        <div class="stat-value gold">100%</div>
+                        <div class="stat-label">OWASP Hardened</div>
+                    </div>
+                </div>
+
+                <!-- Add Question Form -->
+                <div class="card" style="margin-bottom: 40px; border-left: 4px solid var(--neon-crimson);">
+                    <div class="card-header">
+                        <h3 class="card-title">⚡ Dispatch New Challenge</h3>
+                        <span class="badge badge-crimson">Create Mission</span>
+                    </div>
+
+                    <form id="add-mission-form" style="padding-top: 15px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label class="form-label">Mission Title</label>
+                                <input type="text" id="m-title" class="form-control" required placeholder="e.g. Thread Synchronization Locks">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Domain Category</label>
+                                <select id="m-category" class="form-control">
+                                    <option value="Java">Java</option>
+                                    <option value="SQL">SQL</option>
+                                    <option value="DSA">DSA</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Difficulty Rating</label>
+                                <select id="m-diff" class="form-control">
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Hard">Hard</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">XP Bounty</label>
+                                <input type="number" id="m-xp" class="form-control" required value="75" min="10" max="500">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label class="form-label">Problem Scenario / Description</label>
+                            <textarea id="m-desc" class="form-control" rows="3" required placeholder="Detailed challenge explanation..."></textarea>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label class="form-label">Option A</label>
+                                <input type="text" id="m-optA" class="form-control" required placeholder="Option A text">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Option B</label>
+                                <input type="text" id="m-optB" class="form-control" required placeholder="Option B text">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Option C</label>
+                                <input type="text" id="m-optC" class="form-control" required placeholder="Option C text">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Option D</label>
+                                <input type="text" id="m-optD" class="form-control" required placeholder="Option D text">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap;">
+                            <div class="form-group" style="min-width: 200px;">
+                                <label class="form-label">Designated Correct Protocol</label>
+                                <select id="m-correct" class="form-control" style="font-weight: 700; color: var(--neon-emerald);">
+                                    <option value="A">Option A</option>
+                                    <option value="B">Option B</option>
+                                    <option value="C">Option C</option>
+                                    <option value="D">Option D</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-admin btn-lg" style="flex: 1;">
+                                🛡️ Authorize & Publish Mission
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Question Vault -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Existing Mission Vault</h3>
+                        <span class="badge badge-outline" id="vault-count-badge">9 Protocols Live</span>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th>Mission Title</th>
+                                <th>Category</th>
+                                <th>Difficulty</th>
+                                <th>Correct</th>
+                                <th>XP Bounty</th>
+                                <th style="width: 90px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vault-tbody">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="missions.html">Missions</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="admin.html">Admin Console</a>
+                <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
+            </div>
+            <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script src="js/audio-synth.js"></script>
+    <script src="js/codequest-live.js"></script>
+    <script src="js/game-fx.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tbody = document.getElementById('vault-tbody');
+            const form = document.getElementById('add-mission-form');
+
+            function renderVault() {
+                const list = CodeQuestEngine.getMissions();
+                document.getElementById('telemetry-count').textContent = list.length;
+                document.getElementById('vault-count-badge').textContent = `${list.length} Protocols Live`;
+                tbody.innerHTML = '';
+
+                list.forEach(m => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>#${m.id}</strong></td>
+                        <td style="font-weight: 700;">${m.title}</td>
+                        <td><span class="badge badge-outline">${m.category}</span></td>
+                        <td><span class="badge badge-outline">${m.difficulty}</span></td>
+                        <td style="color: var(--neon-emerald); font-weight: 800;">[${m.correct}]</td>
+                        <td style="color: var(--neon-gold); font-weight: 800;">⚡ ${m.xp} XP</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm delete-btn" data-id="${m.id}" style="color: var(--neon-crimson); border-color: rgba(255,59,92,0.3); padding: 4px 10px;">
+                                🗑️ Delete
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Attach delete handlers
+                tbody.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        if (confirm(`Authorize decommissioning of Mission #${id}?`)) {
+                            CodeQuestEngine.deleteMission(id);
+                            if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
+                            renderVault();
+                        }
+                    });
+                });
+            }
+
+            renderVault();
+
+            // Handle Add Form
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const title = document.getElementById('m-title').value.trim();
+                const desc = document.getElementById('m-desc').value.trim();
+                const cat = document.getElementById('m-category').value;
+                const diff = document.getElementById('m-diff').value;
+                const xp = document.getElementById('m-xp').value;
+                const optA = document.getElementById('m-optA').value.trim();
+                const optB = document.getElementById('m-optB').value.trim();
+                const optC = document.getElementById('m-optC').value.trim();
+                const optD = document.getElementById('m-optD').value.trim();
+                const correct = document.getElementById('m-correct').value;
+
+                CodeQuestEngine.addMission({
+                    title: title,
+                    description: desc,
+                    category: cat,
+                    difficulty: diff,
+                    xp: xp,
+                    optionA: optA,
+                    optionB: optB,
+                    optionC: optC,
+                    optionD: optD,
+                    correct: correct
+                });
+
+                if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
+                alert(`Mission "${title}" authorized and deployed to active combat deck!`);
+                form.reset();
+                renderVault();
+            });
+        });
+    </script>
+</body>
+</html>
