@@ -1,0 +1,14 @@
+# Compiled class files and build artifacts
+target/
+*.class
+
+# Log files
+*.log
+
+# OS metadata
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.bak

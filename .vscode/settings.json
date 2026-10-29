@@ -1,0 +1,16 @@
+{
+    "java.project.sourcePaths": [
+        "src/main/java"
+    ],
+    "java.project.outputPath": "src/main/webapp/WEB-INF/classes",
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "java.project.referencedLibraries": [
+        "src/main/webapp/WEB-INF/lib/*.jar"
+    ],
+    "files.associations": {
+        "*.jsp": "jsp"
+    },
+    "html.validate.scripts": false,
+    "html.validate.styles": false,
+    "css.lint.compatibleVendorPrefixes": "ignore"
+}

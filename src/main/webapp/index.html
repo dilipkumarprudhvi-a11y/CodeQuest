@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Game-Based Programming Arena</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <!-- Interactive Background Canvas -->
+    <canvas id="cyber-canvas"></canvas>
+
+    <div class="hud-layout">
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon">CQ</div>
+                <div class="brand-text">CodeQuest</div>
+                <span class="brand-badge">HUD v2.4</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="active"><span>🏠</span> Home</a></li>
+                <li><a href="missions"><span>⚔️</span> Missions</a></li>
+                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="login.jsp"><span>🔑</span> Student Portal</a></li>
+                <li><a href="admin-login.jsp"><span>🛡️</span> Admin Console</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <a href="register.jsp" class="btn btn-primary btn-sm">Initiate Quest</a>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-wrapper">
+            <!-- Hero Showcase Section -->
+            <section class="hero">
+                <div class="hero-pill">
+                    <span class="pulse-dot"></span>
+                    <span>NEXT-GEN GAMIFIED CS MASTERY ARENA</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Level Up Your Code. <br>
+                    Conquer the <span class="highlight-emerald">Programming</span> <span class="highlight-cyan">Colosseum</span>.
+                </h1>
+
+                <p class="hero-lead">
+                    Transform abstract syntax into real-time combat experience. Solve Java, SQL, and Data Structure 
+                    challenges, climb the global ranking ladder, unlock legendary titles, and prove your algorithmic supremacy.
+                </p>
+
+                <div class="hero-cta">
+                    <a href="register.jsp" class="btn btn-primary btn-lg">⚡ Register Student Account</a>
+                    <a href="login.jsp" class="btn btn-outline-cyan btn-lg">🔑 Access Student Login</a>
+                    <a href="missions" class="btn btn-cyber btn-lg">🎯 Inspect Missions</a>
+                    <a href="admin-login.jsp" class="btn btn-admin btn-lg">🛡️ Admin Command</a>
+                </div>
+
+                <!-- Live Metrics Ticker -->
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-value emerald">100%</div>
+                        <div class="stat-label">Gamified Progression</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value cyan">3+</div>
+                        <div class="stat-label">Core Tech Domains</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value gold">500+</div>
+                        <div class="stat-label">Available XP Bounty</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value crimson">ACID</div>
+                        <div class="stat-label">Transactional Engine</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Modules Feature Deck -->
+            <section class="container">
+                <div class="section-header">
+                    <span class="section-tagline">Battle-Ready Architecture</span>
+                    <h2 class="section-title">The CodeQuest Protocol</h2>
+                    <p class="section-desc">
+                        Built from ground-up using pure Jakarta Servlets, scriptlet-driven JSP architecture, 
+                        and transactional JDBC persistence for true low-latency responsiveness.
+                    </p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧩</div>
+                        <h3 class="feature-title">Algorithmic Quests</h3>
+                        <p class="feature-desc">
+                            Tackle hand-crafted challenges in Java fundamentals, relational SQL optimization, 
+                            and advanced Data Structures with instant deterministic evaluation.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">XP & Dynamic Levels</h3>
+                        <p class="feature-desc">
+                            Earn instant experience points per solved quest. Watch your combat tier advance 
+                            from Novice Recruit to Grandmaster Architect with animated progress metrics.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3 class="feature-title">Live Global Arena</h3>
+                        <p class="feature-desc">
+                            Compete head-to-head on the public leaderboard. Dominate the top 3 gold, silver, 
+                            and bronze podiums updated in real time upon every submission.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3 class="feature-title">One-Attempt Security</h3>
+                        <p class="feature-desc">
+                            Every mission permits exactly one official attempt. Backed by MySQL InnoDB transactions 
+                            to ensure atomic submission recording and zero duplicate exploits.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3 class="feature-title">Admin Forge</h3>
+                        <p class="feature-desc">
+                            Administrators possess an isolated command console to dynamically engineer new missions, 
+                            configure XP rewards, and audit database telemetry.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎧</div>
+                        <h3 class="feature-title">Sensory HUD Experience</h3>
+                        <p class="feature-desc">
+                            Real-time Web Audio synthesis delivers tactile acoustic feedback on quest selections, 
+                            victories, and level-ups with zero third-party bloat.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="missions">Missions</a>
+                <a href="leaderboard">Leaderboard</a>
+                <a href="login.jsp">Student Portal</a>
+                <a href="admin-login.jsp">Admin Console</a>
+            </div>
+            <p>&copy; 2026 CodeQuest Learning Game. Built with Jakarta Servlets, JDBC, and MySQL.</p>
+        </footer>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script src="js/audio-synth.js"></script>
+    <script src="js/game-fx.js"></script>
+</body>
+</html>
+
