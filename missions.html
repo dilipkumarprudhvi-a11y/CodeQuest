@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Missions Arena (Live)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <canvas id="cyber-canvas"></canvas>
+
+    <div class="hud-layout">
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon">CQ</div>
+                <div class="brand-text">CodeQuest</div>
+                <span class="brand-badge">LIVE APP</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html"><span>🏠</span> Home</a></li>
+                <li><a href="missions.html" class="active"><span>⚔️</span> Missions</a></li>
+                <li><a href="leaderboard.html"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
+                <li><a href="login.html"><span>🔑</span> Cadet Portal</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div id="user-hud-badge" class="badge badge-emerald" style="padding: 6px 12px; font-weight: 700;">
+                    Cadet: <span id="hud-username">Dilip</span> | ⚡ <span id="hud-xp">0</span> XP
+                </div>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content-wrapper">
+            <div class="container">
+                <!-- Page Header & Filters -->
+                <div class="section-header">
+                    <span class="section-tagline">Combat Training Deck</span>
+                    <h2 class="section-title">Active Programming Missions</h2>
+                    <p class="section-desc">
+                        Select your challenge below. Submissions are strictly limited to one attempt per challenge. 
+                        Correct answers grant XP bounties and level promotions!
+                    </p>
+
+                    <!-- Filter Control Cluster -->
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px;">
+                        <button class="filter-pill active" data-filter="All">All Domains</button>
+                        <button class="filter-pill" data-filter="Java">Java</button>
+                        <button class="filter-pill" data-filter="SQL">SQL</button>
+                        <button class="filter-pill" data-filter="DSA">Data Structures</button>
+                    </div>
+                </div>
+
+                <!-- Mission Result Notification Container -->
+                <div id="result-notification-box" style="display: none; margin-bottom: 30px;"></div>
+
+                <!-- Missions Grid -->
+                <div id="missions-container" class="quests-deck">
+                    <!-- Injected dynamically via codequest-live.js -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="missions.html">Missions</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="login.html">Login</a>
+                <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
+            </div>
+            <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script src="js/audio-synth.js"></script>
+    <script src="js/codequest-live.js"></script>
+    <script src="js/game-fx.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = CodeQuestEngine.getCurrentUser();
+            document.getElementById('hud-username').textContent = user.username;
+            document.getElementById('hud-xp').textContent = user.xp;
+
+            const missions = CodeQuestEngine.getMissions();
+            const container = document.getElementById('missions-container');
+            const resultBox = document.getElementById('result-notification-box');
+
+            function renderMissions(filterCategory = 'All') {
+                container.innerHTML = '';
+                const filtered = (filterCategory === 'All') 
+                    ? missions 
+                    : missions.filter(m => m.category.toLowerCase() === filterCategory.toLowerCase());
+
+                filtered.forEach(m => {
+                    const isSolved = user.submissions && user.submissions[m.id];
+                    const subRecord = isSolved ? user.submissions[m.id] : null;
+
+                    const card = document.createElement('div');
+                    card.className = `quest-card ${isSolved ? 'solved-quest' : ''}`;
+                    card.setAttribute('data-category', m.category);
+
+                    let statusBadge = `<span class="badge badge-cyan">⚡ +${m.xp} XP</span>`;
+                    if (isSolved) {
+                        statusBadge = subRecord.isCorrect 
+                            ? `<span class="badge badge-emerald">✓ COMPLETED (+${subRecord.xpAwarded} XP)</span>`
+                            : `<span class="badge badge-crimson">✗ FAILED (0 XP)</span>`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="quest-header">
+                            <div>
+                                <span class="badge badge-outline">${m.category}</span>
+                                <span class="badge badge-outline">${m.difficulty}</span>
+                            </div>
+                            <div>${statusBadge}</div>
+                        </div>
+
+                        <h3 class="quest-title">${m.title}</h3>
+                        <p class="quest-desc">${m.description}</p>
+
+                        <form class="quest-form" data-mission-id="${m.id}">
+                            <div class="options-cluster">
+                                <label class="option-item ${isSolved && subRecord.selectedOption === 'A' ? 'selected' : ''}">
+                                    <input type="radio" name="opt_${m.id}" value="A" ${isSolved ? 'disabled' : ''} ${isSolved && subRecord.selectedOption === 'A' ? 'checked' : ''}>
+                                    <span class="opt-key">A</span>
+                                    <span class="opt-text">${m.optionA}</span>
+                                </label>
+                                <label class="option-item ${isSolved && subRecord.selectedOption === 'B' ? 'selected' : ''}">
+                                    <input type="radio" name="opt_${m.id}" value="B" ${isSolved ? 'disabled' : ''} ${isSolved && subRecord.selectedOption === 'B' ? 'checked' : ''}>
+                                    <span class="opt-key">B</span>
+                                    <span class="opt-text">${m.optionB}</span>
+                                </label>
+                                <label class="option-item ${isSolved && subRecord.selectedOption === 'C' ? 'selected' : ''}">
+                                    <input type="radio" name="opt_${m.id}" value="C" ${isSolved ? 'disabled' : ''} ${isSolved && subRecord.selectedOption === 'C' ? 'checked' : ''}>
+                                    <span class="opt-key">C</span>
+                                    <span class="opt-text">${m.optionC}</span>
+                                </label>
+                                <label class="option-item ${isSolved && subRecord.selectedOption === 'D' ? 'selected' : ''}">
+                                    <input type="radio" name="opt_${m.id}" value="D" ${isSolved ? 'disabled' : ''} ${isSolved && subRecord.selectedOption === 'D' ? 'checked' : ''}>
+                                    <span class="opt-key">D</span>
+                                    <span class="opt-text">${m.optionD}</span>
+                                </label>
+                            </div>
+
+                            <div style="margin-top: 20px;">
+                                ${isSolved 
+                                    ? `<button type="button" class="btn btn-outline" disabled style="opacity: 0.6; cursor: not-allowed; width: 100%;">🔒 Attempt Locked</button>`
+                                    : `<button type="submit" class="btn btn-primary" style="width: 100%;">⚔️ Lock & Submit Answer</button>`
+                                }
+                            </div>
+                        </form>
+                    `;
+
+                    // Add option click sound & select styling
+                    const labels = card.querySelectorAll('.option-item');
+                    labels.forEach(lbl => {
+                        lbl.addEventListener('click', function() {
+                            if (isSolved) return;
+                            labels.forEach(l => l.classList.remove('selected'));
+                            this.classList.add('selected');
+                            if (window.GameAudio) window.GameAudio.playSelect();
+                        });
+                    });
+
+                    // Handle Form Submission
+                    const form = card.querySelector('.quest-form');
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        const selectedRadio = form.querySelector('input[type="radio"]:checked');
+                        if (!selectedRadio) {
+                            if (window.GameAudio) window.GameAudio.playError();
+                            alert('Please select an option before submitting!');
+                            return;
+                        }
+
+                        const choice = selectedRadio.value;
+                        const result = CodeQuestEngine.submitMission(m.id, choice);
+
+                        if (result.status === 'SUCCESS') {
+                            document.getElementById('hud-xp').textContent = result.totalXp;
+
+                            if (result.isCorrect) {
+                                if (window.GameAudio) window.GameAudio.playVictory();
+                                resultBox.innerHTML = `
+                                    <div class="alert alert-emerald" style="padding: 20px; border-radius: 12px; border: 1px solid var(--neon-emerald); background: rgba(0,245,160,0.15); box-shadow: 0 0 25px rgba(0,245,160,0.25);">
+                                        <h3 style="color: var(--neon-emerald); margin-bottom: 8px;">🎉 Triumphant Solution!</h3>
+                                        <p>Protocol verified successfully. You earned <strong>+${result.xpAwarded} XP</strong>! Your total bounty is now <strong>${result.totalXp} XP</strong>.</p>
+                                        ${result.leveledUp ? `<div class="badge badge-gold" style="margin-top: 10px; font-size: 1rem; padding: 6px 14px;">⚡ PROMOTION ACHIEVED: Level ${result.newLevel} — ${result.tierTitle}!</div>` : ''}
+                                    </div>
+                                `;
+                            } else {
+                                if (window.GameAudio) window.GameAudio.playDefeat();
+                                resultBox.innerHTML = `
+                                    <div class="alert alert-crimson" style="padding: 20px; border-radius: 12px; border: 1px solid var(--neon-crimson); background: rgba(255,59,92,0.15);">
+                                        <h3 style="color: var(--neon-crimson); margin-bottom: 8px;">💀 Quest Failed!</h3>
+                                        <p>Selected Option <strong>[${result.selectedOption}]</strong> was incorrect. The correct protocol choice was <strong>[${result.correctOption}]</strong>. Zero XP awarded.</p>
+                                    </div>
+                                `;
+                            }
+                            resultBox.style.display = 'block';
+                            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            renderMissions(filterCategory);
+                        } else {
+                            if (window.GameAudio) window.GameAudio.playError();
+                            alert(result.message);
+                        }
+                    });
+
+                    container.appendChild(card);
+                });
+            }
+
+            renderMissions('All');
+
+            // Category filter pills
+            const pills = document.querySelectorAll('.filter-pill');
+            pills.forEach(p => {
+                p.addEventListener('click', function() {
+                    pills.forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                    if (window.GameAudio) window.GameAudio.playBlip();
+                    renderMissions(this.getAttribute('data-filter'));
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Join Roster Registration (Live)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <canvas id="cyber-canvas"></canvas>
+
+    <div class="hud-layout">
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon">CQ</div>
+                <div class="brand-text">CodeQuest</div>
+                <span class="brand-badge">LIVE APP</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html"><span>🏠</span> Home</a></li>
+                <li><a href="missions.html"><span>⚔️</span> Missions</a></li>
+                <li><a href="leaderboard.html"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
+                <li><a href="login.html"><span>🔑</span> Cadet Portal</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <a href="login.html" class="btn btn-outline btn-sm">Cadet Login</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content-wrapper" style="display: flex; align-items: center; justify-content: center; padding: 40px 20px;">
+            <div class="card" style="max-width: 480px; width: 100%; padding: 35px; border: 1px solid rgba(0, 217, 245, 0.25); box-shadow: 0 10px 40px rgba(0,0,0,0.6);">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🛡️</div>
+                    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--neon-cyan);">Join Warrior Roster</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Enlist as a new cadet with 0 XP at Combat Level 1.</p>
+                </div>
+
+                <form id="reg-form">
+                    <div class="form-group" style="margin-bottom: 18px;">
+                        <label class="form-label">Cadet Call-Sign (Username)</label>
+                        <input type="text" id="reg-username" class="form-control" required placeholder="e.g. ShadowCoder">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 18px;">
+                        <label class="form-label">Comms Address (Email)</label>
+                        <input type="email" id="reg-email" class="form-control" required placeholder="cadet@example.com">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 18px;">
+                        <label class="form-label">Security Passphrase</label>
+                        <input type="password" id="reg-pass" class="form-control" required placeholder="Min 6 characters">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="form-label">Confirm Passphrase</label>
+                        <input type="password" id="reg-confirm" class="form-control" required placeholder="Re-enter password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 800; font-size: 1.05rem;">
+                        ⚔️ Enlist Cadet & Initiate
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted);">Already registered?</span> 
+                    <a href="login.html" style="color: var(--neon-emerald); font-weight: 700; margin-left: 5px;">Cadet Check-In →</a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="missions.html">Missions</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="login.html">Login</a>
+                <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
+            </div>
+            <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script src="js/audio-synth.js"></script>
+    <script src="js/codequest-live.js"></script>
+    <script src="js/game-fx.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('reg-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const uname = document.getElementById('reg-username').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const pass = document.getElementById('reg-pass').value;
+                const confirm = document.getElementById('reg-confirm').value;
+
+                if (pass !== confirm) {
+                    if (window.GameAudio) window.GameAudio.playError();
+                    alert('Passphrases do not match!');
+                    return;
+                }
+
+                const newUser = {
+                    id: Date.now(),
+                    username: uname,
+                    email: email,
+                    xp: 0,
+                    level: 1,
+                    submissions: {}
+                };
+
+                localStorage.setItem('cq_current_user', JSON.stringify(newUser));
+                if (window.GameAudio) window.GameAudio.playVictory();
+                window.location.href = 'dashboard.html';
+            });
+        });
+    </script>
+</body>
+</html>
