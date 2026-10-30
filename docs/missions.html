@@ -54,7 +54,7 @@
                         <button class="filter-pill" data-filter="Java">Java</button>
                         <button class="filter-pill" data-filter="SQL">SQL</button>
                         <button class="filter-pill" data-filter="DSA">Data Structures</button>
-                        <button id="reset-progress-btn" class="btn btn-outline btn-sm" style="margin-left: 15px; border-color: rgba(255,255,255,0.2);" title="Reset solved status for all challenges">🔄 Reset Solved Missions</button>
+                        <button id="reset-progress-btn" class="btn btn-outline btn-sm" style="margin-left: 15px;" title="Reset solved status for all challenges">🔄 Reset Solved Missions</button>
                     </div>
                 </div>
 
@@ -207,18 +207,18 @@
                             if (result.isCorrect) {
                                 if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
                                 resultBox.innerHTML = `
-                                    <div class="alert alert-emerald" style="padding: 20px; border-radius: 12px; border: 1px solid var(--neon-emerald); background: rgba(0,245,160,0.15); box-shadow: 0 0 25px rgba(0,245,160,0.25);">
-                                        <h3 style="color: var(--neon-emerald); margin-bottom: 8px;">🎉 Triumphant Solution!</h3>
-                                        <p>Protocol verified successfully. You earned <strong>+${result.xpAwarded} XP</strong>! Your total bounty is now <strong>${result.totalXp} XP</strong>.</p>
-                                        ${result.leveledUp ? `<div class="badge badge-gold" style="margin-top: 10px; font-size: 1rem; padding: 6px 14px;">⚡ PROMOTION ACHIEVED: Level ${result.newLevel} — ${result.tierTitle}!</div>` : ''}
+                                    <div class="alert alert-success" style="padding: 22px; border-radius: 12px; border: 3px solid #000000; background: var(--pop-lime); color: #000000; box-shadow: 6px 6px 0px #000000;">
+                                        <h3 style="color: #000000; font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">🎉 TRIUMPHANT SOLUTION!</h3>
+                                        <p style="font-weight: 700; font-size: 1.05rem;">Protocol verified successfully. You earned <strong>+${result.xpAwarded} XP</strong>! Your total bounty is now <strong>${result.totalXp} XP</strong>.</p>
+                                        ${result.leveledUp ? `<div class="badge badge-gold" style="margin-top: 12px; font-size: 1rem; padding: 6px 14px; border: 2px solid #000; box-shadow: 2px 2px 0 #000;">⚡ PROMOTION ACHIEVED: Level ${result.newLevel} — ${result.tierTitle}!</div>` : ''}
                                     </div>
                                 `;
                             } else {
                                 if (window.GameAudio && window.GameAudio.playDefeat) window.GameAudio.playDefeat();
                                 resultBox.innerHTML = `
-                                    <div class="alert alert-crimson" style="padding: 20px; border-radius: 12px; border: 1px solid var(--neon-crimson); background: rgba(255,59,92,0.15);">
-                                        <h3 style="color: var(--neon-crimson); margin-bottom: 8px;">💀 Quest Failed!</h3>
-                                        <p>Selected Option <strong>[${result.selectedOption}]</strong> was incorrect. The correct protocol choice was <strong>[${result.correctOption}]</strong>. Zero XP awarded.</p>
+                                    <div class="alert alert-danger" style="padding: 22px; border-radius: 12px; border: 3px solid #000000; background: var(--pop-magenta); color: #FFFFFF; box-shadow: 6px 6px 0px #000000;">
+                                        <h3 style="color: #FFFFFF; font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">💀 QUEST FAILED!</h3>
+                                        <p style="font-weight: 700; font-size: 1.05rem;">Selected Option <strong>[${result.selectedOption}]</strong> was incorrect. The correct protocol choice was <strong>[${result.correctOption}]</strong>. Zero XP awarded.</p>
                                     </div>
                                 `;
                             }
