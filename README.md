@@ -32,8 +32,8 @@ CodeQuest is built to satisfy rigorous enterprise Java standards and academic ev
 ```mermaid
 flowchart TD
     subgraph Client["1. Client Tier (Gaming HUD)"]
-        UI["Dark Cyber-Obsidian Theme (Vanilla CSS3)"]
-        Canvas["Particle Mesh Background (HTML5 Canvas)"]
+        UI["Neo-Brutalism & High-Contrast Pop Theme (Vanilla CSS3)"]
+        Canvas["Geometric Particle Mesh (HTML5 Canvas)"]
         Audio["Procedural Web Audio FX Synthesizer"]
         JSP["Server-Rendered JSP Views (Pure Java Scriptlets)"]
     end
