@@ -151,17 +151,17 @@
                 else if (rank === 3) rankBadge = `<span class="rank-badge bronze">🥉 #3</span>`;
 
                 const tr = document.createElement('tr');
-                if (isMe) tr.style.background = 'rgba(0, 245, 160, 0.08)';
+                if (isMe) tr.style.background = '#FEF9C3';
 
                 tr.innerHTML = `
                     <td>${rankBadge}</td>
-                    <td style="font-weight: 700;">
+                    <td style="font-weight: 800;">
                         ${p.username} 
                         ${isMe ? '<span class="badge badge-emerald" style="margin-left: 8px;">YOU</span>' : ''}
                     </td>
                     <td><span class="badge badge-outline">Level ${tier.level}</span></td>
-                    <td style="color: var(--neon-cyan);">${tier.title}</td>
-                    <td style="font-weight: 800; color: var(--neon-gold);">⚡ ${p.xp} XP</td>
+                    <td style="color: var(--pop-blue); font-weight: 800;">${tier.title}</td>
+                    <td style="font-weight: 900; color: #000000;">⚡ ${p.xp} XP</td>
                 `;
                 tbody.appendChild(tr);
             });

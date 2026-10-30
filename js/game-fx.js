@@ -1,8 +1,10 @@
 /**
- * CodeQuest Interactive Gaming HUD & Canvas Mesh Engine
+ * CodeQuest Interactive Neo-Brutalist Pop HUD & Canvas Particle Engine
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Interactive Canvas Particle Mesh Background
+    'use strict';
+
+    // 1. Interactive Neo-Brutalist Geometric Canvas Particle Background
     const canvas = document.getElementById('cyber-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -10,15 +12,18 @@ document.addEventListener('DOMContentLoaded', function() {
         let height = canvas.height = window.innerHeight;
 
         const particles = [];
-        const particleCount = Math.min(Math.floor((width * height) / 16000), 55);
+        const particleCount = Math.min(Math.floor((width * height) / 18000), 45);
+        const popColors = ['#FF007F', '#0047FF', '#CCFF00', '#000000', '#FFE600'];
 
-        class Particle {
+        class NeoParticle {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.45;
-                this.vy = (Math.random() - 0.5) * 0.45;
-                this.radius = Math.random() * 1.5 + 0.8;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 2 + 2;
+                this.color = popColors[Math.floor(Math.random() * popColors.length)];
+                this.isSquare = Math.random() > 0.6;
             }
             update() {
                 this.x += this.vx;
@@ -27,21 +32,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (this.y < 0 || this.y > height) this.vy *= -1;
             }
             draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 245, 160, 0.45)';
-                ctx.fill();
+                ctx.save();
+                ctx.fillStyle = this.color;
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 1.5;
+
+                if (this.isSquare) {
+                    const size = this.radius * 2;
+                    ctx.fillRect(this.x - size / 2, this.y - size / 2, size, size);
+                    ctx.strokeRect(this.x - size / 2, this.y - size / 2, size, size);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+                ctx.restore();
             }
         }
 
         for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
+            particles.push(new NeoParticle());
         }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
 
-            // Connect nearby nodes
+            // Connect nearby nodes with crisp solid lines
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
@@ -51,12 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist < 130) {
+                    if (dist < 120) {
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(0, 217, 245, ${0.12 * (1 - dist / 130)})`;
-                        ctx.lineWidth = 0.8;
+                        ctx.strokeStyle = `rgba(0, 0, 0, ${0.16 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 1.2;
                         ctx.stroke();
                     }
                 }
@@ -72,7 +89,70 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 2. Toast notifications helper
+    // 2. Interactive Mission Choice Item Selector
+    const optionItems = document.querySelectorAll('.option-item');
+    optionItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio && !radio.disabled) {
+                radio.checked = true;
+
+                // Remove selected class from sibling options in the same card/form
+                const parentCluster = this.closest('.options-cluster');
+                if (parentCluster) {
+                    parentCluster.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+                }
+                this.classList.add('selected');
+
+                if (window.GameAudio && window.GameAudio.playSelect) {
+                    window.GameAudio.playSelect();
+                }
+
+                // Enable submit button in this card
+                const form = this.closest('form');
+                if (form) {
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('btn-outline');
+                        submitBtn.classList.add('btn-primary');
+                    }
+                }
+            }
+        });
+    });
+
+    // 3. Client-Side Quick Filter Animation (for instant snappy UX)
+    const filterPills = document.querySelectorAll('.filter-pill[data-filter]');
+    filterPills.forEach(pill => {
+        pill.addEventListener('click', function(e) {
+            const filterType = this.getAttribute('data-filter-type'); // 'category' or 'difficulty'
+            const filterVal = this.getAttribute('data-filter');
+
+            // Visual active toggle
+            const siblingGroup = this.parentElement.querySelectorAll('.filter-pill');
+            siblingGroup.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+
+            if (window.GameAudio && window.GameAudio.playBlip) {
+                window.GameAudio.playBlip();
+            }
+
+            const cards = document.querySelectorAll('.quest-card');
+            cards.forEach(card => {
+                let match = true;
+                if (filterVal && filterVal !== 'All') {
+                    const cardVal = card.getAttribute('data-' + filterType);
+                    if (cardVal && cardVal.toLowerCase() !== filterVal.toLowerCase()) {
+                        match = false;
+                    }
+                }
+                card.style.display = match ? 'flex' : 'none';
+            });
+        });
+    });
+
+    // 4. Toast notifications helper
     window.showToast = function(message, type = 'info') {
         const toast = document.createElement('div');
         toast.className = `alert alert-${type}`;
@@ -80,17 +160,17 @@ document.addEventListener('DOMContentLoaded', function() {
         toast.style.bottom = '25px';
         toast.style.right = '25px';
         toast.style.zIndex = '9999';
-        toast.style.boxShadow = '0 8px 30px rgba(0,0,0,0.8)';
+        toast.style.boxShadow = '5px 5px 0px #000000';
         toast.textContent = message;
         document.body.appendChild(toast);
         setTimeout(() => {
             toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => toast.remove(), 500);
+            toast.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => toast.remove(), 400);
         }, 3500);
     };
 
-    // 3. XP Progress Bar smooth fill
+    // 5. XP Progress Bar smooth fill
     const progressFill = document.querySelector('.progress-fill[data-progress]');
     if (progressFill) {
         const targetPercent = progressFill.getAttribute('data-progress') || 0;
