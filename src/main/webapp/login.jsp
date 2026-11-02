@@ -36,8 +36,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Headers & HTTPS Enforcement -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Student Terminal Access - CodeQuest</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23000000'/%3E%3Ctext x='50' y='65' font-family='sans-serif' font-size='50' font-weight='900' fill='%23FFFF00' text-anchor='middle'%3ECQ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -73,44 +78,40 @@
                         <%-- Dynamic Notification Banners via Scriptlets --%>
                         <% if ("true".equalsIgnoreCase(registered)) { %>
                             <div class="alert alert-success">
-                                
                                 <div>Warrior profile forged! Please authenticate below to deploy.</div>
                             </div>
                         <% } %>
 
                         <% if ("true".equalsIgnoreCase(loggedOut)) { %>
                             <div class="alert alert-info">
-                                
                                 <div>Session terminated safely. Your quest state is persisted.</div>
                             </div>
                         <% } %>
 
                         <% if (sessionExpired != null && !sessionExpired.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                
                                 <div><%= SecurityUtil.encodeHtml(sessionExpired) %></div>
                             </div>
                         <% } %>
 
                         <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                
                                 <div><%= SecurityUtil.encodeHtml(errorMessage) %></div>
                             </div>
                         <% } %>
 
-                        <form action="login" method="POST">
+                        <form action="<%= request.getContextPath() %>/login" method="POST">
                             <div class="form-group">
                                 <label class="form-label" for="identifier">Warrior Codename or Comm-Link (Username / Email)</label>
                                 <input type="text" id="identifier" name="identifier" class="form-control" 
                                        placeholder="Username or Email" 
-                                       value="<%= SecurityUtil.encodeHtml(formIdentifier) %>" required autofocus>
+                                       value="<%= SecurityUtil.encodeHtml(formIdentifier) %>" required autofocus autocomplete="username">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="password">Access Cipher (Password)</label>
                                 <input type="password" id="password" name="password" class="form-control" 
-                                       placeholder="Enter your password" required>
+                                       placeholder="Enter your password" required autocomplete="current-password">
                             </div>
 
                             <div class="form-group">
@@ -142,4 +143,3 @@
     <script src="js/game-fx.js"></script>
 </body>
 </html>
-

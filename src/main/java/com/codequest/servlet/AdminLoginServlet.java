@@ -79,9 +79,10 @@ public class AdminLoginServlet extends HttpServlet {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT id, username, password, full_name, email FROM admins WHERE username = ?";
+            String sql = "SELECT id, username, password, full_name, email FROM admins WHERE (username = ? OR email = ?)";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
+            stmt.setString(2, username);
             rs = stmt.executeQuery();
 
             if (rs.next()) {

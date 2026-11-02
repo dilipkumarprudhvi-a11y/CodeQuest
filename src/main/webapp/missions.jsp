@@ -169,7 +169,7 @@
                                 </div>
 
                                 <!-- Answer Submission Form -->
-                                <form action="submit-answer" method="POST">
+                                <form action="<%= request.getContextPath() %>/submit-answer" method="POST">
                                     <input type="hidden" name="missionId" value="<%= m.getId() %>">
 
                                     <div class="options-cluster">

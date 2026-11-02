@@ -13,8 +13,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Headers & HTTPS Enforcement -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Enlist as Code Warrior - CodeQuest</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23000000'/%3E%3Ctext x='50' y='65' font-family='sans-serif' font-size='50' font-weight='900' fill='%23FFFF00' text-anchor='middle'%3ECQ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -52,36 +57,35 @@
                         <%-- Display Validation or Error Message Dynamically using Scriptlet --%>
                         <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                
                                 <div><%= SecurityUtil.encodeHtml(errorMessage) %></div>
                             </div>
                         <% } %>
 
-                        <form action="register" method="POST" autocomplete="off">
+                        <form action="<%= request.getContextPath() %>/register" method="POST">
                             <div class="form-group">
                                 <label class="form-label" for="username">Warrior Codename (Username)</label>
                                 <input type="text" id="username" name="username" class="form-control" 
                                        placeholder="e.g. CyberNinja, ByteMaster" 
-                                       value="<%= SecurityUtil.encodeHtml(formUsername) %>" required autofocus minlength="3" maxlength="30">
+                                       value="<%= SecurityUtil.encodeHtml(formUsername) %>" required autofocus minlength="3" maxlength="30" autocomplete="username">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="email">Student Comm-Link (Email)</label>
                                 <input type="email" id="email" name="email" class="form-control" 
                                        placeholder="cadet@codequest.dev" 
-                                       value="<%= SecurityUtil.encodeHtml(formEmail) %>" required>
+                                       value="<%= SecurityUtil.encodeHtml(formEmail) %>" required autocomplete="email">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="password">Access Cipher (Password)</label>
                                 <input type="password" id="password" name="password" class="form-control" 
-                                       placeholder="Minimum 6 characters" required minlength="6">
+                                       placeholder="Minimum 6 characters" required minlength="6" autocomplete="new-password">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="confirmPassword">Verify Access Cipher</label>
                                 <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" 
-                                       placeholder="Re-type your password" required minlength="6">
+                                       placeholder="Re-type your password" required minlength="6" autocomplete="new-password">
                             </div>
 
                             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
@@ -106,4 +110,3 @@
     <script src="js/game-fx.js"></script>
 </body>
 </html>
-

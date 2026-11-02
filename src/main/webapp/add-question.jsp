@@ -78,7 +78,7 @@
                             </div>
                         <% } %>
 
-                        <form action="add-question" method="POST">
+                        <form action="<%= request.getContextPath() %>/add-question" method="POST">
                             <div class="form-group">
                                 <label class="form-label" for="title">Mission Title / Codename</label>
                                 <input type="text" id="title" name="title" class="form-control" 
