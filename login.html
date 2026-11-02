@@ -38,7 +38,7 @@
         <main class="content-wrapper" style="display: flex; align-items: center; justify-content: center; padding: 95px 20px 40px;">
             <div class="card" style="max-width: 480px; width: 100%; padding: 35px;">
                 <div style="text-align: center; margin-bottom: 25px;">
-                    <div style="font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--pop-yellow);">CQ</div>
+                    <div style="font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--pop-blue);">CQ</div>
                     <h2 style="font-size: 2rem; font-weight: 800; color: #000000;">Cadet Check-In</h2>
                     <p style="color: var(--text-secondary); font-weight: 600; font-size: 0.95rem;">Enter your warrior credentials to enter the combat grid.</p>
                 </div>
@@ -60,8 +60,8 @@
                 </form>
 
                 <!-- Quick Presets -->
-                <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center;">
-                    <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 10px;">Quick Test Profiles:</span>
+                <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #000; text-align: center;">
+                    <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 10px; font-weight: 700;">Quick Test Profiles:</span>
                     <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
                         <button type="button" class="btn btn-outline btn-sm quick-btn" data-user="CyberKnight">CyberKnight</button>
                         <button type="button" class="btn btn-outline btn-sm quick-btn" data-user="NeonCoder">NeonCoder</button>
@@ -83,7 +83,9 @@
                 <a href="missions.html">Missions</a>
                 <a href="leaderboard.html">Leaderboard</a>
                 <a href="dashboard.html">Dashboard</a>
+                <a href="admin.html">Admin Console</a>
                 <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
                 <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
             </div>
             <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
@@ -97,25 +99,37 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('login-form');
             const usernameInput = document.getElementById('username-input');
+            const passwordInput = document.getElementById('password-input');
 
             document.querySelectorAll('.quick-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    usernameInput.value = this.getAttribute('data-user');
-                    if (window.GameAudio) window.GameAudio.playBlip();
+                    if (usernameInput) {
+                        usernameInput.value = this.getAttribute('data-user');
+                        if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
+                    }
                 });
             });
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const uname = usernameInput.value.trim();
-                if (!uname) return;
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const uname = usernameInput ? usernameInput.value.trim() : '';
+                    const pass = passwordInput ? passwordInput.value : '';
+                    if (!uname) return;
 
-                CodeQuestEngine.login(uname);
-                if (window.GameAudio) window.GameAudio.playVictory();
-                window.location.href = 'dashboard.html';
-            });
+                    try {
+                        if (window.CodeQuestEngine) {
+                            await CodeQuestEngine.login(uname, pass);
+                        }
+                        if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
+                        window.location.href = 'dashboard.html';
+                    } catch (err) {
+                        if (window.GameAudio && window.GameAudio.playError) window.GameAudio.playError();
+                        alert('Authentication Notice: ' + (err.message || 'Unable to log in.'));
+                    }
+                });
+            }
         });
     </script>
 </body>
 </html>
-

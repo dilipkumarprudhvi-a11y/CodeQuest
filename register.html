@@ -38,7 +38,7 @@
         <main class="content-wrapper" style="display: flex; align-items: center; justify-content: center; padding: 95px 20px 40px;">
             <div class="card" style="max-width: 480px; width: 100%; padding: 35px;">
                 <div style="text-align: center; margin-bottom: 25px;">
-                    <div style="font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--pop-blue);">AD</div>
+                    <div style="font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--pop-lime);">AD</div>
                     <h2 style="font-size: 2rem; font-weight: 800; color: #000000;">Join Warrior Roster</h2>
                     <p style="color: var(--text-secondary); font-weight: 600; font-size: 0.95rem;">Enlist as a new cadet with 0 XP at Combat Level 1.</p>
                 </div>
@@ -83,7 +83,9 @@
                 <a href="missions.html">Missions</a>
                 <a href="leaderboard.html">Leaderboard</a>
                 <a href="dashboard.html">Dashboard</a>
+                <a href="admin.html">Admin Console</a>
                 <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
                 <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
             </div>
             <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
@@ -96,34 +98,45 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('reg-form');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const uname = document.getElementById('reg-username').value.trim();
-                const email = document.getElementById('reg-email').value.trim();
-                const pass = document.getElementById('reg-pass').value;
-                const confirm = document.getElementById('reg-confirm').value;
+            if (!form) return;
 
-                if (pass !== confirm) {
-                    if (window.GameAudio) window.GameAudio.playError();
-                    alert('Passphrases do not match!');
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const uname = document.getElementById('reg-username') ? document.getElementById('reg-username').value.trim() : '';
+                const email = document.getElementById('reg-email') ? document.getElementById('reg-email').value.trim() : '';
+                const pass = document.getElementById('reg-pass') ? document.getElementById('reg-pass').value : '';
+                const confirmPass = document.getElementById('reg-confirm') ? document.getElementById('reg-confirm').value : '';
+
+                if (!uname || !email) {
+                    alert('Username and Email are required.');
                     return;
                 }
 
-                const newUser = {
-                    id: Date.now(),
-                    username: uname,
-                    email: email,
-                    xp: 0,
-                    level: 1,
-                    submissions: {}
-                };
+                if (pass.length < 6) {
+                    if (window.GameAudio && window.GameAudio.playError) window.GameAudio.playError();
+                    alert('Passphrase must be at least 6 characters in length.');
+                    return;
+                }
 
-                localStorage.setItem('cq_current_user', JSON.stringify(newUser));
-                if (window.GameAudio) window.GameAudio.playVictory();
-                window.location.href = 'dashboard.html';
+                if (pass !== confirmPass) {
+                    if (window.GameAudio && window.GameAudio.playError) window.GameAudio.playError();
+                    alert('Passphrases do not match! Please re-enter.');
+                    return;
+                }
+
+                try {
+                    if (window.CodeQuestEngine) {
+                        await CodeQuestEngine.register(uname, email, pass);
+                    }
+                    if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
+                    alert(`Welcome Cadet ${uname}! Your combat record has been initiated.`);
+                    window.location.href = 'dashboard.html';
+                } catch (err) {
+                    if (window.GameAudio && window.GameAudio.playError) window.GameAudio.playError();
+                    alert('Registration Notice: ' + (err.message || 'Unable to register account.'));
+                }
             });
         });
     </script>
 </body>
 </html>
-
