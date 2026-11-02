@@ -178,4 +178,17 @@ document.addEventListener('DOMContentLoaded', function() {
             progressFill.style.width = targetPercent + '%';
         }, 150);
     }
+
+    // 6. Floating Dynamic Island Scroll Morph Effect
+    window.addEventListener('scroll', function() {
+        const nav = document.querySelector('.navbar');
+        if (nav) {
+            if (window.scrollY > 20) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }
+    }, { passive: true });
+
 });
