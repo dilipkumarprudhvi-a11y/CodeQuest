@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest - Global Leaderboard & 3D Podium (Live)</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23000000%22/><text x=%2250%%22 y=%2265%%22 font-family=%22sans-serif%22 font-size=%2250%22 font-weight=%22900%22 fill=%22%23FFFF00%22 text-anchor=%22middle%22>CQ</text></svg>">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -20,17 +20,17 @@
             </a>
 
             <ul class="nav-links">
-                <li><a href="index.html"><span>🏠</span> Home</a></li>
-                <li><a href="missions.html"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard.html" class="active"><span>🏆</span> Leaderboard</a></li>
-                <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
-                <li><a href="admin.html"><span>🛡️</span> Admin Console</a></li>
-                <li><a href="login.html"><span>🔑</span> Cadet Portal</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="missions.html">Missions</a></li>
+                <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="admin.html">Admin Console</a></li>
+                <li><a href="login.html">Cadet Portal</a></li>
             </ul>
 
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
-                <a href="missions.html" class="btn btn-primary btn-sm">⚔️ Play Missions</a>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
+                <a href="missions.html" class="btn btn-primary btn-sm">Play Missions</a>
             </div>
         </nav>
 
@@ -108,9 +108,9 @@
             podium.innerHTML = `
                 <!-- Rank 2: Silver Pillar -->
                 <div class="podium-step step-2">
-                    <div class="podium-avatar">🥈</div>
+                    <div class="podium-avatar">2</div>
                     <div class="podium-name">${p2.username}</div>
-                    <div class="podium-xp">⚡ ${p2.xp} XP</div>
+                    <div class="podium-xp">${p2.xp} XP</div>
                     <div class="podium-block">
                         <span class="podium-rank">2</span>
                     </div>
@@ -118,10 +118,10 @@
 
                 <!-- Rank 1: Gold Pillar (Elevated) -->
                 <div class="podium-step step-1">
-                    <div class="podium-crown">👑</div>
-                    <div class="podium-avatar">🥇</div>
+                    <div class="podium-crown">NO. 1</div>
+                    <div class="podium-avatar">1</div>
                     <div class="podium-name">${p1.username}</div>
-                    <div class="podium-xp">⚡ ${p1.xp} XP</div>
+                    <div class="podium-xp">${p1.xp} XP</div>
                     <div class="podium-block">
                         <span class="podium-rank">1</span>
                     </div>
@@ -129,9 +129,9 @@
 
                 <!-- Rank 3: Bronze Pillar -->
                 <div class="podium-step step-3">
-                    <div class="podium-avatar">🥉</div>
+                    <div class="podium-avatar">3</div>
                     <div class="podium-name">${p3.username}</div>
-                    <div class="podium-xp">⚡ ${p3.xp} XP</div>
+                    <div class="podium-xp">${p3.xp} XP</div>
                     <div class="podium-block">
                         <span class="podium-rank">3</span>
                     </div>
@@ -146,9 +146,9 @@
                 const isMe = (p.username.toLowerCase() === currentUser.username.toLowerCase());
 
                 let rankBadge = `<span class="rank-badge">#${rank}</span>`;
-                if (rank === 1) rankBadge = `<span class="rank-badge gold">🥇 #1</span>`;
-                else if (rank === 2) rankBadge = `<span class="rank-badge silver">🥈 #2</span>`;
-                else if (rank === 3) rankBadge = `<span class="rank-badge bronze">🥉 #3</span>`;
+                if (rank === 1) rankBadge = `<span class="rank-badge gold">#1</span>`;
+                else if (rank === 2) rankBadge = `<span class="rank-badge silver">#2</span>`;
+                else if (rank === 3) rankBadge = `<span class="rank-badge bronze">#3</span>`;
 
                 const tr = document.createElement('tr');
                 if (isMe) tr.style.background = '#FEF9C3';
@@ -161,7 +161,7 @@
                     </td>
                     <td><span class="badge badge-outline">Level ${tier.level}</span></td>
                     <td style="color: var(--pop-blue); font-weight: 800;">${tier.title}</td>
-                    <td style="font-weight: 900; color: #000000;">⚡ ${p.xp} XP</td>
+                    <td style="font-weight: 900; color: #000000;">${p.xp} XP</td>
                 `;
                 tbody.appendChild(tr);
             });

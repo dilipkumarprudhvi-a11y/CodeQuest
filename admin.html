@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest - Admin Command Center (Live)</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23FF007F%22/><text x=%2250%%22 y=%2265%%22 font-family=%22sans-serif%22 font-size=%2245%22 font-weight=%22900%22 fill=%22%23FFFFFF%22 text-anchor=%22middle%22>AD</text></svg>">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -14,22 +14,22 @@
         <!-- Main Navigation Bar -->
         <nav class="navbar" style="border-bottom-color: rgba(255, 59, 92, 0.3);">
             <a href="index.html" class="nav-brand">
-                <div class="brand-icon" style="background: var(--neon-crimson); box-shadow: 0 0 15px rgba(255,59,92,0.4);">🛡️</div>
+                <div class="brand-icon" style="background: var(--neon-crimson); box-shadow: 0 0 15px rgba(255,59,92,0.4);">AD</div>
                 <div class="brand-text">CodeQuest <span style="color: var(--neon-crimson); font-size: 0.9rem;">ADMIN</span></div>
                 <span class="brand-badge" style="background: rgba(255,59,92,0.2); color: var(--neon-crimson);">ROOT ACCESS</span>
             </a>
 
             <ul class="nav-links">
-                <li><a href="index.html"><span>🏠</span> Home</a></li>
-                <li><a href="missions.html"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard.html"><span>🏆</span> Leaderboard</a></li>
-                <li><a href="dashboard.html"><span>📊</span> Dashboard</a></li>
-                <li><a href="admin.html" class="active"><span>🛡️</span> Admin Console</a></li>
-                <li><a href="login.html"><span>🔑</span> Cadet Portal</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="missions.html">Missions</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="admin.html" class="active">Admin Console</a></li>
+                <li><a href="login.html">Cadet Portal</a></li>
             </ul>
 
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <a href="missions.html" class="btn btn-outline btn-sm">Exit Admin</a>
             </div>
         </nav>
@@ -69,7 +69,7 @@
                 <!-- Add Question Form -->
                 <div class="card card-admin" style="margin-bottom: 40px;">
                     <div class="card-header">
-                        <h3 class="card-title">⚡ Dispatch New Challenge</h3>
+                        <h3 class="card-title">Dispatch New Challenge</h3>
                         <span class="badge badge-crimson">Create Mission</span>
                     </div>
 
@@ -136,7 +136,7 @@
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-admin btn-lg" style="flex: 1;">
-                                🛡️ Authorize & Publish Mission
+                                Authorize & Publish Mission
                             </button>
                         </div>
                     </form>
@@ -205,10 +205,10 @@
                         <td><span class="badge badge-outline">${m.category}</span></td>
                         <td><span class="badge badge-outline">${m.difficulty}</span></td>
                         <td style="color: var(--neon-emerald); font-weight: 800;">[${m.correct}]</td>
-                        <td style="color: var(--neon-gold); font-weight: 800;">⚡ ${m.xp} XP</td>
+                        <td style="color: var(--neon-gold); font-weight: 800;">${m.xp} XP</td>
                         <td>
                             <button class="btn btn-outline btn-sm delete-btn" data-id="${m.id}" style="color: var(--neon-crimson); border-color: rgba(255,59,92,0.3); padding: 4px 10px;">
-                                🗑️ Delete
+                                Delete
                             </button>
                         </td>
                     `;
