@@ -12,7 +12,7 @@
 
     <div class="hud-layout">
         <!-- Main Navigation Bar -->
-        <nav class="navbar" style="border-bottom-color: rgba(255, 59, 92, 0.3);">
+        <nav class="navbar" style="border-bottom-color: rgba(255, 59, 92, 0.4);">
             <a href="index.html" class="nav-brand">
                 <div class="brand-icon" style="background: var(--neon-crimson); box-shadow: 0 0 15px rgba(255,59,92,0.4);">AD</div>
                 <div class="brand-text">CodeQuest <span style="color: var(--neon-crimson); font-size: 0.9rem;">ADMIN</span></div>
@@ -42,14 +42,14 @@
                     <span class="section-tagline">System Operations Protocol</span>
                     <h2 class="section-title">Question Vault & Mission Control</h2>
                     <p class="section-desc">
-                        Manage active combat challenges, inspect system telemetry, and dispatch new algorithmic missions.
+                        Manage active combat challenges, inspect system telemetry, deploy interactive coding suites, and dispatch rapid concept boss checks.
                     </p>
                 </div>
 
                 <!-- Telemetry Cards -->
                 <div class="hero-stats" style="margin-bottom: 35px;">
                     <div class="stat-card" style="background: #FFD1DC;">
-                        <div class="stat-value crimson" id="telemetry-count">9</div>
+                        <div class="stat-value crimson" id="telemetry-count">13</div>
                         <div class="stat-label">Active Missions</div>
                     </div>
                     <div class="stat-card" style="background: #E8FF80;">
@@ -66,25 +66,48 @@
                     </div>
                 </div>
 
-                <!-- Add Question Form -->
+                <!-- Add Challenge Form -->
                 <div class="card card-admin" style="margin-bottom: 40px;">
-                    <div class="card-header">
-                        <h3 class="card-title">Dispatch New Challenge</h3>
-                        <span class="badge badge-crimson">Create Mission</span>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 class="card-title">Dispatch New Challenge</h3>
+                            <span class="badge badge-crimson">Create Dual-Mode Mission</span>
+                        </div>
+                        <button type="button" id="reset-defaults-btn" class="btn btn-outline btn-sm" style="color: var(--neon-crimson); border-color: var(--neon-crimson); font-weight: 800;">
+                            Reset Default Missions
+                        </button>
                     </div>
 
-                    <form id="add-mission-form" style="padding-top: 15px;">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                    <form id="add-mission-form" style="padding-top: 20px;">
+                        <!-- Mode Selector -->
+                        <div class="form-group" style="margin-bottom: 22px;">
+                            <label class="form-label" style="font-size: 1rem; font-weight: 800;">Select Challenge Protocol Type</label>
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; background: #FFFDF5; border: 2px solid #000; padding: 10px 16px; border-radius: 8px; box-shadow: 2px 2px 0 #000;">
+                                    <input type="radio" name="challenge-type" value="code" checked id="type-code">
+                                    <span>Mode A: Interactive Coding Challenge (Web Worker Sandbox)</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; background: #FFFDF5; border: 2px solid #000; padding: 10px 16px; border-radius: 8px; box-shadow: 2px 2px 0 #000;">
+                                    <input type="radio" name="challenge-type" value="mcq" id="type-mcq">
+                                    <span>Mode B: Rapid Concept Boss Check (Multiple Choice)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Common Metadata -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 20px;">
                             <div class="form-group">
                                 <label class="form-label">Mission Title</label>
-                                <input type="text" id="m-title" class="form-control" required placeholder="e.g. Thread Synchronization Locks">
+                                <input type="text" id="m-title" class="form-control" required placeholder="e.g. Palindrome Number Verification">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Domain Category</label>
                                 <select id="m-category" class="form-control">
-                                    <option value="Java">Java</option>
-                                    <option value="SQL">SQL</option>
-                                    <option value="DSA">DSA</option>
+                                    <option value="DSA">DSA / Algorithms</option>
+                                    <option value="Java">Java Fundamentals</option>
+                                    <option value="SQL">Relational SQL</option>
+                                    <option value="Web">Web Technologies</option>
+                                    <option value="General">General CS</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -96,46 +119,89 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">XP Bounty</label>
+                                <label class="form-label">XP Bounty (Positive Integer)</label>
                                 <input type="number" id="m-xp" class="form-control" required value="75" min="10" max="500">
                             </div>
                         </div>
 
                         <div class="form-group" style="margin-bottom: 20px;">
                             <label class="form-label">Problem Scenario / Description</label>
-                            <textarea id="m-desc" class="form-control" rows="3" required placeholder="Detailed challenge explanation..."></textarea>
+                            <textarea id="m-desc" class="form-control" rows="3" required placeholder="Detailed challenge instructions, algorithmic constraints, and edge case parameters..."></textarea>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                            <div class="form-group">
-                                <label class="form-label">Option A</label>
-                                <input type="text" id="m-optA" class="form-control" required placeholder="Option A text">
+                        <!-- Panel for Mode A: Code Challenge -->
+                        <div id="code-fields-panel" style="background: rgba(0, 71, 255, 0.04); border: 2px solid #000; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 3px 3px 0 #000;">
+                            <h4 style="margin: 0 0 15px; font-weight: 800; color: var(--pop-blue); font-size: 1.1rem;">Mode A Specification (Code Arena)</h4>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 18px;">
+                                <div class="form-group">
+                                    <label class="form-label">Target Function Name</label>
+                                    <input type="text" id="m-func-name" class="form-control" placeholder="e.g. isPalindrome" value="isPalindrome">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Language Runtime</label>
+                                    <select id="m-language" class="form-control">
+                                        <option value="javascript">JavaScript (V8 Sandboxed Web Worker)</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Option B</label>
-                                <input type="text" id="m-optB" class="form-control" required placeholder="Option B text">
+
+                            <div class="form-group" style="margin-bottom: 18px;">
+                                <label class="form-label">Starter Code Template</label>
+                                <textarea id="m-starter-code" class="form-control" rows="4" style="font-family: 'Fira Code', monospace; font-size: 0.95rem;">function isPalindrome(x) {
+    // Return true if x reads the same backward as forward
+    
+}</textarea>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label">Option C</label>
-                                <input type="text" id="m-optC" class="form-control" required placeholder="Option C text">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Option D</label>
-                                <input type="text" id="m-optD" class="form-control" required placeholder="Option D text">
+                                <label class="form-label">Test Suite (Valid JSON Array of Test Cases with input and expected)</label>
+                                <textarea id="m-test-cases" class="form-control" rows="5" style="font-family: 'Fira Code', monospace; font-size: 0.92rem;">[
+    { "input": [121], "expected": true, "label": "Example 1: Positive palindrome" },
+    { "input": [-121], "expected": false, "label": "Example 2: Negative number" },
+    { "input": [10], "expected": false, "label": "Example 3: Trailing zero" }
+]</textarea>
+                                <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-top: 6px;">Format: JSON array of objects with <code>input</code> (array or single value) and <code>expected</code> return value.</span>
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap;">
-                            <div class="form-group" style="min-width: 200px;">
-                                <label class="form-label">Designated Correct Protocol</label>
-                                <select id="m-correct" class="form-control" style="font-weight: 700; color: var(--neon-emerald);">
+                        <!-- Panel for Mode B: MCQ Challenge -->
+                        <div id="mcq-fields-panel" style="display: none; background: rgba(255, 0, 127, 0.04); border: 2px solid #000; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 3px 3px 0 #000;">
+                            <h4 style="margin: 0 0 15px; font-weight: 800; color: var(--pop-magenta); font-size: 1.1rem;">Mode B Specification (Concept MCQ)</h4>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                                <div class="form-group">
+                                    <label class="form-label">Option A</label>
+                                    <input type="text" id="m-optA" class="form-control" placeholder="Option A text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Option B</label>
+                                    <input type="text" id="m-optB" class="form-control" placeholder="Option B text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Option C</label>
+                                    <input type="text" id="m-optC" class="form-control" placeholder="Option C text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Option D</label>
+                                    <input type="text" id="m-optD" class="form-control" placeholder="Option D text">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="max-width: 280px;">
+                                <label class="form-label">Designated Correct Option</label>
+                                <select id="m-correct" class="form-control" style="font-weight: 800;">
                                     <option value="A">Option A</option>
                                     <option value="B">Option B</option>
                                     <option value="C">Option C</option>
                                     <option value="D">Option D</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-admin btn-lg" style="flex: 1;">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div style="display: flex; gap: 20px; align-items: center; justify-content: flex-end;">
+                            <button type="submit" class="btn btn-admin btn-lg" style="min-width: 260px; font-weight: 800;">
                                 Authorize & Publish Mission
                             </button>
                         </div>
@@ -144,27 +210,30 @@
 
                 <!-- Existing Question Vault -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                         <h3 class="card-title">Existing Mission Vault</h3>
-                        <span class="badge badge-outline" id="vault-count-badge">9 Protocols Live</span>
+                        <span class="badge badge-outline" id="vault-count-badge">Loading Protocols...</span>
                     </div>
 
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 60px;">ID</th>
-                                <th>Mission Title</th>
-                                <th>Category</th>
-                                <th>Difficulty</th>
-                                <th>Correct</th>
-                                <th>XP Bounty</th>
-                                <th style="width: 90px;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="vault-tbody">
-                            <!-- Injected dynamically -->
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">ID</th>
+                                    <th style="width: 80px;">Type</th>
+                                    <th>Mission Title</th>
+                                    <th>Category</th>
+                                    <th>Difficulty</th>
+                                    <th>Target / Key</th>
+                                    <th>XP Bounty</th>
+                                    <th style="width: 100px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-mission-list">
+                                <!-- Injected dynamically via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
@@ -177,6 +246,8 @@
                 <a href="leaderboard.html">Leaderboard</a>
                 <a href="dashboard.html">Dashboard</a>
                 <a href="admin.html">Admin Console</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
                 <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
             </div>
             <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
@@ -188,38 +259,71 @@
     <script src="js/game-fx.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const tbody = document.getElementById('vault-tbody');
+            const missionListTbody = document.getElementById('admin-mission-list');
             const form = document.getElementById('add-mission-form');
+            const typeCodeRadio = document.getElementById('type-code');
+            const typeMcqRadio = document.getElementById('type-mcq');
+            const codeFieldsPanel = document.getElementById('code-fields-panel');
+            const mcqFieldsPanel = document.getElementById('mcq-fields-panel');
+            const resetDefaultsBtn = document.getElementById('reset-defaults-btn');
 
+            // Switch between Code and MCQ form panels
+            function updateTypeView() {
+                const isCode = typeCodeRadio.checked;
+                if (codeFieldsPanel) codeFieldsPanel.style.display = isCode ? 'block' : 'none';
+                if (mcqFieldsPanel) mcqFieldsPanel.style.display = isCode ? 'none' : 'block';
+            }
+
+            if (typeCodeRadio && typeMcqRadio) {
+                typeCodeRadio.addEventListener('change', updateTypeView);
+                typeMcqRadio.addEventListener('change', updateTypeView);
+            }
+
+            // Render Mission Vault Table
             function renderVault() {
+                if (!missionListTbody || !window.CodeQuestEngine) return;
                 const list = CodeQuestEngine.getMissions();
-                document.getElementById('telemetry-count').textContent = list.length;
-                document.getElementById('vault-count-badge').textContent = `${list.length} Protocols Live`;
-                tbody.innerHTML = '';
+
+                const countEl = document.getElementById('telemetry-count');
+                const badgeEl = document.getElementById('vault-count-badge');
+                if (countEl) countEl.textContent = list.length;
+                if (badgeEl) badgeEl.textContent = `${list.length} Protocols Live`;
+
+                missionListTbody.innerHTML = '';
 
                 list.forEach(m => {
                     const tr = document.createElement('tr');
+                    const isCode = m.type === 'code';
+                    const typeBadge = isCode
+                        ? `<span class="badge" style="background: var(--pop-blue); color: #FFF; font-weight: 800;">CODE</span>`
+                        : `<span class="badge" style="background: var(--pop-magenta); color: #FFF; font-weight: 800;">MCQ</span>`;
+                    
+                    const targetInfo = isCode
+                        ? `<code style="font-weight: 700; color: var(--pop-blue); font-size: 0.9rem;">${CodeQuestEngine.escapeHTML(m.functionName || 'solve')}()</code>`
+                        : `<strong style="color: #000; font-weight: 800;">[Option ${CodeQuestEngine.escapeHTML(m.correct || 'A')}]</strong>`;
+
                     tr.innerHTML = `
                         <td><strong>#${m.id}</strong></td>
-                        <td style="font-weight: 700;">${m.title}</td>
-                        <td><span class="badge badge-outline">${m.category}</span></td>
-                        <td><span class="badge badge-outline">${m.difficulty}</span></td>
-                        <td style="color: var(--neon-emerald); font-weight: 800;">[${m.correct}]</td>
-                        <td style="color: var(--neon-gold); font-weight: 800;">${m.xp} XP</td>
+                        <td>${typeBadge}</td>
+                        <td style="font-weight: 700;">${CodeQuestEngine.escapeHTML(m.title)}</td>
+                        <td><span class="badge badge-outline">${CodeQuestEngine.escapeHTML(m.category)}</span></td>
+                        <td><span class="badge badge-outline">${CodeQuestEngine.escapeHTML(m.difficulty)}</span></td>
+                        <td>${targetInfo}</td>
+                        <td style="color: #000; font-weight: 800;">${m.xp} XP</td>
                         <td>
-                            <button class="btn btn-outline btn-sm delete-btn" data-id="${m.id}" style="color: var(--neon-crimson); border-color: rgba(255,59,92,0.3); padding: 4px 10px;">
+                            <button class="btn btn-outline btn-sm delete-btn" data-id="${m.id}" style="color: var(--neon-crimson); border-color: var(--neon-crimson); padding: 4px 10px; font-weight: 800;">
                                 Delete
                             </button>
                         </td>
                     `;
-                    tbody.appendChild(tr);
+                    missionListTbody.appendChild(tr);
                 });
 
-                // Attach delete handlers
-                tbody.querySelectorAll('.delete-btn').forEach(btn => {
+                // Attach delete event listeners
+                missionListTbody.querySelectorAll('.delete-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const id = this.getAttribute('data-id');
-                        if (confirm(`Authorize decommissioning of Mission #${id}?`)) {
+                        if (confirm(`Authorize decommissioning of Mission #${id}? This will remove it from the live arena.`)) {
                             CodeQuestEngine.deleteMission(id);
                             if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
                             renderVault();
@@ -230,40 +334,101 @@
 
             renderVault();
 
-            // Handle Add Form
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const title = document.getElementById('m-title').value.trim();
-                const desc = document.getElementById('m-desc').value.trim();
-                const cat = document.getElementById('m-category').value;
-                const diff = document.getElementById('m-diff').value;
-                const xp = document.getElementById('m-xp').value;
-                const optA = document.getElementById('m-optA').value.trim();
-                const optB = document.getElementById('m-optB').value.trim();
-                const optC = document.getElementById('m-optC').value.trim();
-                const optD = document.getElementById('m-optD').value.trim();
-                const correct = document.getElementById('m-correct').value;
-
-                CodeQuestEngine.addMission({
-                    title: title,
-                    description: desc,
-                    category: cat,
-                    difficulty: diff,
-                    xp: xp,
-                    optionA: optA,
-                    optionB: optB,
-                    optionC: optC,
-                    optionD: optD,
-                    correct: correct
+            // Handle Reset Default Missions
+            if (resetDefaultsBtn) {
+                resetDefaultsBtn.addEventListener('click', function() {
+                    if (confirm('Restore the standard CodeQuest dual-mode mission suite (4 Interactive Coding Arenas + 9 Concept Boss Checks)? Any custom missions will be replaced.')) {
+                        CodeQuestEngine.resetDefaultMissions();
+                        if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
+                        renderVault();
+                        alert('Default mission protocols restored successfully!');
+                    }
                 });
+            }
 
-                if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
-                alert(`Mission "${title}" authorized and deployed to active combat deck!`);
-                form.reset();
-                renderVault();
-            });
+            // Handle Add Form Submission
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const title = (document.getElementById('m-title') ? document.getElementById('m-title').value : '').trim();
+                    const desc = (document.getElementById('m-desc') ? document.getElementById('m-desc').value : '').trim();
+                    const cat = document.getElementById('m-category') ? document.getElementById('m-category').value : 'DSA';
+                    const diff = document.getElementById('m-diff') ? document.getElementById('m-diff').value : 'Medium';
+                    const xpVal = Number(document.getElementById('m-xp') ? document.getElementById('m-xp').value : 75);
+                    const isCode = typeCodeRadio ? typeCodeRadio.checked : true;
+
+                    if (!title) {
+                        alert('Please provide a valid mission title.');
+                        return;
+                    }
+                    if (isNaN(xpVal) || xpVal <= 0) {
+                        alert('XP Bounty must be a positive number.');
+                        return;
+                    }
+
+                    const missionData = {
+                        type: isCode ? 'code' : 'mcq',
+                        title: title,
+                        description: desc,
+                        category: cat,
+                        difficulty: diff,
+                        xp: xpVal
+                    };
+
+                    if (isCode) {
+                        const funcName = (document.getElementById('m-func-name') ? document.getElementById('m-func-name').value : '').trim();
+                        const starterCode = (document.getElementById('m-starter-code') ? document.getElementById('m-starter-code').value : '').trim();
+                        const testCasesRaw = (document.getElementById('m-test-cases') ? document.getElementById('m-test-cases').value : '').trim();
+
+                        if (!funcName) {
+                            alert('Target function name is required for coding missions.');
+                            return;
+                        }
+
+                        let parsedTestCases = [];
+                        try {
+                            parsedTestCases = JSON.parse(testCasesRaw);
+                            if (!Array.isArray(parsedTestCases) || parsedTestCases.length === 0) {
+                                throw new Error('Test cases must be a non-empty JSON array.');
+                            }
+                        } catch (jsonErr) {
+                            alert(`Invalid Test Suite JSON format: ${jsonErr.message}`);
+                            return;
+                        }
+
+                        missionData.language = 'javascript';
+                        missionData.functionName = funcName;
+                        missionData.starterCode = starterCode;
+                        missionData.testCases = parsedTestCases;
+                    } else {
+                        const optA = (document.getElementById('m-optA') ? document.getElementById('m-optA').value : '').trim();
+                        const optB = (document.getElementById('m-optB') ? document.getElementById('m-optB').value : '').trim();
+                        const optC = (document.getElementById('m-optC') ? document.getElementById('m-optC').value : '').trim();
+                        const optD = (document.getElementById('m-optD') ? document.getElementById('m-optD').value : '').trim();
+                        const correct = document.getElementById('m-correct') ? document.getElementById('m-correct').value : 'A';
+
+                        if (!optA || !optB || !optC || !optD) {
+                            alert('All 4 options (A, B, C, D) are required for concept checks.');
+                            return;
+                        }
+
+                        missionData.optionA = optA;
+                        missionData.optionB = optB;
+                        missionData.optionC = optC;
+                        missionData.optionD = optD;
+                        missionData.correct = correct;
+                    }
+
+                    CodeQuestEngine.addMission(missionData);
+                    if (window.GameAudio && window.GameAudio.playVictory) window.GameAudio.playVictory();
+                    alert(`Mission "${title}" authorized and deployed to the live combat grid!`);
+                    form.reset();
+                    updateTypeView();
+                    renderVault();
+                });
+            }
         });
     </script>
 </body>
 </html>
-

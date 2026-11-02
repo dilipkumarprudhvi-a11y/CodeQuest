@@ -11,7 +11,7 @@
     <canvas id="cyber-canvas"></canvas>
 
     <div class="hud-layout">
-        <!-- Main Navigation Bar -->
+        <!-- Floating Dynamic Island Navigation Bar -->
         <nav class="navbar">
             <a href="index.html" class="nav-brand">
                 <div class="brand-icon">CQ</div>
@@ -52,7 +52,7 @@
 
                 <!-- Full Scoreboard Table -->
                 <div class="card" style="margin-top: 40px; overflow-x: auto;">
-                    <div class="card-header">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <h3 class="card-title">Full Warrior Roster</h3>
                         <span class="badge badge-cyan" id="player-count-badge">5 Warriors Enlisted</span>
                     </div>
@@ -64,6 +64,7 @@
                                 <th>Warrior Cadet</th>
                                 <th>Combat Level</th>
                                 <th>Tier Title</th>
+                                <th>Missions Mastered</th>
                                 <th>Total XP</th>
                             </tr>
                         </thead>
@@ -82,7 +83,9 @@
                 <a href="missions.html">Missions</a>
                 <a href="leaderboard.html">Leaderboard</a>
                 <a href="dashboard.html">Dashboard</a>
+                <a href="admin.html">Admin Console</a>
                 <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
                 <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
             </div>
             <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
@@ -98,75 +101,84 @@
             const currentUser = CodeQuestEngine.getCurrentUser();
             const podium = document.getElementById('podium-container');
             const tbody = document.getElementById('leaderboard-tbody');
-            document.getElementById('player-count-badge').textContent = `${players.length} Warriors Enlisted`;
+            const countBadge = document.getElementById('player-count-badge');
+
+            if (countBadge) {
+                countBadge.textContent = `${players.length} Warriors Enlisted`;
+            }
 
             // Podium: Rank 2 (Silver), Rank 1 (Gold), Rank 3 (Bronze)
             const p1 = players[0] || { username: 'Vacant', xp: 0, level: 1 };
             const p2 = players[1] || { username: 'Vacant', xp: 0, level: 1 };
             const p3 = players[2] || { username: 'Vacant', xp: 0, level: 1 };
 
-            podium.innerHTML = `
-                <!-- Rank 2: Silver Pillar -->
-                <div class="podium-step step-2">
-                    <div class="podium-avatar">2</div>
-                    <div class="podium-name">${p2.username}</div>
-                    <div class="podium-xp">${p2.xp} XP</div>
-                    <div class="podium-block">
-                        <span class="podium-rank">2</span>
+            if (podium) {
+                podium.innerHTML = `
+                    <!-- Rank 2: Silver Pillar -->
+                    <div class="podium-step step-2">
+                        <div class="podium-avatar">2</div>
+                        <div class="podium-name">${CodeQuestEngine.escapeHTML(p2.username)}</div>
+                        <div class="podium-xp">${p2.xp} XP</div>
+                        <div class="podium-block">
+                            <span class="podium-rank">2</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Rank 1: Gold Pillar (Elevated) -->
-                <div class="podium-step step-1">
-                    <div class="podium-crown">NO. 1</div>
-                    <div class="podium-avatar">1</div>
-                    <div class="podium-name">${p1.username}</div>
-                    <div class="podium-xp">${p1.xp} XP</div>
-                    <div class="podium-block">
-                        <span class="podium-rank">1</span>
+                    <!-- Rank 1: Gold Pillar (Elevated) -->
+                    <div class="podium-step step-1">
+                        <div class="podium-crown">NO. 1</div>
+                        <div class="podium-avatar">1</div>
+                        <div class="podium-name">${CodeQuestEngine.escapeHTML(p1.username)}</div>
+                        <div class="podium-xp">${p1.xp} XP</div>
+                        <div class="podium-block">
+                            <span class="podium-rank">1</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Rank 3: Bronze Pillar -->
-                <div class="podium-step step-3">
-                    <div class="podium-avatar">3</div>
-                    <div class="podium-name">${p3.username}</div>
-                    <div class="podium-xp">${p3.xp} XP</div>
-                    <div class="podium-block">
-                        <span class="podium-rank">3</span>
+                    <!-- Rank 3: Bronze Pillar -->
+                    <div class="podium-step step-3">
+                        <div class="podium-avatar">3</div>
+                        <div class="podium-name">${CodeQuestEngine.escapeHTML(p3.username)}</div>
+                        <div class="podium-xp">${p3.xp} XP</div>
+                        <div class="podium-block">
+                            <span class="podium-rank">3</span>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
 
             // Table rows
-            tbody.innerHTML = '';
-            players.forEach((p, idx) => {
-                const rank = idx + 1;
-                const tier = CodeQuestEngine.calculateTier(p.xp);
-                const isMe = (p.username.toLowerCase() === currentUser.username.toLowerCase());
+            if (tbody) {
+                tbody.innerHTML = '';
+                players.forEach((p, idx) => {
+                    const rank = idx + 1;
+                    const tier = CodeQuestEngine.calculateTier(p.xp);
+                    const isMe = (p.username.toLowerCase() === currentUser.username.toLowerCase());
+                    const completedCount = (p.completedMissions && Array.isArray(p.completedMissions)) ? p.completedMissions.length : 0;
 
-                let rankBadge = `<span class="rank-badge">#${rank}</span>`;
-                if (rank === 1) rankBadge = `<span class="rank-badge gold">#1</span>`;
-                else if (rank === 2) rankBadge = `<span class="rank-badge silver">#2</span>`;
-                else if (rank === 3) rankBadge = `<span class="rank-badge bronze">#3</span>`;
+                    let rankBadge = `<span class="rank-badge">#${rank}</span>`;
+                    if (rank === 1) rankBadge = `<span class="rank-badge gold">#1</span>`;
+                    else if (rank === 2) rankBadge = `<span class="rank-badge silver">#2</span>`;
+                    else if (rank === 3) rankBadge = `<span class="rank-badge bronze">#3</span>`;
 
-                const tr = document.createElement('tr');
-                if (isMe) tr.style.background = '#FEF9C3';
+                    const tr = document.createElement('tr');
+                    if (isMe) tr.style.background = '#FEF9C3';
 
-                tr.innerHTML = `
-                    <td>${rankBadge}</td>
-                    <td style="font-weight: 800;">
-                        ${p.username} 
-                        ${isMe ? '<span class="badge badge-emerald" style="margin-left: 8px;">YOU</span>' : ''}
-                    </td>
-                    <td><span class="badge badge-outline">Level ${tier.level}</span></td>
-                    <td style="color: var(--pop-blue); font-weight: 800;">${tier.title}</td>
-                    <td style="font-weight: 900; color: #000000;">${p.xp} XP</td>
-                `;
-                tbody.appendChild(tr);
-            });
+                    tr.innerHTML = `
+                        <td>${rankBadge}</td>
+                        <td style="font-weight: 800;">
+                            ${CodeQuestEngine.escapeHTML(p.username)} 
+                            ${isMe ? '<span class="badge badge-emerald" style="margin-left: 8px;">YOU</span>' : ''}
+                        </td>
+                        <td><span class="badge badge-outline">Level ${tier.level}</span></td>
+                        <td style="color: var(--pop-blue); font-weight: 800;">${tier.title}</td>
+                        <td><strong>${completedCount}</strong> Solved</td>
+                        <td style="font-weight: 900; color: #000000;">${p.xp} XP</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
         });
     </script>
 </body>
 </html>
-

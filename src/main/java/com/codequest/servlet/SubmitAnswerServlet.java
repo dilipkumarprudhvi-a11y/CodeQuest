@@ -18,24 +18,15 @@ import com.codequest.util.DBConnection;
 public class SubmitAnswerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private int lvl2Thresh = 100;
-    private int lvl3Thresh = 250;
-    private int lvl4Thresh = 450;
-    private int lvl5Thresh = 700;
-    private String engineName = "Standard Judge";
+    private String engineName = "CodeQuest Standard Judge";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        // Demonstrate ServletConfig init parameters
-        try {
-            lvl2Thresh = Integer.parseInt(config.getInitParameter("level2Threshold"));
-            lvl3Thresh = Integer.parseInt(config.getInitParameter("level3Threshold"));
-            lvl4Thresh = Integer.parseInt(config.getInitParameter("level4Threshold"));
-            lvl5Thresh = Integer.parseInt(config.getInitParameter("level5Threshold"));
-        } catch (Exception ignored) {}
         engineName = config.getInitParameter("evaluationEngine");
-        if (engineName == null) engineName = "CodeQuest Judge Engine";
+        if (engineName == null || engineName.trim().isEmpty()) {
+            engineName = "CodeQuest Jakarta EE Evaluation Engine";
+        }
     }
 
     @Override
@@ -91,7 +82,7 @@ public class SubmitAnswerServlet extends HttpServlet {
         try {
             conn = DBConnection.getConnection();
 
-            // 1. One-attempt-per-mission rule enforcement
+            // 1. One-attempt-per-mission rule enforcement (checked against DB and table constraint)
             String checkSql = "SELECT id, is_correct, xp_awarded, selected_option FROM mission_submissions WHERE user_id = ? AND mission_id = ?";
             checkSubStmt = conn.prepareStatement(checkSql);
             checkSubStmt.setInt(1, userId);
@@ -102,12 +93,12 @@ public class SubmitAnswerServlet extends HttpServlet {
                 request.setAttribute("isDuplicate", true);
                 request.setAttribute("previousChoice", rsCheck.getString("selected_option"));
                 request.setAttribute("wasCorrect", rsCheck.getBoolean("is_correct"));
-                request.setAttribute("errorMessage", "Per CodeQuest rules, only one attempt is permitted per mission. Your prior submission has already been logged.");
+                request.setAttribute("errorMessage", "Per CodeQuest rules, only one official evaluation attempt is permitted per mission. Your prior submission has already been logged.");
                 request.getRequestDispatcher("/mission-result.jsp").forward(request, response);
                 return;
             }
 
-            // 2. Retrieve mission details and correct answer
+            // 2. Retrieve mission details and correct option
             String missionSql = "SELECT id, title, description, category, difficulty, option_a, option_b, option_c, option_d, correct_option, xp_reward "
                               + "FROM missions WHERE id = ?";
             missionStmt = conn.prepareStatement(missionSql);
@@ -148,7 +139,7 @@ public class SubmitAnswerServlet extends HttpServlet {
             // ====================================================
             conn.setAutoCommit(false);
 
-            // A. Insert submission record
+            // A. Insert submission record into mission_submissions
             String insertSubSql = "INSERT INTO mission_submissions (user_id, mission_id, selected_option, is_correct, xp_awarded) "
                                 + "VALUES (?, ?, ?, ?, ?)";
             insertSubStmt = conn.prepareStatement(insertSubSql);
@@ -159,8 +150,8 @@ public class SubmitAnswerServlet extends HttpServlet {
             insertSubStmt.setInt(5, xpAwarded);
             insertSubStmt.executeUpdate();
 
-            // B. If correct, update user XP and Level
-            if (isCorrect) {
+            // B. If correct, query current XP and calculate new level using uniform formula
+            if (isCorrect && xpAwarded > 0) {
                 String userSql = "SELECT xp, level FROM users WHERE id = ? FOR UPDATE";
                 userStmt = conn.prepareStatement(userSql);
                 userStmt.setInt(1, userId);
@@ -171,11 +162,9 @@ public class SubmitAnswerServlet extends HttpServlet {
                     oldLevel = rsUser.getInt("level");
                     newTotalXp = currentXp + xpAwarded;
 
-                    newLevel = 1;
-                    if (newTotalXp >= lvl5Thresh) newLevel = 5;
-                    else if (newTotalXp >= lvl4Thresh) newLevel = 4;
-                    else if (newTotalXp >= lvl3Thresh) newLevel = 3;
-                    else if (newTotalXp >= lvl2Thresh) newLevel = 2;
+                    // Uniform level formula: (newTotalXp / 100) + 1
+                    // 0-99 XP = Level 1, 100-199 XP = Level 2, etc.
+                    newLevel = (newTotalXp / 100) + 1;
 
                     if (newLevel > oldLevel) {
                         leveledUp = true;
@@ -196,9 +185,10 @@ public class SubmitAnswerServlet extends HttpServlet {
                 newTotalXp = (sXp instanceof Integer) ? (Integer) sXp : 0;
                 Object sLvl = session.getAttribute("level");
                 newLevel = (sLvl instanceof Integer) ? (Integer) sLvl : 1;
+                oldLevel = newLevel;
             }
 
-            // Commit transaction
+            // Commit atomic transaction
             conn.commit();
 
         } catch (SQLException e) {
@@ -206,7 +196,7 @@ public class SubmitAnswerServlet extends HttpServlet {
                 try {
                     conn.rollback();
                 } catch (SQLException rollbackEx) {
-                    System.err.println("Rollback error: " + rollbackEx.getMessage());
+                    System.err.println("[SubmitAnswerServlet Rollback Error] " + rollbackEx.getMessage());
                 }
             }
             System.err.println("[SubmitAnswerServlet Error] " + e.getMessage());

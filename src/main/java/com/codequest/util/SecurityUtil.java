@@ -11,8 +11,9 @@ import java.util.Base64;
  * Implements OWASP-recommended defenses:
  * 1. HTML Output Encoding (XSS defense)
  * 2. Salted Cryptographic Password Hashing (SHA-256 + 16-byte SecureRandom salt)
- * 3. Constant-Time Hash Comparison (Timing-attack defense)
- * 4. Input Sanitization Helpers
+ * 3. 64-character Hex SHA-256 comparison for client-side WebCrypto / legacy support
+ * 4. Constant-Time Hash Comparison (Timing-attack defense)
+ * 5. Input Sanitization Helpers
  */
 public class SecurityUtil {
 
@@ -73,7 +74,10 @@ public class SecurityUtil {
     }
 
     /**
-     * Verifies password against stored hash with backward compatibility for legacy plaintext records.
+     * Verifies password against stored hash with backward compatibility for:
+     * 1. Standard salted hashes (CQ256$...)
+     * 2. Raw 64-character hex SHA-256 strings (client-side WebCrypto digests)
+     * 3. Legacy plaintext records
      * Uses constant-time comparison to prevent side-channel timing attacks.
      */
     public static boolean verifyPassword(String plainPassword, String storedHash) {
@@ -81,7 +85,7 @@ public class SecurityUtil {
             return false;
         }
 
-        // Check if stored in CQ256$ format
+        // 1. Check if stored in CQ256$ format
         if (storedHash.startsWith(HASH_PREFIX)) {
             try {
                 String[] parts = storedHash.substring(HASH_PREFIX.length()).split("\\$");
@@ -97,7 +101,26 @@ public class SecurityUtil {
             }
         }
 
-        // Fallback for initial seed records / plain text backward compatibility
+        // 2. Check if stored as 64-character hex SHA-256 string
+        if (storedHash.length() == 64 && storedHash.matches("^[0-9a-fA-F]{64}$")) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                byte[] digest = md.digest(plainPassword.getBytes(StandardCharsets.UTF_8));
+                StringBuilder hexString = new StringBuilder();
+                for (byte b : digest) {
+                    String hex = Integer.toHexString(0xff & b);
+                    if (hex.length() == 1) hexString.append('0');
+                    hexString.append(hex);
+                }
+                byte[] expected = storedHash.toLowerCase().getBytes(StandardCharsets.UTF_8);
+                byte[] actual = hexString.toString().toLowerCase().getBytes(StandardCharsets.UTF_8);
+                if (MessageDigest.isEqual(expected, actual)) {
+                    return true;
+                }
+            } catch (Exception ignored) {}
+        }
+
+        // 3. Fallback for initial seed records / plain text backward compatibility
         return storedHash.equals(plainPassword);
     }
 
@@ -118,4 +141,3 @@ public class SecurityUtil {
         }
     }
 }
-
