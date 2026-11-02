@@ -3,9 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Headers & HTTPS Enforcement -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script>
+        // Automatic HTTPS Enforcer for public host environments (e.g. GitHub Pages)
+        if (window.location.protocol === 'http:' && 
+            window.location.hostname !== 'localhost' && 
+            window.location.hostname !== '127.0.0.1' &&
+            !window.location.hostname.endsWith('.local')) {
+            window.location.replace(window.location.href.replace(/^http:/i, 'https:'));
+        }
+    </script>
     <title>CodeQuest - Combat Programming Arena</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23000000%22/><text x=%2250%%22 y=%2265%%22 font-family=%22sans-serif%22 font-size=%2250%22 font-weight=%22900%22 fill=%22%23FFFF00%22 text-anchor=%22middle%22>CQ</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23000000'/%3E%3Ctext x='50' y='65' font-family='sans-serif' font-size='50' font-weight='900' fill='%23FFFF00' text-anchor='middle'%3ECQ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -29,8 +42,10 @@
             </ul>
 
             <div class="nav-actions">
-                <div id="user-hud-badge" class="badge badge-emerald" style="padding: 6px 14px; font-weight: 800; border-radius: 9999px;">
-                    <span id="hud-username">Cadet_Dilip</span> | LV.<span id="hud-level">1</span> | <span id="hud-xp">0</span> XP
+                <div id="user-hud-badge" class="badge badge-emerald"
+                    style="padding: 6px 14px; font-weight: 800; border-radius: 9999px;">
+                    <span id="hud-username">Cadet_Dilip</span> | LV.<span id="hud-level">1</span> | <span
+                        id="hud-xp">0</span> XP
                 </div>
                 <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
             </div>
@@ -44,12 +59,14 @@
                     <span class="section-tagline">Combat Training Deck</span>
                     <h2 class="section-title">Active Programming Missions</h2>
                     <p class="section-desc">
-                        Solve interactive coding challenges in our sandboxed runtime or conquer rapid concept checks. 
-                        First-time solutions earn permanent XP bounties and rank advancements. Replays support unlimited practice!
+                        Solve interactive coding challenges in our sandboxed runtime or conquer rapid concept checks.
+                        First-time solutions earn permanent XP bounties and rank advancements. Replays support unlimited
+                        practice!
                     </p>
 
                     <!-- Filter Control Cluster -->
-                    <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 25px;">
+                    <div
+                        style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 25px;">
                         <button class="filter-pill active" data-filter="All">All Missions</button>
                         <button class="filter-pill" data-filter="code">Coding Arena</button>
                         <button class="filter-pill" data-filter="mcq">Concept Checks</button>
@@ -60,7 +77,8 @@
                         <button class="filter-pill" data-filter="Easy">Easy</button>
                         <button class="filter-pill" data-filter="Medium">Medium</button>
                         <button class="filter-pill" data-filter="Hard">Hard</button>
-                        <button id="reset-progress-btn" class="btn btn-outline btn-sm" style="margin-left: 15px;" title="Reset solved status for all challenges">Reset Progress</button>
+                        <button id="reset-progress-btn" class="btn btn-outline btn-sm" style="margin-left: 15px;"
+                            title="Reset solved status for all challenges">Reset Progress</button>
                     </div>
                 </div>
 
@@ -94,7 +112,7 @@
     <script src="js/codequest-live.js"></script>
     <script src="js/game-fx.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let user = CodeQuestEngine.getCurrentUser();
             let activeFilter = 'All';
 
@@ -141,7 +159,7 @@
                     card.setAttribute('data-category', m.category || '');
                     card.setAttribute('data-type', m.type || 'mcq');
 
-                    const typeBadge = (m.type === 'code') 
+                    const typeBadge = (m.type === 'code')
                         ? `<span class="badge" style="background: var(--pop-blue); color: #fff; border: 2px solid #000; box-shadow: 2px 2px 0 #000;">CODING ARENA</span>`
                         : `<span class="badge" style="background: var(--pop-yellow); color: #000; border: 2px solid #000; box-shadow: 2px 2px 0 #000;">CONCEPT CHECK</span>`;
 
@@ -190,7 +208,7 @@
                         // Handle Tab Indentation inside code textarea
                         const textarea = card.querySelector(`#editor-${m.id}`);
                         if (textarea) {
-                            textarea.addEventListener('keydown', function(e) {
+                            textarea.addEventListener('keydown', function (e) {
                                 if (e.key === 'Tab') {
                                     e.preventDefault();
                                     const start = this.selectionStart;
@@ -203,7 +221,7 @@
 
                         // Run Code Button Handler
                         const runBtn = card.querySelector('.btn-run-code');
-                        runBtn.addEventListener('click', async function() {
+                        runBtn.addEventListener('click', async function () {
                             const codeVal = textarea.value;
                             const consolePanel = card.querySelector(`#console-${m.id}`);
                             const consoleOutput = card.querySelector(`#output-${m.id}`);
@@ -217,7 +235,7 @@
 
                         // Submit Code Button Handler
                         const submitBtn = card.querySelector('.btn-submit-code');
-                        submitBtn.addEventListener('click', async function() {
+                        submitBtn.addEventListener('click', async function () {
                             const codeVal = textarea.value;
                             const consolePanel = card.querySelector(`#console-${m.id}`);
                             const consoleOutput = card.querySelector(`#output-${m.id}`);
@@ -258,7 +276,7 @@
 
                         // Reset Code Button Handler
                         const resetBtn = card.querySelector('.btn-reset-code');
-                        resetBtn.addEventListener('click', function() {
+                        resetBtn.addEventListener('click', function () {
                             if (confirm('Reset your code back to the starter template?')) {
                                 textarea.value = m.starterCode;
                                 if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
@@ -313,7 +331,7 @@
                         // Handle Option Selection
                         const labels = card.querySelectorAll('.option-item');
                         labels.forEach(lbl => {
-                            lbl.addEventListener('click', function() {
+                            lbl.addEventListener('click', function () {
                                 labels.forEach(l => l.classList.remove('selected'));
                                 this.classList.add('selected');
                                 const radio = this.querySelector('input[type="radio"]');
@@ -324,7 +342,7 @@
 
                         // Handle Form Submission
                         const form = card.querySelector('.quest-form');
-                        form.addEventListener('submit', function(e) {
+                        form.addEventListener('submit', function (e) {
                             e.preventDefault();
                             const selectedRadio = form.querySelector('input[type="radio"]:checked');
                             if (!selectedRadio) {
@@ -375,8 +393,8 @@
 
                 let html = '';
                 result.results.forEach(tc => {
-                    const badge = tc.passed 
-                        ? `<span class="test-badge-pass">PASS</span>` 
+                    const badge = tc.passed
+                        ? `<span class="test-badge-pass">PASS</span>`
                         : `<span class="test-badge-fail">FAIL</span>`;
                     html += `
                         <div class="test-case-card">
@@ -398,7 +416,7 @@
             // Category & Type Filter Pill Handlers
             const pills = document.querySelectorAll('.filter-pill');
             pills.forEach(p => {
-                p.addEventListener('click', function() {
+                p.addEventListener('click', function () {
                     pills.forEach(el => el.classList.remove('active'));
                     this.classList.add('active');
                     if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
@@ -409,7 +427,7 @@
             // Reset progress button
             const resetBtn = document.getElementById('reset-progress-btn');
             if (resetBtn) {
-                resetBtn.addEventListener('click', function() {
+                resetBtn.addEventListener('click', function () {
                     if (confirm('Reset your solved mission history to test again from 0 XP?')) {
                         CodeQuestEngine.resetProgress();
                         if (window.GameAudio && window.GameAudio.playBlip) window.GameAudio.playBlip();
@@ -421,4 +439,5 @@
         });
     </script>
 </body>
+
 </html>

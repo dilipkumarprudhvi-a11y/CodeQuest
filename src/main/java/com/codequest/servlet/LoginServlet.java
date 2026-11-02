@@ -96,6 +96,9 @@ public class LoginServlet extends HttpServlet {
                         userCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
                         userCookie.setPath(cookiePath);
                         userCookie.setHttpOnly(true);
+                        if (request.isSecure()) {
+                            userCookie.setSecure(true);
+                        }
                         response.addCookie(userCookie);
                     } else {
                         // Clear cookie if unchecked
@@ -103,6 +106,9 @@ public class LoginServlet extends HttpServlet {
                         userCookie.setMaxAge(0);
                         userCookie.setPath(cookiePath);
                         userCookie.setHttpOnly(true);
+                        if (request.isSecure()) {
+                            userCookie.setSecure(true);
+                        }
                         response.addCookie(userCookie);
                     }
 

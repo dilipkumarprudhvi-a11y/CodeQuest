@@ -25,11 +25,16 @@ public class AdminLoginServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        // Demonstrate ServletConfig usage
         consoleTitle = config.getInitParameter("adminConsoleTitle");
+        if (consoleTitle == null || consoleTitle.trim().isEmpty()) {
+            consoleTitle = "CodeQuest Administrative Command Center";
+        }
         maxFailedAttempts = config.getInitParameter("maxFailedAttempts");
+        if (maxFailedAttempts == null || maxFailedAttempts.trim().isEmpty()) {
+            maxFailedAttempts = "5";
+        }
 
-        // Demonstrate ServletContext usage
+        // Initialize application-scoped telemetry
         ServletContext context = config.getServletContext();
         if (context.getAttribute("appVersion") == null) {
             context.setAttribute("appVersion", "CodeQuest v2.4 (Enterprise Engine)");
@@ -42,6 +47,11 @@ public class AdminLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("adminId") != null) {
+            response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+            return;
+        }
         request.setAttribute("consoleTitle", consoleTitle);
         request.getRequestDispatcher("/admin-login.jsp").forward(request, response);
     }
@@ -79,7 +89,7 @@ public class AdminLoginServlet extends HttpServlet {
                 if (SecurityUtil.verifyPassword(password, dbPass)) {
                     int adminId = rs.getInt("id");
 
-                    // Rehash legacy plaintext admin password
+                    // Rehash legacy plaintext admin password to salted CQ256 standard
                     if (SecurityUtil.needsRehash(dbPass)) {
                         try (PreparedStatement updateStmt = conn.prepareStatement("UPDATE admins SET password = ? WHERE id = ?")) {
                             updateStmt.setString(1, SecurityUtil.hashPassword(password));
@@ -88,7 +98,7 @@ public class AdminLoginServlet extends HttpServlet {
                         } catch (Exception ignored) {}
                     }
 
-                    // Prevent Session Fixation: Invalidate old session before creating new
+                    // Prevent Session Fixation: Invalidate prior session before creating fresh session
                     HttpSession oldSession = request.getSession(false);
                     if (oldSession != null) {
                         oldSession.invalidate();
@@ -101,7 +111,7 @@ public class AdminLoginServlet extends HttpServlet {
                     session.setAttribute("adminEmail", rs.getString("email"));
                     session.setAttribute("adminRole", "SYSTEM_ADMIN");
 
-                    // Demonstrate ServletContext update
+                    // Thread-safe update of ServletContext telemetry counter
                     ServletContext ctx = getServletContext();
                     synchronized (ctx) {
                         Integer count = (Integer) ctx.getAttribute("adminLoginsCount");
@@ -119,7 +129,7 @@ public class AdminLoginServlet extends HttpServlet {
 
         } catch (SQLException e) {
             System.err.println("[AdminLoginServlet Error] " + e.getMessage());
-            request.setAttribute("errorMessage", "Security communication failure. Please try again.");
+            request.setAttribute("errorMessage", "Security communication failure: " + e.getMessage());
             request.getRequestDispatcher("/admin-login.jsp").forward(request, response);
         } finally {
             DBConnection.close(rs, stmt, conn);

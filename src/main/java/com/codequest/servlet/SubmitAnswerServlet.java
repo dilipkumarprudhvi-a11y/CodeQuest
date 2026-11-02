@@ -74,9 +74,9 @@ public class SubmitAnswerServlet extends HttpServlet {
         Mission mission = null;
         boolean isCorrect = false;
         int xpAwarded = 0;
-        int newTotalXp = 0;
-        int oldLevel = 1;
-        int newLevel = 1;
+        int newTotalXp = (session.getAttribute("xp") instanceof Integer) ? (Integer) session.getAttribute("xp") : 0;
+        int oldLevel = (session.getAttribute("level") instanceof Integer) ? (Integer) session.getAttribute("level") : 1;
+        int newLevel = oldLevel;
         boolean leveledUp = false;
 
         try {
@@ -93,6 +93,8 @@ public class SubmitAnswerServlet extends HttpServlet {
                 request.setAttribute("isDuplicate", true);
                 request.setAttribute("previousChoice", rsCheck.getString("selected_option"));
                 request.setAttribute("wasCorrect", rsCheck.getBoolean("is_correct"));
+                request.setAttribute("newLevel", oldLevel);
+                request.setAttribute("newTotalXp", newTotalXp);
                 request.setAttribute("errorMessage", "Per CodeQuest rules, only one official evaluation attempt is permitted per mission. Your prior submission has already been logged.");
                 request.getRequestDispatcher("/mission-result.jsp").forward(request, response);
                 return;
@@ -181,11 +183,7 @@ public class SubmitAnswerServlet extends HttpServlet {
                     session.setAttribute("level", newLevel);
                 }
             } else {
-                Object sXp = session.getAttribute("xp");
-                newTotalXp = (sXp instanceof Integer) ? (Integer) sXp : 0;
-                Object sLvl = session.getAttribute("level");
-                newLevel = (sLvl instanceof Integer) ? (Integer) sLvl : 1;
-                oldLevel = newLevel;
+                newLevel = oldLevel;
             }
 
             // Commit atomic transaction
@@ -200,7 +198,16 @@ public class SubmitAnswerServlet extends HttpServlet {
                 }
             }
             System.err.println("[SubmitAnswerServlet Error] " + e.getMessage());
-            request.setAttribute("errorMessage", "Database transaction aborted. Please retry your submission.");
+
+            // Handle potential duplicate submission race condition
+            if (e.getErrorCode() == 1062 || (e.getMessage() != null && e.getMessage().toLowerCase().contains("duplicate"))) {
+                request.setAttribute("isDuplicate", true);
+                request.setAttribute("previousChoice", selectedOption);
+                request.setAttribute("wasCorrect", false);
+                request.setAttribute("errorMessage", "Per CodeQuest rules, only one official evaluation attempt is permitted per mission. Your prior submission has already been logged.");
+            } else {
+                request.setAttribute("errorMessage", "Database transaction aborted: " + e.getMessage());
+            }
         } finally {
             if (conn != null) {
                 try {

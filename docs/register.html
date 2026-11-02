@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest - Join Roster Registration (Live)</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23000000%22/><text x=%2250%%22 y=%2265%%22 font-family=%22sans-serif%22 font-size=%2250%22 font-weight=%22900%22 fill=%22%23FFFF00%22 text-anchor=%22middle%22>CQ</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23000000%22/><text x=%2250%%22 y=%2265%%22 font-family=%22sans-serif%22 font-size=%2250%22 font-weight=%22900%22 fill=%22%23FFFF00%22 text-anchor=%22middle%22>CQ</text></svg>">
 </head>
+
 <body>
     <canvas id="cyber-canvas"></canvas>
 
@@ -35,43 +38,52 @@
         </nav>
 
         <!-- Main Content -->
-        <main class="content-wrapper" style="display: flex; align-items: center; justify-content: center; padding: 95px 20px 40px;">
+        <main class="content-wrapper"
+            style="display: flex; align-items: center; justify-content: center; padding: 95px 20px 40px;">
             <div class="card" style="max-width: 480px; width: 100%; padding: 35px;">
                 <div style="text-align: center; margin-bottom: 25px;">
-                    <div style="font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--pop-lime);">AD</div>
+                    <div style="font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--pop-lime);">AD
+                    </div>
                     <h2 style="font-size: 2rem; font-weight: 800; color: #000000;">Join Warrior Roster</h2>
-                    <p style="color: var(--text-secondary); font-weight: 600; font-size: 0.95rem;">Enlist as a new cadet with 0 XP at Combat Level 1.</p>
+                    <p style="color: var(--text-secondary); font-weight: 600; font-size: 0.95rem;">Enlist as a new cadet
+                        with 0 XP at Combat Level 1.</p>
                 </div>
 
                 <form id="reg-form">
                     <div class="form-group" style="margin-bottom: 18px;">
                         <label class="form-label">Cadet Call-Sign (Username)</label>
-                        <input type="text" id="reg-username" class="form-control" required placeholder="e.g. ShadowCoder">
+                        <input type="text" id="reg-username" class="form-control" required
+                            placeholder="e.g. ShadowCoder">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 18px;">
                         <label class="form-label">Comms Address (Email)</label>
-                        <input type="email" id="reg-email" class="form-control" required placeholder="cadet@example.com">
+                        <input type="email" id="reg-email" class="form-control" required
+                            placeholder="cadet@example.com">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 18px;">
                         <label class="form-label">Security Passphrase</label>
-                        <input type="password" id="reg-pass" class="form-control" required placeholder="Min 6 characters">
+                        <input type="password" id="reg-pass" class="form-control" required
+                            placeholder="Min 6 characters">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 25px;">
                         <label class="form-label">Confirm Passphrase</label>
-                        <input type="password" id="reg-confirm" class="form-control" required placeholder="Re-enter password">
+                        <input type="password" id="reg-confirm" class="form-control" required
+                            placeholder="Re-enter password">
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 800; font-size: 1.05rem;">
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 14px; font-weight: 800; font-size: 1.05rem;">
                         Enlist Cadet & Initiate
                     </button>
                 </form>
 
                 <div style="text-align: center; margin-top: 20px; font-size: 0.95rem;">
-                    <span style="color: var(--text-secondary); font-weight: 600;">Already registered?</span> 
-                    <a href="login.html" style="color: var(--pop-blue); font-weight: 800; margin-left: 5px;">Cadet Check-In →</a>
+                    <span style="color: var(--text-secondary); font-weight: 600;">Already registered?</span>
+                    <a href="login.html" style="color: var(--pop-blue); font-weight: 800; margin-left: 5px;">Cadet
+                        Check-In →</a>
                 </div>
             </div>
         </main>
@@ -96,11 +108,11 @@
     <script src="js/codequest-live.js"></script>
     <script src="js/game-fx.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('reg-form');
             if (!form) return;
 
-            form.addEventListener('submit', async function(e) {
+            form.addEventListener('submit', async function (e) {
                 e.preventDefault();
                 const uname = document.getElementById('reg-username') ? document.getElementById('reg-username').value.trim() : '';
                 const email = document.getElementById('reg-email') ? document.getElementById('reg-email').value.trim() : '';
@@ -139,4 +151,5 @@
         });
     </script>
 </body>
+
 </html>
