@@ -3,9 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Headers & HTTPS Enforcement -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script>
+        // Automatic HTTPS Enforcer for public host environments (e.g. GitHub Pages)
+        if (window.location.protocol === 'http:' && 
+            window.location.hostname !== 'localhost' && 
+            window.location.hostname !== '127.0.0.1' &&
+            !window.location.hostname.endsWith('.local')) {
+            window.location.replace(window.location.href.replace(/^http:/i, 'https:'));
+        }
+    </script>
     <title>CodeQuest - Game-Based Programming Arena (Live Application)</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23000000%22/><text x=%2250%%22 y=%2265%%22 font-family=%22sans-serif%22 font-size=%2250%22 font-weight=%22900%22 fill=%22%23FFFF00%22 text-anchor=%22middle%22>CQ</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23000000'/%3E%3Ctext x='50' y='65' font-family='sans-serif' font-size='50' font-weight='900' fill='%23FFFF00' text-anchor='middle'%3ECQ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -153,7 +166,7 @@
                 <a href="admin.html">Admin Console</a>
                 <a href="login.html">Login</a>
                 <a href="register.html">Register</a>
-                <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank">GitHub Repo</a>
+                <a href="https://github.com/dilipkumarprudhvi-a11y/CodeQuest" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
             </div>
             <p>&copy; 2026 CodeQuest Learning Game. Live Web Application on GitHub Pages.</p>
         </footer>

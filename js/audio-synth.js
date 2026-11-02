@@ -3,7 +3,7 @@
  * Zero external audio assets needed - synthesized in realtime via Web Audio API.
  * Uses lazy gesture-triggered initialization to comply with browser autoplay policies.
  */
-(function() {
+(function () {
     'use strict';
 
     let audioCtx = null;
@@ -36,7 +36,7 @@
 
     // Lazy resume on first user gesture anywhere on the page
     function setupGestureUnlock() {
-        const unlock = function() {
+        const unlock = function () {
             if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
@@ -50,14 +50,14 @@
 
     // Expose sound functions globally
     window.GameAudio = {
-        isMuted: function() {
+        isMuted: function () {
             return isMuted;
         },
-        toggleMute: function() {
+        toggleMute: function () {
             isMuted = !isMuted;
             try {
                 localStorage.setItem('codequest_muted', isMuted ? 'true' : 'false');
-            } catch (e) {}
+            } catch (e) { }
 
             const btn = document.getElementById('sound-toggle-btn');
             if (btn) {
@@ -67,7 +67,7 @@
             }
             return isMuted;
         },
-        playBlip: function() {
+        playBlip: function () {
             if (isMuted) return;
             const ctx = initAudio();
             if (!ctx) return;
@@ -83,9 +83,9 @@
                 gain.connect(ctx.destination);
                 osc.start();
                 osc.stop(ctx.currentTime + 0.08);
-            } catch (e) {}
+            } catch (e) { }
         },
-        playSelect: function() {
+        playSelect: function () {
             if (isMuted) return;
             const ctx = initAudio();
             if (!ctx) return;
@@ -101,9 +101,9 @@
                 gain.connect(ctx.destination);
                 osc.start();
                 osc.stop(ctx.currentTime + 0.12);
-            } catch (e) {}
+            } catch (e) { }
         },
-        playSuccess: function() {
+        playSuccess: function () {
             if (isMuted) return;
             const ctx = initAudio();
             if (!ctx) return;
@@ -121,12 +121,12 @@
                     osc.start(ctx.currentTime + (idx * 0.08));
                     osc.stop(ctx.currentTime + (idx * 0.08) + 0.35);
                 });
-            } catch (e) {}
+            } catch (e) { }
         },
-        playVictory: function() {
+        playVictory: function () {
             this.playSuccess();
         },
-        playError: function() {
+        playError: function () {
             if (isMuted) return;
             const ctx = initAudio();
             if (!ctx) return;
@@ -142,12 +142,12 @@
                 gain.connect(ctx.destination);
                 osc.start();
                 osc.stop(ctx.currentTime + 0.22);
-            } catch (e) {}
+            } catch (e) { }
         },
-        playDefeat: function() {
+        playDefeat: function () {
             this.playError();
         },
-        playLevelUp: function() {
+        playLevelUp: function () {
             if (isMuted) return;
             const ctx = initAudio();
             if (!ctx) return;
@@ -165,18 +165,18 @@
                     osc.start(ctx.currentTime + (idx * 0.09));
                     osc.stop(ctx.currentTime + (idx * 0.09) + 0.45);
                 });
-            } catch (e) {}
+            } catch (e) { }
         }
     };
 
     // Auto-bind sound toggle button across any page
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const btn = document.getElementById('sound-toggle-btn');
         if (btn) {
             btn.classList.toggle('muted', isMuted);
             btn.title = isMuted ? "Sound: Off (Click to unmute)" : "Sound: On (Click to mute)";
             btn.innerHTML = isMuted ? 'MUTED' : 'AUDIO';
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 initAudio();
                 window.GameAudio.toggleMute();
