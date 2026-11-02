@@ -52,12 +52,12 @@
                 <div class="brand-text">CodeQuest</div>
             </a>
             <ul class="nav-links">
-                <li><a href="dashboard" class="active"><span>📊</span> Cockpit</a></li>
-                <li><a href="missions"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard" class="active">Cockpit</a></li>
+                <li><a href="missions">Missions</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <div class="nav-profile-pill">
                     <span class="nav-level-tag">LVL <%= student.getLevel() %></span>
                     <span style="color: var(--text-pure); font-weight: 600;"><%= SecurityUtil.encodeHtml(student.getUsername()) %></span>
@@ -71,7 +71,7 @@
             <div class="container">
                 <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                     <div class="alert alert-danger">
-                        <span>⚠️</span>
+                        
                         <div><%= errorMessage %></div>
                     </div>
                 <% } %>
@@ -80,11 +80,7 @@
                 <div class="profile-banner">
                     <div class="profile-identity">
                         <div class="profile-avatar">
-                            <% if (student.getLevel() >= 5) { %>🧙‍♂️<% } 
-                               else if (student.getLevel() >= 4) { %>⚔️<% } 
-                               else if (student.getLevel() >= 3) { %>🛡️<% } 
-                               else if (student.getLevel() >= 2) { %>⚡<% } 
-                               else { %>🐣<% } %>
+                            L<%= student.getLevel() %>
                         </div>
                         <div>
                             <h1 class="profile-name"><%= SecurityUtil.encodeHtml(student.getUsername()) %></h1>
@@ -123,7 +119,7 @@
                 <div class="xp-tracker-card">
                     <div class="xp-header">
                         <div class="xp-label">
-                            <span>🚀 Tier Advancement Calibration</span>
+                            <span>Tier Advancement Calibration</span>
                             <span style="font-family: var(--font-code); color: var(--neon-emerald); font-size: 0.85rem;">
                                 [<%= progressPercent %>% Complete]
                             </span>
@@ -150,7 +146,7 @@
                     <div class="card" style="padding: 1.75rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                             <h3 style="font-family: var(--font-heading); font-size: 1.35rem; color: var(--text-pure);">
-                                📜 Recent Mission Submissions
+                                Recent Mission Submissions
                             </h3>
                             <a href="missions" class="btn btn-outline-cyan btn-sm">Enter Arena &rarr;</a>
                         </div>
@@ -189,11 +185,11 @@
                                                 <td>
                                                     <% if (sub.isCorrect()) { %>
                                                         <span style="color: var(--neon-emerald); font-weight: 700; font-family: var(--font-code);">
-                                                            ✓ VICTORY
+                                                            VICTORY
                                                         </span>
                                                     <% } else { %>
                                                         <span style="color: var(--danger-crimson); font-weight: 700; font-family: var(--font-code);">
-                                                            ✗ DEFEAT
+                                                            DEFEAT
                                                         </span>
                                                     <% } %>
                                                 </td>
@@ -209,7 +205,7 @@
                             </div>
                         <% } else { %>
                             <div class="empty-state" style="padding: 2.5rem 1rem;">
-                                <div class="empty-state-icon" style="font-size: 2rem;">⚔️</div>
+                                <div class="empty-state-icon" style="font-size: 1.2rem; font-weight: 800;">NONE</div>
                                 <h4 style="color: var(--text-pure); margin-bottom: 0.5rem; font-family: var(--font-heading);">
                                     Zero Quests Undertaken
                                 </h4>
@@ -225,7 +221,7 @@
                     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                         <div class="card" style="padding: 1.75rem; background: linear-gradient(180deg, rgba(0,245,160,0.06), var(--bg-surface));">
                             <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--neon-emerald); margin-bottom: 0.75rem;">
-                                ⚡ Deploy to Missions
+                                Deploy to Missions
                             </h3>
                             <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
                                 Ready to earn more XP? Solve Java syntax puzzles, SQL transaction problems, and algorithmic benchmarks.
@@ -237,7 +233,7 @@
 
                         <div class="card" style="padding: 1.75rem; background: linear-gradient(180deg, rgba(255,184,0,0.06), var(--bg-surface));">
                             <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--solar-gold); margin-bottom: 0.75rem;">
-                                🏆 Global Ranking
+                                Global Ranking
                             </h3>
                             <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
                                 Check your placement on the global leaderboard against all registered warriors.

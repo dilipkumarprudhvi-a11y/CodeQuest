@@ -36,7 +36,7 @@
             if (btn) {
                 btn.classList.toggle('muted', isMuted);
                 btn.title = isMuted ? "Sound: Off (Click to unmute)" : "Sound: On (Click to mute)";
-                btn.innerHTML = isMuted ? '🔇' : '🔊';
+                btn.innerHTML = isMuted ? 'MUTED' : 'AUDIO';
             }
             return isMuted;
         },
@@ -142,7 +142,7 @@
         if (btn) {
             btn.classList.toggle('muted', isMuted);
             btn.title = isMuted ? "Sound: Off (Click to unmute)" : "Sound: On (Click to mute)";
-            btn.innerHTML = isMuted ? '🔇' : '🔊';
+            btn.innerHTML = isMuted ? 'MUTED' : 'AUDIO';
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 initAudio();

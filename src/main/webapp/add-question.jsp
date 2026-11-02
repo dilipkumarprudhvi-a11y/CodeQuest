@@ -50,13 +50,13 @@
                 <div class="brand-text">CodeQuest <span style="font-size: 0.8rem; color: #ff3366;">[COMMAND]</span></div>
             </a>
             <ul class="nav-links">
-                <li><a href="admin-dashboard.jsp"><span>📊</span> Cockpit</a></li>
-                <li><a href="add-question.jsp" class="active"><span>➕</span> Add Mission</a></li>
-                <li><a href="view-questions"><span>📋</span> Question Vault</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="admin-dashboard.jsp">Cockpit</a></li>
+                <li><a href="add-question.jsp" class="active">Add Mission</a></li>
+                <li><a href="view-questions">Question Vault</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <a href="admin-logout" class="btn btn-danger btn-sm">Terminate Session</a>
             </div>
         </nav>
@@ -73,7 +73,7 @@
 
                         <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                <span>⚠️</span>
+                                
                                 <div><%= SecurityUtil.encodeHtml(errorMessage) %></div>
                             </div>
                         <% } %>
@@ -97,9 +97,9 @@
                                 <div class="form-group">
                                     <label class="form-label" for="category">Technology Category</label>
                                     <select id="category" name="category" class="form-select" required>
-                                        <option value="Java" <%= ("Java".equals(formCategory) ? "selected" : "") %>>☕ Java Fundamentals & JVM</option>
-                                        <option value="SQL" <%= ("SQL".equals(formCategory) ? "selected" : "") %>>🗄️ SQL & Relational Databases</option>
-                                        <option value="DSA" <%= ("DSA".equals(formCategory) ? "selected" : "") %>>⚡ Data Structures & Algorithms</option>
+                                        <option value="Java" <%= ("Java".equals(formCategory) ? "selected" : "") %>>Java Fundamentals & JVM</option>
+                                        <option value="SQL" <%= ("SQL".equals(formCategory) ? "selected" : "") %>>SQL & Relational Databases</option>
+                                        <option value="DSA" <%= ("DSA".equals(formCategory) ? "selected" : "") %>>Data Structures & Algorithms</option>
                                     </select>
                                 </div>
 
@@ -107,9 +107,9 @@
                                     <div class="form-group">
                                         <label class="form-label" for="difficulty">Difficulty Tier</label>
                                         <select id="difficulty" name="difficulty" class="form-select" required>
-                                            <option value="Easy" <%= ("Easy".equals(formDifficulty) ? "selected" : "") %>>🟢 Easy (Novice)</option>
-                                            <option value="Medium" <%= ("Medium".equals(formDifficulty) ? "selected" : "") %>>🟡 Medium (Warrior)</option>
-                                            <option value="Hard" <%= ("Hard".equals(formDifficulty) ? "selected" : "") %>>🔴 Hard (Grandmaster)</option>
+                                            <option value="Easy" <%= ("Easy".equals(formDifficulty) ? "selected" : "") %>>Easy (Novice)</option>
+                                            <option value="Medium" <%= ("Medium".equals(formDifficulty) ? "selected" : "") %>>Medium (Warrior)</option>
+                                            <option value="Hard" <%= ("Hard".equals(formDifficulty) ? "selected" : "") %>>Hard (Grandmaster)</option>
                                         </select>
                                     </div>
 
@@ -170,7 +170,7 @@
 
                             <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                                 <button type="submit" class="btn btn-admin btn-lg">
-                                    💾 Persist Mission to Database
+                                    Persist Mission to Database
                                 </button>
                                 <a href="view-questions" class="btn btn-outline btn-lg">Cancel & Return</a>
                             </div>

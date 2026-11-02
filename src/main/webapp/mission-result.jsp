@@ -49,12 +49,12 @@
                 <div class="brand-text">CodeQuest</div>
             </a>
             <ul class="nav-links">
-                <li><a href="dashboard"><span>📊</span> Cockpit</a></li>
-                <li><a href="missions"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard">Cockpit</a></li>
+                <li><a href="missions">Missions</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <div class="nav-profile-pill">
                     <span class="nav-level-tag">LVL <%= newLevel %></span>
                     <span style="color: var(--text-pure); font-weight: 600;"><%= SecurityUtil.encodeHtml(username) %></span>
@@ -69,7 +69,7 @@
                 <% if (duplicate) { %>
                     <!-- Duplicate Submission Screen -->
                     <div class="result-card failure-card">
-                        <div class="result-icon-orb">🔒</div>
+                        <div class="result-icon-orb">LOCK</div>
                         <h2 class="result-headline" style="color: var(--danger-crimson);">One-Attempt Rule Enforced</h2>
                         <p class="result-lead">
                             <%= (errorMessage != null ? SecurityUtil.encodeHtml(errorMessage) : "You have already submitted an answer for this mission.") %>
@@ -86,7 +86,7 @@
                 <% } else if (correct) { %>
                     <!-- Victory & XP Reward Screen -->
                     <div class="result-card success-card">
-                        <div class="result-icon-orb">⚡</div>
+                        <div class="result-icon-orb">PASS</div>
                         <h2 class="result-headline" style="color: var(--neon-emerald);">Protocol Solved: Victory!</h2>
                         <p class="result-lead">
                             Your selected answer <strong style="color: var(--cyber-cyan);">[Option <%= SecurityUtil.encodeHtml(selectedOption) %>]</strong> was evaluated as 
@@ -95,12 +95,11 @@
 
                         <% if (leveledUp) { %>
                             <div class="level-up-banner">
-                                🎖️ TIER PROMOTION: ADVANCED FROM LEVEL <%= oldLevel %> TO LEVEL <%= newLevel %>!
+                                TIER PROMOTION: ADVANCED FROM LEVEL <%= oldLevel %> TO LEVEL <%= newLevel %>!
                             </div>
                         <% } %>
 
                         <div class="xp-awarded-pill">
-                            <span>⚡</span>
                             <span>+<%= xpAwarded %> XP AWARDED</span>
                         </div>
 
@@ -110,9 +109,9 @@
                         </div>
 
                         <div style="display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap;">
-                            <a href="missions" class="btn btn-primary btn-lg">Next Mission ⚔️</a>
-                            <a href="dashboard" class="btn btn-outline-cyan btn-lg">View Cockpit 📊</a>
-                            <a href="leaderboard" class="btn btn-outline btn-lg">Check Rankings 🏆</a>
+                            <a href="missions" class="btn btn-primary btn-lg">Next Mission</a>
+                            <a href="dashboard" class="btn btn-outline-cyan btn-lg">View Cockpit</a>
+                            <a href="leaderboard" class="btn btn-outline btn-lg">Check Rankings</a>
                         </div>
                     </div>
 
@@ -134,7 +133,7 @@
                 <% } else { %>
                     <!-- Defeat Screen (Zero XP awarded, Feedback provided) -->
                     <div class="result-card failure-card">
-                        <div class="result-icon-orb">💀</div>
+                        <div class="result-icon-orb">FAIL</div>
                         <h2 class="result-headline" style="color: var(--danger-crimson);">Compilation Defeat</h2>
                         <p class="result-lead">
                             Your submitted choice <strong style="color: var(--text-pure);">[Option <%= SecurityUtil.encodeHtml(selectedOption) %>]</strong> did not satisfy 
@@ -151,7 +150,7 @@
                         </div>
 
                         <div style="display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap;">
-                            <a href="missions" class="btn btn-primary btn-lg">Resume Quests ⚔️</a>
+                            <a href="missions" class="btn btn-primary btn-lg">Resume Quests</a>
                             <a href="dashboard" class="btn btn-outline btn-lg">Return to Cockpit</a>
                         </div>
                     </div>

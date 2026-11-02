@@ -27,14 +27,14 @@
                 <div class="brand-text">CodeQuest</div>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html"><span>🏠</span> Home</a></li>
-                <li><a href="missions"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
-                <li><a href="login.jsp"><span>🔑</span> Student Login</a></li>
-                <li><a href="admin-login.jsp"><span>🛡️</span> Admin</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="missions">Missions</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
+                <li><a href="login.jsp">Student Login</a></li>
+                <li><a href="admin-login.jsp">Admin</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <a href="login.jsp" class="btn btn-outline-cyan btn-sm">Sign In</a>
             </div>
         </nav>
@@ -52,7 +52,7 @@
                         <%-- Display Validation or Error Message Dynamically using Scriptlet --%>
                         <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                <span>⚠️</span>
+                                
                                 <div><%= SecurityUtil.encodeHtml(errorMessage) %></div>
                             </div>
                         <% } %>
@@ -85,7 +85,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
-                                ⚡ Initialize Account & Enter Arena
+                                Initialize Account & Enter Arena
                             </button>
                         </form>
 

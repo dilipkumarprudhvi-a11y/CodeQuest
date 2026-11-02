@@ -45,12 +45,12 @@
                 <div class="brand-text">CodeQuest</div>
             </a>
             <ul class="nav-links">
-                <li><a href="dashboard"><span>📊</span> Cockpit</a></li>
-                <li><a href="missions" class="active"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="dashboard">Cockpit</a></li>
+                <li><a href="missions" class="active">Missions</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <div class="nav-profile-pill">
                     <span class="nav-level-tag">LVL <%= (level != null ? level : 1) %></span>
                     <span style="color: var(--text-pure); font-weight: 600;"><%= username %></span>
@@ -72,7 +72,7 @@
 
                 <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                     <div class="alert alert-danger">
-                        <span>⚠️</span>
+                        
                         <div><%= errorMessage %></div>
                     </div>
                 <% } %>
@@ -86,19 +86,19 @@
                         <div class="filter-pills">
                             <a href="missions?category=All&difficulty=<%= selectedDifficulty %>" 
                                class="filter-pill <%= ("All".equalsIgnoreCase(selectedCategory) ? "active" : "") %>">
-                               🌐 All Domains
+                               All Domains
                             </a>
                             <a href="missions?category=Java&difficulty=<%= selectedDifficulty %>" 
                                class="filter-pill <%= ("Java".equalsIgnoreCase(selectedCategory) ? "active" : "") %>">
-                               ☕ Java
+                               Java
                             </a>
                             <a href="missions?category=SQL&difficulty=<%= selectedDifficulty %>" 
                                class="filter-pill <%= ("SQL".equalsIgnoreCase(selectedCategory) ? "active" : "") %>">
-                               🗄️ SQL
+                               SQL
                             </a>
                             <a href="missions?category=DSA&difficulty=<%= selectedDifficulty %>" 
                                class="filter-pill <%= ("DSA".equalsIgnoreCase(selectedCategory) ? "active" : "") %>">
-                               ⚡ DSA
+                               DSA
                             </a>
                         </div>
                     </div>
@@ -114,15 +114,15 @@
                             </a>
                             <a href="missions?category=<%= selectedCategory %>&difficulty=Easy" 
                                class="filter-pill <%= ("Easy".equalsIgnoreCase(selectedDifficulty) ? "active" : "") %>">
-                               🟢 Easy
+                               Easy
                             </a>
                             <a href="missions?category=<%= selectedCategory %>&difficulty=Medium" 
                                class="filter-pill <%= ("Medium".equalsIgnoreCase(selectedDifficulty) ? "active" : "") %>">
-                               🟡 Medium
+                               Medium
                             </a>
                             <a href="missions?category=<%= selectedCategory %>&difficulty=Hard" 
                                class="filter-pill <%= ("Hard".equalsIgnoreCase(selectedDifficulty) ? "active" : "") %>">
-                               🔴 Hard
+                               Hard
                             </a>
                         </div>
                     </div>
@@ -140,25 +140,25 @@
                                 <div>
                                     <div class="quest-card-header">
                                         <% if ("Java".equalsIgnoreCase(m.getCategory())) { %>
-                                            <span class="quest-category-badge category-java">☕ Java</span>
+                                            <span class="quest-category-badge category-java">Java</span>
                                         <% } else if ("SQL".equalsIgnoreCase(m.getCategory())) { %>
-                                            <span class="quest-category-badge category-sql">🗄️ SQL</span>
+                                            <span class="quest-category-badge category-sql">SQL</span>
                                         <% } else { %>
-                                            <span class="quest-category-badge category-dsa">⚡ DSA</span>
+                                            <span class="quest-category-badge category-dsa">DSA</span>
                                         <% } %>
 
                                         <div style="display: flex; gap: 0.45rem; align-items: center;">
                                             <% if ("Easy".equalsIgnoreCase(m.getDifficulty())) { %>
-                                                <span class="difficulty-tag diff-easy">🟢 Easy</span>
+                                                <span class="difficulty-tag diff-easy">Easy</span>
                                             <% } else if ("Medium".equalsIgnoreCase(m.getDifficulty())) { %>
-                                                <span class="difficulty-tag diff-medium">🟡 Medium</span>
+                                                <span class="difficulty-tag diff-medium">Medium</span>
                                             <% } else { %>
-                                                <span class="difficulty-tag diff-hard">🔴 Hard</span>
+                                                <span class="difficulty-tag diff-hard">Hard</span>
                                             <% } %>
 
                                             <% if (m.isSolved()) { %>
                                                 <span style="font-family: var(--font-code); font-size: 0.72rem; color: var(--neon-emerald); background: rgba(0,245,160,0.15); border: 1px solid var(--neon-emerald); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 700;">
-                                                    ✓ COMPLETED
+                                                    COMPLETED
                                                 </span>
                                             <% } %>
                                         </div>
@@ -200,13 +200,13 @@
 
                                     <div class="quest-card-footer">
                                         <div class="quest-xp-badge">
-                                            <span>⚡</span>
+                                            
                                             <span>+<%= m.getXpReward() %> XP</span>
                                         </div>
 
                                         <% if (m.isSolved()) { %>
                                             <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.6; cursor: not-allowed;">
-                                                🔒 Locked (Attempted)
+                                                Locked (Attempted)
                                             </button>
                                         <% } else { %>
                                             <button type="submit" class="btn btn-outline btn-sm" disabled>
@@ -220,7 +220,7 @@
                     </div>
                 <% } else { %>
                     <div class="empty-state">
-                        <div class="empty-state-icon">🔍</div>
+                        <div class="empty-state-icon">SEARCH</div>
                         <h3 style="color: var(--text-pure); font-family: var(--font-heading); margin-bottom: 0.5rem;">
                             No Matches in Registry
                         </h3>

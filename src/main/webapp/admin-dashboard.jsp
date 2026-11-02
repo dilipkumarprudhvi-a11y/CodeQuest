@@ -60,15 +60,15 @@
                 <div class="brand-text">CodeQuest <span style="font-size: 0.8rem; color: #ff3366;">[COMMAND]</span></div>
             </a>
             <ul class="nav-links">
-                <li><a href="admin-dashboard.jsp" class="active"><span>📊</span> Cockpit</a></li>
-                <li><a href="add-question.jsp"><span>➕</span> Add Mission</a></li>
-                <li><a href="view-questions"><span>📋</span> Question Vault</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Live Leaderboard</a></li>
+                <li><a href="admin-dashboard.jsp" class="active">Cockpit</a></li>
+                <li><a href="add-question.jsp">Add Mission</a></li>
+                <li><a href="view-questions">Question Vault</a></li>
+                <li><a href="leaderboard">Live Leaderboard</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <div class="nav-profile-pill" style="border-color: rgba(255, 51, 102, 0.4);">
-                    <span style="color: #ff3366; font-weight: 700;">🛡️ <%= adminUsername %></span>
+                    <span style="color: #ff3366; font-weight: 700;"><%= adminUsername %></span>
                 </div>
                 <a href="admin-logout" class="btn btn-danger btn-sm">Terminate Session</a>
             </div>
@@ -79,9 +79,7 @@
                 <!-- Welcome Banner -->
                 <div class="profile-banner" style="border-top: 3px solid #ff3366;">
                     <div class="profile-identity">
-                        <div class="profile-avatar" style="border-color: #ff3366; box-shadow: 0 0 25px rgba(255, 51, 102, 0.3);">
-                            👑
-                        </div>
+                        <div class="profile-avatar" style="border-color: #ff3366; box-shadow: 0 0 25px rgba(255, 51, 102, 0.3);">ADM</div>
                         <div>
                             <h1 class="profile-name"><%= (adminName != null ? adminName : "Command Master") %></h1>
                             <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -119,7 +117,7 @@
 
                 <div class="features-grid" style="margin-top: 1rem;">
                     <div class="feature-card" style="border-top: 2px solid var(--neon-emerald);">
-                        <div class="feature-icon">➕</div>
+                        <div class="feature-icon">01</div>
                         <h3 class="feature-title">Add Programming Question</h3>
                         <p class="feature-desc" style="margin-bottom: 1.5rem;">
                             Author and dynamically insert new Java, SQL, or DSA questions with 4 choices, 
@@ -129,7 +127,7 @@
                     </div>
 
                     <div class="feature-card" style="border-top: 2px solid var(--cyber-cyan);">
-                        <div class="feature-icon">📋</div>
+                        <div class="feature-icon">02</div>
                         <h3 class="feature-title">Question Vault</h3>
                         <p class="feature-desc" style="margin-bottom: 1.5rem;">
                             View complete inventory of programming missions in a dynamic tabular interface, 
@@ -139,7 +137,7 @@
                     </div>
 
                     <div class="feature-card" style="border-top: 2px solid var(--solar-gold);">
-                        <div class="feature-icon">🏆</div>
+                        <div class="feature-icon">03</div>
                         <h3 class="feature-title">Real-Time Leaderboard</h3>
                         <p class="feature-desc" style="margin-bottom: 1.5rem;">
                             Inspect the public student arena rankings, analyze XP progressions, 

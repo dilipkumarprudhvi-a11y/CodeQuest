@@ -35,14 +35,14 @@
                 <div class="brand-text">CodeQuest <span style="font-size: 0.8rem; color: #ff3366;">[COMMAND]</span></div>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html"><span>🏠</span> Home</a></li>
-                <li><a href="missions"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
-                <li><a href="login.jsp"><span>🔑</span> Student Portal</a></li>
-                <li><a href="admin-login.jsp" class="active"><span>🛡️</span> Admin Console</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="missions">Missions</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
+                <li><a href="login.jsp">Student Portal</a></li>
+                <li><a href="admin-login.jsp" class="active">Admin Console</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <a href="index.html" class="btn btn-outline btn-sm">Exit to Public</a>
             </div>
         </nav>
@@ -59,21 +59,21 @@
 
                         <% if ("true".equalsIgnoreCase(loggedOut)) { %>
                             <div class="alert alert-info">
-                                <span>🔒</span>
+                                
                                 <div>Administrative session terminated and security tokens revoked.</div>
                             </div>
                         <% } %>
 
                         <% if (paramError != null && !paramError.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                <span>⚠️</span>
+                                
                                 <div><%= SecurityUtil.encodeHtml(paramError) %></div>
                             </div>
                         <% } %>
 
                         <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                <span>⚠️</span>
+                                
                                 <div><%= SecurityUtil.encodeHtml(errorMessage) %></div>
                             </div>
                         <% } %>
@@ -93,7 +93,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-admin" style="width: 100%; margin-top: 0.75rem;">
-                                🛡️ Authenticate Administrator
+                                Authenticate Administrator
                             </button>
                         </form>
 

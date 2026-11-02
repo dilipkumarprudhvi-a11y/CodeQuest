@@ -49,14 +49,14 @@
                 <div class="brand-text">CodeQuest</div>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html"><span>🏠</span> Home</a></li>
-                <li><a href="missions"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
-                <li><a href="login.jsp" class="active"><span>🔑</span> Student Login</a></li>
-                <li><a href="admin-login.jsp"><span>🛡️</span> Admin</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="missions">Missions</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
+                <li><a href="login.jsp" class="active">Student Login</a></li>
+                <li><a href="admin-login.jsp">Admin</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <a href="register.jsp" class="btn btn-primary btn-sm">Enlist</a>
             </div>
         </nav>
@@ -73,28 +73,28 @@
                         <%-- Dynamic Notification Banners via Scriptlets --%>
                         <% if ("true".equalsIgnoreCase(registered)) { %>
                             <div class="alert alert-success">
-                                <span>🎉</span>
+                                
                                 <div>Warrior profile forged! Please authenticate below to deploy.</div>
                             </div>
                         <% } %>
 
                         <% if ("true".equalsIgnoreCase(loggedOut)) { %>
                             <div class="alert alert-info">
-                                <span>🔒</span>
+                                
                                 <div>Session terminated safely. Your quest state is persisted.</div>
                             </div>
                         <% } %>
 
                         <% if (sessionExpired != null && !sessionExpired.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                <span>⚠️</span>
+                                
                                 <div><%= SecurityUtil.encodeHtml(sessionExpired) %></div>
                             </div>
                         <% } %>
 
                         <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                             <div class="alert alert-danger">
-                                <span>⚠️</span>
+                                
                                 <div><%= SecurityUtil.encodeHtml(errorMessage) %></div>
                             </div>
                         <% } %>
@@ -121,7 +121,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
-                                🚀 Access Dashboard & Missions
+                                Access Dashboard & Missions
                             </button>
                         </form>
 

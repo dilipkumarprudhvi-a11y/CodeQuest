@@ -251,14 +251,18 @@ body {
     background: #FFFFFF;
     border: 2.5px solid #000000;
     color: #000000;
-    width: 40px;
-    height: 40px;
+    min-width: 58px;
+    height: 38px;
+    padding: 0 0.65rem;
     border-radius: 8px;
-    display: grid;
-    place-items: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     box-shadow: 3px 3px 0px #000000;
-    font-size: 1.1rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
     transition: all 0.15s ease;
 }
 
@@ -800,14 +804,15 @@ textarea.form-control {
 }
 
 .form-check input[type="checkbox"]:checked::after {
-    content: '✓';
+    content: '';
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    color: #000000;
-    font-weight: 900;
-    font-size: 13px;
+    width: 5px;
+    height: 9px;
+    border: solid #000000;
+    border-width: 0 2.5px 2.5px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
 }
 
 /* Alert Notification Banners */

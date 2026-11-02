@@ -1,4 +1,4 @@
-# ⚡ CodeQuest — Gamified Programming Arena
+# CodeQuest — Gamified Programming Arena
 
 [![Live Application](https://img.shields.io/badge/Live_Application-GitHub_Pages-00f5a0?style=for-the-badge&logo=github)](https://dilipkumarprudhvi-a11y.github.io/CodeQuest/)
 [![Jakarta EE 10](https://img.shields.io/badge/Jakarta_EE-10_Servlet_6.0-00d9f5?style=for-the-badge&logo=java)](https://jakarta.ee/)
@@ -12,11 +12,11 @@
 
 ---
 
-## 🚀 Live Application
+## Live Application
 
 Experience the full interactive gamified arena directly in your browser:
 
-### 👉 **[https://dilipkumarprudhvi-a11y.github.io/CodeQuest/](https://dilipkumarprudhvi-a11y.github.io/CodeQuest/)**
+### **[https://dilipkumarprudhvi-a11y.github.io/CodeQuest/](https://dilipkumarprudhvi-a11y.github.io/CodeQuest/)**
 
 * **Interactive Mission Solver**: Complete Java, SQL, and DSA missions with instant protocol evaluation.
 * **Olympic 3D Podium**: Real-time rank calculation with elevated gold crown, silver, and bronze steps.
@@ -25,7 +25,7 @@ Experience the full interactive gamified arena directly in your browser:
 
 ---
 
-## 🎮 System Architecture & Strict Academic Constraints
+## System Architecture & Strict Academic Constraints
 
 CodeQuest is built to satisfy rigorous enterprise Java standards and academic evaluation criteria:
 
@@ -63,26 +63,26 @@ flowchart TD
 
 ---
 
-## 📋 Module Compliance Matrix (Modules 1 – 12)
+## Module Compliance Matrix (Modules 1 – 12)
 
 | Module | Requirement | Key Files | Implementation Status |
 | :--- | :--- | :--- | :---: |
-| **Module 1** | **Home Page & Gaming HUD** | `index.html`, `css/style.css`, `js/game-fx.js` | ✅ **Complete**: Cyber-obsidian canvas mesh, live ticker, Web Audio synthesizer. |
-| **Module 2** | **Student Registration** | `register.jsp`, `RegisterServlet.java` | ✅ **Complete**: Regex validation, unique call-sign check, starts at 0 XP & Level 1. |
-| **Module 3** | **Student Login & Session** | `login.jsp`, `LoginServlet.java`, `LogoutServlet.java` | ✅ **Complete**: Dual-mode login, session fixation protection, `HttpOnly` cookies. |
-| **Module 4** | **Admin Login & Console** | `admin-login.jsp`, `AdminLoginServlet.java`, `admin-dashboard.jsp` | ✅ **Complete**: Role isolation (`SYSTEM_ADMIN`), `ServletConfig` & `ServletContext` telemetry. |
-| **Module 5** | **Database Design & JDBC** | `codequest_db.sql`, `DBConnection.java` | ✅ **Complete**: Reusable singleton, parameterized `PreparedStatement`, foreign keys. |
-| **Module 6** | **Admin Question Creation** | `add-question.jsp`, `AddQuestionServlet.java` | ✅ **Complete**: Dynamic multi-choice creation for Java, SQL, DSA with custom XP bounties. |
-| **Module 7** | **Question Management** | `view-questions.jsp`, `ViewQuestionsServlet.java` | ✅ **Complete**: Full tabular inventory with category badges and secure POST deletion. |
-| **Module 8** | **Student Dashboard** | `dashboard.jsp`, `DashboardServlet.java` | ✅ **Complete**: Real-time XP, level rank titles, dynamic animated striped progress bar. |
-| **Module 9** | **Missions Deck** | `missions.jsp`, `MissionServlet.java` | ✅ **Complete**: Category filters; **omits correct answer from student view**; flags completed quests. |
-| **Module 10** | **Evaluation & XP Engine** | `mission-result.jsp`, `SubmitAnswerServlet.java` | ✅ **Complete**: **Atomic transaction**, **one-attempt rule**, dynamic level promotions. |
-| **Module 11** | **Global Leaderboard** | `leaderboard.jsp`, `LeaderboardServlet.java` | ✅ **Complete**: Real-time descending rank, Olympic 3D podium (Gold, Silver, Bronze). |
-| **Module 12** | **Integration & Security** | Full Application Stack | ✅ **Complete**: Clean PRG redirect patterns, error handling, zero generic error pages. |
+| **Module 1** | **Home Page & Gaming HUD** | `index.html`, `css/style.css`, `js/game-fx.js` | **Complete**: Cyber-obsidian canvas mesh, live ticker, Web Audio synthesizer. |
+| **Module 2** | **Student Registration** | `register.jsp`, `RegisterServlet.java` | **Complete**: Regex validation, unique call-sign check, starts at 0 XP & Level 1. |
+| **Module 3** | **Student Login & Session** | `login.jsp`, `LoginServlet.java`, `LogoutServlet.java` | **Complete**: Dual-mode login, session fixation protection, `HttpOnly` cookies. |
+| **Module 4** | **Admin Login & Console** | `admin-login.jsp`, `AdminLoginServlet.java`, `admin-dashboard.jsp` | **Complete**: Role isolation (`SYSTEM_ADMIN`), `ServletConfig` & `ServletContext` telemetry. |
+| **Module 5** | **Database Design & JDBC** | `codequest_db.sql`, `DBConnection.java` | **Complete**: Reusable singleton, parameterized `PreparedStatement`, foreign keys. |
+| **Module 6** | **Admin Question Creation** | `add-question.jsp`, `AddQuestionServlet.java` | **Complete**: Dynamic multi-choice creation for Java, SQL, DSA with custom XP bounties. |
+| **Module 7** | **Question Management** | `view-questions.jsp`, `ViewQuestionsServlet.java` | **Complete**: Full tabular inventory with category badges and secure POST deletion. |
+| **Module 8** | **Student Dashboard** | `dashboard.jsp`, `DashboardServlet.java` | **Complete**: Real-time XP, level rank titles, dynamic animated striped progress bar. |
+| **Module 9** | **Missions Deck** | `missions.jsp`, `MissionServlet.java` | **Complete**: Category filters; **omits correct answer from student view**; flags completed quests. |
+| **Module 10** | **Evaluation & XP Engine** | `mission-result.jsp`, `SubmitAnswerServlet.java` | **Complete**: **Atomic transaction**, **one-attempt rule**, dynamic level promotions. |
+| **Module 11** | **Global Leaderboard** | `leaderboard.jsp`, `LeaderboardServlet.java` | **Complete**: Real-time descending rank, Olympic 3D podium (Gold, Silver, Bronze). |
+| **Module 12** | **Integration & Security** | Full Application Stack | **Complete**: Clean PRG redirect patterns, error handling, zero generic error pages. |
 
 ---
 
-## 🛠️ Local Enterprise Deployment (Apache Tomcat 10.1)
+## Local Enterprise Deployment (Apache Tomcat 10.1)
 
 To run the full enterprise Java backend with live MySQL database persistence locally:
 
@@ -101,7 +101,7 @@ To run the full enterprise Java backend with live MySQL database persistence loc
    apache-tomcat-10.1.60\bin\startup.bat
    ```
 3. Open your browser and navigate to the local runtime:  
-   👉 **`http://localhost:8080/CodeQuest/`**
+   **`http://localhost:8080/CodeQuest/`**
 
 ### 3. Import into Eclipse IDE
 1. Open **Eclipse IDE for Enterprise Java**.
@@ -110,7 +110,7 @@ To run the full enterprise Java backend with live MySQL database persistence loc
 
 ---
 
-## 🔑 Test Credentials
+## Test Credentials
 
 ### Administrator Portal
 * **URL**: `http://localhost:8080/CodeQuest/admin-login.jsp`
@@ -125,5 +125,5 @@ To run the full enterprise Java backend with live MySQL database persistence loc
 
 ---
 
-## 📄 License & Attribution
+## License & Attribution
 Developed for academic submission. Built with Jakarta Servlets 6.0, JSP 3.1, JDBC, MySQL, HTML5, CSS3, and the Web Audio API.

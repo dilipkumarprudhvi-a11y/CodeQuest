@@ -72,17 +72,17 @@
                 <div class="brand-text">CodeQuest</div>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html"><span>🏠</span> Home</a></li>
-                <li><a href="missions"><span>⚔️</span> Missions</a></li>
-                <li><a href="leaderboard" class="active"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="missions">Missions</a></li>
+                <li><a href="leaderboard" class="active">Leaderboard</a></li>
                 <% if (currentSessionUser != null) { %>
-                    <li><a href="dashboard"><span>📊</span> Cockpit</a></li>
+                    <li><a href="dashboard">Cockpit</a></li>
                 <% } else { %>
-                    <li><a href="login.jsp"><span>🔑</span> Student Portal</a></li>
+                    <li><a href="login.jsp">Student Portal</a></li>
                 <% } %>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
                 <% if (currentSessionUser != null) { %>
                     <a href="dashboard" class="btn btn-outline-cyan btn-sm"><%= currentSessionUser %> (Cockpit)</a>
                 <% } else { %>
@@ -104,7 +104,7 @@
 
                 <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                     <div class="alert alert-danger">
-                        <span>⚠️</span>
+                        
                         <div><%= errorMessage %></div>
                     </div>
                 <% } %>
@@ -115,11 +115,9 @@
                         <!-- 2nd Place (Silver) -->
                         <% if (secondPlace != null) { %>
                             <div class="podium-place place-2">
-                                <div class="podium-avatar">
-                                    🥈
-                                </div>
+                                <div class="podium-avatar"> 2 </div>
                                 <div class="podium-name"><%= SecurityUtil.encodeHtml((String) secondPlace.get("username")) %></div>
-                                <div class="podium-xp">⚡ <%= secondPlace.get("xp") %> XP</div>
+                                <div class="podium-xp"><%= secondPlace.get("xp") %> XP</div>
                                 <div class="podium-pedestal">
                                     <span>2</span>
                                     <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">SILVER</span>
@@ -131,11 +129,11 @@
                         <% if (firstPlace != null) { %>
                             <div class="podium-place place-1">
                                 <div class="podium-avatar">
-                                    <span class="podium-crown">👑</span>
-                                    🥇
+                                    <span class="podium-crown" style="font-size:0.75rem;font-weight:900;">NO. 1</span>
+                                    1
                                 </div>
                                 <div class="podium-name" style="color: #ffd700;"><%= SecurityUtil.encodeHtml((String) firstPlace.get("username")) %></div>
-                                <div class="podium-xp" style="color: #ffd700; font-size: 1rem;">⚡ <%= firstPlace.get("xp") %> XP</div>
+                                <div class="podium-xp" style="color: #ffd700; font-size: 1rem;"><%= firstPlace.get("xp") %> XP</div>
                                 <div class="podium-pedestal">
                                     <span>1</span>
                                     <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">CHAMPION</span>
@@ -146,11 +144,9 @@
                         <!-- 3rd Place (Bronze) -->
                         <% if (thirdPlace != null) { %>
                             <div class="podium-place place-3">
-                                <div class="podium-avatar">
-                                    🥉
-                                </div>
+                                <div class="podium-avatar"> 3 </div>
                                 <div class="podium-name"><%= SecurityUtil.encodeHtml((String) thirdPlace.get("username")) %></div>
-                                <div class="podium-xp">⚡ <%= thirdPlace.get("xp") %> XP</div>
+                                <div class="podium-xp"><%= thirdPlace.get("xp") %> XP</div>
                                 <div class="podium-pedestal">
                                     <span>3</span>
                                     <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">BRONZE</span>
@@ -186,11 +182,11 @@
                                         <% } %>
                                             <td>
                                                 <% if (r == 1) { %>
-                                                    <span class="rank-badge rank-1">🥇 1</span>
+                                                    <span class="rank-badge rank-1">#1</span>
                                                 <% } else if (r == 2) { %>
-                                                    <span class="rank-badge rank-2">🥈 2</span>
+                                                    <span class="rank-badge rank-2">#2</span>
                                                 <% } else if (r == 3) { %>
-                                                    <span class="rank-badge rank-3">🥉 3</span>
+                                                    <span class="rank-badge rank-3">#3</span>
                                                 <% } else { %>
                                                     <span class="rank-badge">#<%= r %></span>
                                                 <% } %>
@@ -212,12 +208,12 @@
                                             </td>
                                             <td>
                                                 <span style="font-family: var(--font-code); color: var(--cyber-cyan); font-weight: 600;">
-                                                    🎯 <%= p.get("completedMissions") %> Solved
+                                                    <%= p.get("completedMissions") %> Solved
                                                 </span>
                                             </td>
                                             <td style="text-align: right;">
                                                 <span style="color: var(--solar-gold); font-family: var(--font-code); font-weight: 700; font-size: 1.15rem;">
-                                                    ⚡ <%= p.get("xp") %> XP
+                                                    <%= p.get("xp") %> XP
                                                 </span>
                                             </td>
                                         </tr>
@@ -229,7 +225,7 @@
                 <% } else { %>
                     <!-- Empty State Message when no players are available -->
                     <div class="empty-state">
-                        <div class="empty-state-icon">🛡️</div>
+                        <div class="empty-state-icon">EMPTY</div>
                         <h3 style="color: var(--text-pure); font-family: var(--font-heading); margin-bottom: 0.5rem;">
                             Arena Roster Empty
                         </h3>

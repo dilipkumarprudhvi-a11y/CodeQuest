@@ -12,4 +12,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.bak
+scratch/
+
 

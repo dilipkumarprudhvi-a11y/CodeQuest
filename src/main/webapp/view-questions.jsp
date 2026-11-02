@@ -34,14 +34,14 @@
                 <div class="brand-text">CodeQuest <span style="font-size: 0.8rem; color: #ff3366;">[COMMAND]</span></div>
             </a>
             <ul class="nav-links">
-                <li><a href="admin-dashboard.jsp"><span>📊</span> Cockpit</a></li>
-                <li><a href="add-question.jsp"><span>➕</span> Add Mission</a></li>
-                <li><a href="view-questions" class="active"><span>📋</span> Question Vault</a></li>
-                <li><a href="leaderboard"><span>🏆</span> Leaderboard</a></li>
+                <li><a href="admin-dashboard.jsp">Cockpit</a></li>
+                <li><a href="add-question.jsp">Add Mission</a></li>
+                <li><a href="view-questions" class="active">Question Vault</a></li>
+                <li><a href="leaderboard">Leaderboard</a></li>
             </ul>
             <div class="nav-actions">
-                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">🔊</button>
-                <a href="add-question.jsp" class="btn btn-admin btn-sm">➕ Add Mission</a>
+                <button id="sound-toggle-btn" class="sound-toggle" title="Toggle Sound FX">AUDIO</button>
+                <a href="add-question.jsp" class="btn btn-admin btn-sm">Add Mission</a>
                 <a href="admin-logout" class="btn btn-danger btn-sm">Exit</a>
             </div>
         </nav>
@@ -56,26 +56,26 @@
                             Live catalog of stored programming missions retrieved dynamically via JDBC.
                         </p>
                     </div>
-                    <a href="add-question.jsp" class="btn btn-primary">➕ Forge New Mission</a>
+                    <a href="add-question.jsp" class="btn btn-primary">Forge New Mission</a>
                 </div>
 
                 <% if ("true".equalsIgnoreCase(created)) { %>
                     <div class="alert alert-success">
-                        <span>✨</span>
+                        
                         <div>New mission persisted and deployed into curriculum registry!</div>
                     </div>
                 <% } %>
 
                 <% if ("true".equalsIgnoreCase(deleted)) { %>
                     <div class="alert alert-info">
-                        <span>🗑️</span>
+                        
                         <div>Mission record eradicated from database.</div>
                     </div>
                 <% } %>
 
                 <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                     <div class="alert alert-danger">
-                        <span>⚠️</span>
+                        
                         <div><%= errorMessage %></div>
                     </div>
                 <% } %>
@@ -110,20 +110,20 @@
                                             </td>
                                             <td>
                                                 <% if ("Java".equalsIgnoreCase(m.getCategory())) { %>
-                                                    <span class="quest-category-badge category-java">☕ Java</span>
+                                                    <span class="quest-category-badge category-java">Java</span>
                                                 <% } else if ("SQL".equalsIgnoreCase(m.getCategory())) { %>
-                                                    <span class="quest-category-badge category-sql">🗄️ SQL</span>
+                                                    <span class="quest-category-badge category-sql">SQL</span>
                                                 <% } else { %>
-                                                    <span class="quest-category-badge category-dsa">⚡ DSA</span>
+                                                    <span class="quest-category-badge category-dsa">DSA</span>
                                                 <% } %>
                                             </td>
                                             <td>
                                                 <% if ("Easy".equalsIgnoreCase(m.getDifficulty())) { %>
-                                                    <span class="difficulty-tag diff-easy">🟢 Easy</span>
+                                                    <span class="difficulty-tag diff-easy">Easy</span>
                                                 <% } else if ("Medium".equalsIgnoreCase(m.getDifficulty())) { %>
-                                                    <span class="difficulty-tag diff-medium">🟡 Medium</span>
+                                                    <span class="difficulty-tag diff-medium">Medium</span>
                                                 <% } else { %>
-                                                    <span class="difficulty-tag diff-hard">🔴 Hard</span>
+                                                    <span class="difficulty-tag diff-hard">Hard</span>
                                                 <% } %>
                                             </td>
                                             <td>
@@ -151,14 +151,14 @@
                     </div>
                 <% } else { %>
                     <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-icon">EMPTY</div>
                         <h3 style="color: var(--text-pure); font-family: var(--font-heading); margin-bottom: 0.5rem;">
                             No Programming Missions Found
                         </h3>
                         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
                             The curriculum registry is currently devoid of challenges. Use the Mission Forge to seed your first questions.
                         </p>
-                        <a href="add-question.jsp" class="btn btn-primary">➕ Forge First Mission</a>
+                        <a href="add-question.jsp" class="btn btn-primary">Forge First Mission</a>
                     </div>
                 <% } %>
             </div>
