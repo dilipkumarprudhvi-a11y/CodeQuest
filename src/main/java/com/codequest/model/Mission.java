@@ -4,13 +4,18 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Mission implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private int id;
     private String title;
     private String description;
-    private String category;    // Java, SQL, DSA
+    private String category;    // Java, SQL, DSA, Algorithms
     private String difficulty;  // Easy, Medium, Hard
+    private String type = "mcq"; // "code" or "mcq"
+    private String functionName;
+    private String language = "javascript";
+    private String starterCode;
+    private String testCases;
     private String optionA;
     private String optionB;
     private String optionC;
@@ -22,10 +27,12 @@ public class Mission implements Serializable {
     // Additional transient/helper fields for display
     private boolean solved;
     private String userChoice;
+    private String submittedCode;
 
     public Mission() {
     }
 
+    // Legacy constructor for MCQ missions
     public Mission(int id, String title, String description, String category, String difficulty,
                    String optionA, String optionB, String optionC, String optionD,
                    String correctOption, int xpReward, Timestamp createdAt) {
@@ -34,6 +41,31 @@ public class Mission implements Serializable {
         this.description = description;
         this.category = category;
         this.difficulty = difficulty;
+        this.type = "mcq";
+        this.optionA = optionA;
+        this.optionB = optionB;
+        this.optionC = optionC;
+        this.optionD = optionD;
+        this.correctOption = correctOption;
+        this.xpReward = xpReward;
+        this.createdAt = createdAt;
+    }
+
+    // Full constructor supporting dual-mode (coding arena + MCQs)
+    public Mission(int id, String title, String description, String category, String difficulty,
+                   String type, String functionName, String language, String starterCode, String testCases,
+                   String optionA, String optionB, String optionC, String optionD,
+                   String correctOption, int xpReward, Timestamp createdAt) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.difficulty = difficulty;
+        this.type = (type != null && !type.trim().isEmpty()) ? type.trim().toLowerCase() : "mcq";
+        this.functionName = functionName;
+        this.language = (language != null && !language.trim().isEmpty()) ? language.trim().toLowerCase() : "javascript";
+        this.starterCode = starterCode;
+        this.testCases = testCases;
         this.optionA = optionA;
         this.optionB = optionB;
         this.optionC = optionC;
@@ -81,6 +113,46 @@ public class Mission implements Serializable {
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public String getType() {
+        return type != null ? type : "mcq";
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFunctionName() {
+        return functionName;
+    }
+
+    public void setFunctionName(String functionName) {
+        this.functionName = functionName;
+    }
+
+    public String getLanguage() {
+        return language != null ? language : "javascript";
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getStarterCode() {
+        return starterCode;
+    }
+
+    public void setStarterCode(String starterCode) {
+        this.starterCode = starterCode;
+    }
+
+    public String getTestCases() {
+        return testCases;
+    }
+
+    public void setTestCases(String testCases) {
+        this.testCases = testCases;
     }
 
     public String getOptionA() {
@@ -153,5 +225,13 @@ public class Mission implements Serializable {
 
     public void setUserChoice(String userChoice) {
         this.userChoice = userChoice;
+    }
+
+    public String getSubmittedCode() {
+        return submittedCode;
+    }
+
+    public void setSubmittedCode(String submittedCode) {
+        this.submittedCode = submittedCode;
     }
 }

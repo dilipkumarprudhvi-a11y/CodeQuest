@@ -8,12 +8,17 @@ import java.sql.SQLException;
  * Reusable Database Connection Manager for CodeQuest
  * Implements environment-aware JDBC connection management, connection verification,
  * and safe resource cleanup.
+ *
+ * Credentials can be configured via environment variables:
+ * - DB_URL
+ * - DB_USER
+ * - DB_PASSWORD
  */
 public class DBConnection {
 
     private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/codequest_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
     private static final String DEFAULT_USER = "root";
-    private static final String DEFAULT_PASS = "@123Kumar";
+    private static final String DEFAULT_PASS = "@123Kumar"; // Safe local developer fallback
 
     private static String configuredUrl = null;
     private static String configuredUser = null;

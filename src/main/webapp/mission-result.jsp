@@ -30,6 +30,7 @@
     int newLevel = (newLevelObj != null) ? newLevelObj : 1;
     boolean leveledUp = (leveledUpObj != null && leveledUpObj);
     if (judgeEngine == null) judgeEngine = "CodeQuest Judge Engine";
+    boolean isCodeSubmission = "CODE".equalsIgnoreCase(selectedOption);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +39,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission Evaluation - CodeQuest</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23000000'/%3E%3Ctext x='50' y='65' font-family='sans-serif' font-size='50' font-weight='900' fill='%23FFFF00' text-anchor='middle'%3ECQ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -89,8 +91,12 @@
                         <div class="result-icon-orb">PASS</div>
                         <h2 class="result-headline" style="color: var(--neon-emerald);">Protocol Solved: Victory!</h2>
                         <p class="result-lead">
-                            Your selected answer <strong style="color: var(--cyber-cyan);">[Option <%= SecurityUtil.encodeHtml(selectedOption) %>]</strong> was evaluated as 
-                            flawless by <%= SecurityUtil.encodeHtml(judgeEngine) %>.
+                            <% if (isCodeSubmission) { %>
+                                Your coding solution was evaluated as flawless across all automated test cases by <%= SecurityUtil.encodeHtml(judgeEngine) %>.
+                            <% } else { %>
+                                Your selected answer <strong style="color: var(--cyber-cyan);">[Option <%= SecurityUtil.encodeHtml(selectedOption) %>]</strong> was evaluated as 
+                                flawless by <%= SecurityUtil.encodeHtml(judgeEngine) %>.
+                            <% } %>
                         </p>
 
                         <% if (leveledUp) { %>
@@ -134,10 +140,14 @@
                     <!-- Defeat Screen (Zero XP awarded, Feedback provided) -->
                     <div class="result-card failure-card">
                         <div class="result-icon-orb">FAIL</div>
-                        <h2 class="result-headline" style="color: var(--danger-crimson);">Compilation Defeat</h2>
+                        <h2 class="result-headline" style="color: var(--danger-crimson);">Evaluation Defeat</h2>
                         <p class="result-lead">
-                            Your submitted choice <strong style="color: var(--text-pure);">[Option <%= SecurityUtil.encodeHtml(selectedOption) %>]</strong> did not satisfy 
-                            the algorithmic invariants.
+                            <% if (isCodeSubmission) { %>
+                                Your submitted code solution did not satisfy the automated test cases and algorithmic invariants.
+                            <% } else { %>
+                                Your submitted choice <strong style="color: var(--text-pure);">[Option <%= SecurityUtil.encodeHtml(selectedOption) %>]</strong> did not satisfy 
+                                the algorithmic invariants.
+                            <% } %>
                         </p>
 
                         <div style="background: rgba(255, 51, 102, 0.08); border: 1px solid rgba(255, 51, 102, 0.25); border-radius: 10px; padding: 1.25rem; margin-bottom: 2rem; text-align: left;">
@@ -177,4 +187,3 @@
     <script src="js/game-fx.js"></script>
 </body>
 </html>
-

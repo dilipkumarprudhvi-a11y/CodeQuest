@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Submission implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private int id;
     private int userId;
@@ -13,6 +13,11 @@ public class Submission implements Serializable {
     private boolean isCorrect;
     private int xpAwarded;
     private Timestamp submittedAt;
+
+    // Dual-mode arena fields
+    private String type = "mcq"; // "code" or "mcq"
+    private String submittedCode;
+    private Integer executionTimeMs;
 
     // Joined mission details for dashboard tables
     private String missionTitle;
@@ -30,6 +35,21 @@ public class Submission implements Serializable {
         this.isCorrect = isCorrect;
         this.xpAwarded = xpAwarded;
         this.submittedAt = submittedAt;
+        this.type = "mcq";
+    }
+
+    public Submission(int id, int userId, int missionId, String selectedOption, boolean isCorrect, int xpAwarded, 
+                      Timestamp submittedAt, String type, String submittedCode, Integer executionTimeMs) {
+        this.id = id;
+        this.userId = userId;
+        this.missionId = missionId;
+        this.selectedOption = selectedOption;
+        this.isCorrect = isCorrect;
+        this.xpAwarded = xpAwarded;
+        this.submittedAt = submittedAt;
+        this.type = (type != null) ? type : "mcq";
+        this.submittedCode = submittedCode;
+        this.executionTimeMs = executionTimeMs;
     }
 
     public int getId() {
@@ -88,6 +108,30 @@ public class Submission implements Serializable {
         this.submittedAt = submittedAt;
     }
 
+    public String getType() {
+        return type != null ? type : "mcq";
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getSubmittedCode() {
+        return submittedCode;
+    }
+
+    public void setSubmittedCode(String submittedCode) {
+        this.submittedCode = submittedCode;
+    }
+
+    public Integer getExecutionTimeMs() {
+        return executionTimeMs;
+    }
+
+    public void setExecutionTimeMs(Integer executionTimeMs) {
+        this.executionTimeMs = executionTimeMs;
+    }
+
     public String getMissionTitle() {
         return missionTitle;
     }
@@ -112,4 +156,3 @@ public class Submission implements Serializable {
         this.difficulty = difficulty;
     }
 }
-

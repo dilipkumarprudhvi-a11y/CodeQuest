@@ -499,7 +499,18 @@
                     return true;
                 }
 
-                self.onmessage = function(e) {
+                // Strip ambient network and storage access from Web Worker environment
+    try {
+        self.fetch = undefined;
+        self.XMLHttpRequest = undefined;
+        self.WebSocket = undefined;
+        self.EventSource = undefined;
+        self.importScripts = undefined;
+        self.indexedDB = undefined;
+        self.caches = undefined;
+    } catch (sandboxErr) {}
+
+    self.onmessage = function(e) {
                     const { code, fnName, testCases } = e.data;
                     const results = [];
                     try {

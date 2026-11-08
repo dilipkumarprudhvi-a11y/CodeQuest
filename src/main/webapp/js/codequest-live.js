@@ -8,7 +8,7 @@
  * - Single-Attempt First-Time XP Bounty with Repeat Practice Mode
  * - Client-Side SHA-256 Authentication & Leaderboard Deterministic Tie-Breaking
  */
-(function(window) {
+(function (window) {
     'use strict';
 
     // ----------------------------------------------------
@@ -320,7 +320,7 @@
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed) && parsed.length > 0) return parsed;
             }
-        } catch (e) {}
+        } catch (e) { }
         saveMissions(DEFAULT_MISSIONS);
         return DEFAULT_MISSIONS;
     }
@@ -330,7 +330,7 @@
             const json = JSON.stringify(list);
             localStorage.setItem('codequest_missions', json);
             localStorage.setItem('cq_missions', json);
-        } catch (e) {}
+        } catch (e) { }
     }
 
     function getStoredUser() {
@@ -347,7 +347,7 @@
                     return u;
                 }
             }
-        } catch (e) {}
+        } catch (e) { }
 
         const defaultGuest = {
             id: 1,
@@ -394,7 +394,7 @@
                 });
             }
             localStorage.setItem('codequest_registered_users', JSON.stringify(regUsers));
-        } catch (e) {}
+        } catch (e) { }
     }
 
     function getRegisteredUsers() {
@@ -404,7 +404,7 @@
                 const list = JSON.parse(raw);
                 if (Array.isArray(list)) return list;
             }
-        } catch (e) {}
+        } catch (e) { }
         return [];
     }
 
@@ -499,7 +499,18 @@
                     return true;
                 }
 
-                self.onmessage = function(e) {
+                // Strip ambient network and storage access from Web Worker environment
+    try {
+        self.fetch = undefined;
+        self.XMLHttpRequest = undefined;
+        self.WebSocket = undefined;
+        self.EventSource = undefined;
+        self.importScripts = undefined;
+        self.indexedDB = undefined;
+        self.caches = undefined;
+    } catch (sandboxErr) {}
+
+    self.onmessage = function(e) {
                     const { code, fnName, testCases } = e.data;
                     const results = [];
                     try {
@@ -565,7 +576,7 @@
                 }
             }, timeoutMs);
 
-            worker.onmessage = function(e) {
+            worker.onmessage = function (e) {
                 if (!finished) {
                     finished = true;
                     clearTimeout(timer);
@@ -575,7 +586,7 @@
                 }
             };
 
-            worker.onerror = function(err) {
+            worker.onerror = function (err) {
                 if (!finished) {
                     finished = true;
                     clearTimeout(timer);
@@ -648,26 +659,26 @@
         hashPassword: hashPassword,
         calculateTier: calculateTier,
 
-        getMissions: function() {
+        getMissions: function () {
             return getStoredMissions();
         },
 
-        getCurrentUser: function() {
+        getCurrentUser: function () {
             return getStoredUser();
         },
 
-        getLeaderboard: function() {
+        getLeaderboard: function () {
             return getLeaderboard();
         },
 
-        getCurrentUserRank: function() {
+        getCurrentUserRank: function () {
             const list = getLeaderboard();
             const current = getStoredUser();
             const found = list.find(p => p.username.toLowerCase() === current.username.toLowerCase());
             return found ? found.rank : list.length;
         },
 
-        login: async function(username, rawPassword) {
+        login: async function (username, rawPassword) {
             const cleanUser = (username || 'WarriorCadet').trim();
             const user = getStoredUser();
             user.username = cleanUser;
@@ -686,7 +697,7 @@
             return user;
         },
 
-        register: async function(username, email, rawPassword) {
+        register: async function (username, email, rawPassword) {
             const cleanUser = (username || '').trim();
             const cleanEmail = (email || '').trim().toLowerCase();
             const passwordHash = await hashPassword(rawPassword);
@@ -722,13 +733,13 @@
             return activeUser;
         },
 
-        logout: function() {
+        logout: function () {
             localStorage.removeItem('codequest_user');
             localStorage.removeItem('cq_current_user');
             window.location.href = 'login.html';
         },
 
-        resetProgress: function() {
+        resetProgress: function () {
             const user = getStoredUser();
             user.xp = 0;
             user.level = 1;
@@ -741,7 +752,7 @@
         },
 
         // Mode B: Rapid Concept MCQ Boss Check
-        submitMissionMCQ: function(missionId, optionChar) {
+        submitMissionMCQ: function (missionId, optionChar) {
             const user = getStoredUser();
             const missions = getStoredMissions();
             const mission = missions.find(m => m.id === Number(missionId));
@@ -806,7 +817,7 @@
         },
 
         // Mode A: Interactive Coding Challenge
-        runCode: function(missionId, userCode) {
+        runCode: function (missionId, userCode) {
             const missions = getStoredMissions();
             const mission = missions.find(m => m.id === Number(missionId));
             if (!mission || mission.type !== 'code') {
@@ -815,7 +826,7 @@
             return runCodeSandboxed(userCode, mission.functionName, mission.testCases);
         },
 
-        submitCodeMission: async function(missionId, userCode) {
+        submitCodeMission: async function (missionId, userCode) {
             const user = getStoredUser();
             const missions = getStoredMissions();
             const mission = missions.find(m => m.id === Number(missionId));
@@ -888,7 +899,7 @@
         },
 
         // Admin Mission Management
-        addMission: function(m) {
+        addMission: function (m) {
             const list = getStoredMissions();
             const newId = list.length > 0 ? Math.max(...list.map(x => x.id)) + 1 : 1;
             const isCodeType = m.type === 'code';
@@ -923,14 +934,14 @@
             return created;
         },
 
-        deleteMission: function(id) {
+        deleteMission: function (id) {
             let list = getStoredMissions();
             list = list.filter(m => m.id !== Number(id));
             saveMissions(list);
             return list;
         },
 
-        resetDefaultMissions: function() {
+        resetDefaultMissions: function () {
             saveMissions(DEFAULT_MISSIONS);
             return DEFAULT_MISSIONS;
         }

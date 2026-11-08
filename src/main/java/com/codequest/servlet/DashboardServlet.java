@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.ServletException;
-
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import com.codequest.model.User;
 import com.codequest.util.DBConnection;
 
 public class DashboardServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -37,14 +36,17 @@ public class DashboardServlet extends HttpServlet {
         PreparedStatement countStmt = null;
         PreparedStatement historyStmt = null;
         PreparedStatement totalMissionsStmt = null;
+        PreparedStatement rankStmt = null;
         ResultSet rsUser = null;
         ResultSet rsCount = null;
         ResultSet rsHistory = null;
         ResultSet rsTotal = null;
+        ResultSet rsRank = null;
 
         User student = null;
         int completedMissions = 0;
         int totalAvailableMissions = 0;
+        int userRank = 1;
         List<Submission> recentSubmissions = new ArrayList<>();
 
         try {
@@ -92,9 +94,19 @@ public class DashboardServlet extends HttpServlet {
                 totalAvailableMissions = rsTotal.getInt(1);
             }
 
-            // 4. Fetch recent submission history
+            // 4. Compute dynamic leaderboard rank
+            String rankSql = "SELECT COUNT(*) + 1 AS user_rank FROM users WHERE xp > ?";
+            rankStmt = conn.prepareStatement(rankSql);
+            rankStmt.setInt(1, student.getXp());
+            rsRank = rankStmt.executeQuery();
+            if (rsRank.next()) {
+                userRank = rsRank.getInt("user_rank");
+            }
+
+            // 5. Fetch recent submission history
             String historySql = "SELECT ms.id, ms.user_id, ms.mission_id, ms.selected_option, ms.is_correct, "
-                              + "ms.xp_awarded, ms.submitted_at, m.title, m.category, m.difficulty "
+                              + "ms.xp_awarded, ms.submitted_at, ms.type, ms.submitted_code, ms.execution_time_ms, "
+                              + "m.title, m.category, m.difficulty "
                               + "FROM mission_submissions ms "
                               + "JOIN missions m ON ms.mission_id = m.id "
                               + "WHERE ms.user_id = ? ORDER BY ms.submitted_at DESC LIMIT 5";
@@ -110,7 +122,10 @@ public class DashboardServlet extends HttpServlet {
                     rsHistory.getString("selected_option"),
                     rsHistory.getBoolean("is_correct"),
                     rsHistory.getInt("xp_awarded"),
-                    rsHistory.getTimestamp("submitted_at")
+                    rsHistory.getTimestamp("submitted_at"),
+                    rsHistory.getString("type"),
+                    rsHistory.getString("submitted_code"),
+                    rsHistory.getObject("execution_time_ms") != null ? rsHistory.getInt("execution_time_ms") : null
                 );
                 sub.setMissionTitle(rsHistory.getString("title"));
                 sub.setCategory(rsHistory.getString("category"));
@@ -121,12 +136,14 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("student", student);
             request.setAttribute("completedMissions", completedMissions);
             request.setAttribute("totalAvailableMissions", totalAvailableMissions);
+            request.setAttribute("userRank", userRank);
             request.setAttribute("recentSubmissions", recentSubmissions);
 
         } catch (SQLException e) {
             System.err.println("[DashboardServlet Error] " + e.getMessage());
             request.setAttribute("errorMessage", "Unable to load student telemetry. Please refresh.");
         } finally {
+            DBConnection.close(rsRank, rankStmt, null);
             DBConnection.close(rsUser, rsCount, rsHistory, rsTotal, userStmt, countStmt, historyStmt, totalMissionsStmt, conn);
         }
 
@@ -139,4 +156,3 @@ public class DashboardServlet extends HttpServlet {
         doGet(request, response);
     }
 }
-

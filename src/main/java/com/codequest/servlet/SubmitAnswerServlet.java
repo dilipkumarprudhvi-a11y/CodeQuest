@@ -16,7 +16,7 @@ import com.codequest.model.Mission;
 import com.codequest.util.DBConnection;
 
 public class SubmitAnswerServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private String engineName = "CodeQuest Standard Judge";
 
@@ -40,9 +40,8 @@ public class SubmitAnswerServlet extends HttpServlet {
 
         int userId = (Integer) session.getAttribute("userId");
         String missionIdParam = request.getParameter("missionId");
-        String selectedOption = request.getParameter("selectedOption");
 
-        if (missionIdParam == null || selectedOption == null || selectedOption.trim().isEmpty()) {
+        if (missionIdParam == null || missionIdParam.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/missions?error=Invalid+mission+selection");
             return;
         }
@@ -52,12 +51,6 @@ public class SubmitAnswerServlet extends HttpServlet {
             missionId = Integer.parseInt(missionIdParam.trim());
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/missions?error=Invalid+mission+identifier");
-            return;
-        }
-
-        selectedOption = selectedOption.trim().toUpperCase();
-        if (!selectedOption.matches("^[ABCD]$")) {
-            response.sendRedirect(request.getContextPath() + "/missions?error=Invalid+option+selected");
             return;
         }
 
@@ -79,11 +72,16 @@ public class SubmitAnswerServlet extends HttpServlet {
         int newLevel = oldLevel;
         boolean leveledUp = false;
 
+        String submissionType = request.getParameter("type");
+        String submittedCode = request.getParameter("submittedCode");
+        String selectedOption = request.getParameter("selectedOption");
+        String allPassedParam = request.getParameter("allPassed");
+
         try {
             conn = DBConnection.getConnection();
 
             // 1. One-attempt-per-mission rule enforcement (checked against DB and table constraint)
-            String checkSql = "SELECT id, is_correct, xp_awarded, selected_option FROM mission_submissions WHERE user_id = ? AND mission_id = ?";
+            String checkSql = "SELECT id, is_correct, xp_awarded, selected_option, type FROM mission_submissions WHERE user_id = ? AND mission_id = ?";
             checkSubStmt = conn.prepareStatement(checkSql);
             checkSubStmt.setInt(1, userId);
             checkSubStmt.setInt(2, missionId);
@@ -101,7 +99,8 @@ public class SubmitAnswerServlet extends HttpServlet {
             }
 
             // 2. Retrieve mission details and correct option
-            String missionSql = "SELECT id, title, description, category, difficulty, option_a, option_b, option_c, option_d, correct_option, xp_reward "
+            String missionSql = "SELECT id, title, description, category, difficulty, type, function_name, language, "
+                              + "starter_code, test_cases, option_a, option_b, option_c, option_d, correct_option, xp_reward "
                               + "FROM missions WHERE id = ?";
             missionStmt = conn.prepareStatement(missionSql);
             missionStmt.setInt(1, missionId);
@@ -112,12 +111,20 @@ public class SubmitAnswerServlet extends HttpServlet {
                 return;
             }
 
+            String dbMissionType = rsMission.getString("type");
+            if (dbMissionType == null) dbMissionType = "mcq";
+
             mission = new Mission(
                 rsMission.getInt("id"),
                 rsMission.getString("title"),
                 rsMission.getString("description"),
                 rsMission.getString("category"),
                 rsMission.getString("difficulty"),
+                dbMissionType,
+                rsMission.getString("function_name"),
+                rsMission.getString("language"),
+                rsMission.getString("starter_code"),
+                rsMission.getString("test_cases"),
                 rsMission.getString("option_a"),
                 rsMission.getString("option_b"),
                 rsMission.getString("option_c"),
@@ -127,9 +134,28 @@ public class SubmitAnswerServlet extends HttpServlet {
                 null
             );
 
-            // Compare student choice with correct option
-            String correctOption = mission.getCorrectOption();
-            isCorrect = selectedOption.equalsIgnoreCase(correctOption);
+            // Determine evaluation result based on mission format
+            if ("code".equalsIgnoreCase(dbMissionType)) {
+                submissionType = "code";
+                if (selectedOption == null || selectedOption.trim().isEmpty()) {
+                    selectedOption = "CODE";
+                }
+                isCorrect = "true".equalsIgnoreCase(allPassedParam);
+            } else {
+                submissionType = "mcq";
+                if (selectedOption == null || selectedOption.trim().isEmpty()) {
+                    response.sendRedirect(request.getContextPath() + "/missions?error=Invalid+option+selected");
+                    return;
+                }
+                selectedOption = selectedOption.trim().toUpperCase();
+                if (!selectedOption.matches("^[ABCD]$")) {
+                    response.sendRedirect(request.getContextPath() + "/missions?error=Invalid+option+selected");
+                    return;
+                }
+                String correctOption = mission.getCorrectOption();
+                isCorrect = selectedOption.equalsIgnoreCase(correctOption);
+            }
+
             if (isCorrect) {
                 xpAwarded = mission.getXpReward();
             } else {
@@ -142,14 +168,16 @@ public class SubmitAnswerServlet extends HttpServlet {
             conn.setAutoCommit(false);
 
             // A. Insert submission record into mission_submissions
-            String insertSubSql = "INSERT INTO mission_submissions (user_id, mission_id, selected_option, is_correct, xp_awarded) "
-                                + "VALUES (?, ?, ?, ?, ?)";
+            String insertSubSql = "INSERT INTO mission_submissions (user_id, mission_id, selected_option, is_correct, xp_awarded, type, submitted_code) "
+                                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             insertSubStmt = conn.prepareStatement(insertSubSql);
             insertSubStmt.setInt(1, userId);
             insertSubStmt.setInt(2, missionId);
             insertSubStmt.setString(3, selectedOption);
             insertSubStmt.setBoolean(4, isCorrect);
             insertSubStmt.setInt(5, xpAwarded);
+            insertSubStmt.setString(6, submissionType);
+            insertSubStmt.setString(7, submittedCode);
             insertSubStmt.executeUpdate();
 
             // B. If correct, query current XP and calculate new level using uniform formula
@@ -199,34 +227,42 @@ public class SubmitAnswerServlet extends HttpServlet {
             }
             System.err.println("[SubmitAnswerServlet Error] " + e.getMessage());
 
-            // Handle potential duplicate submission race condition
-            if (e.getErrorCode() == 1062 || (e.getMessage() != null && e.getMessage().toLowerCase().contains("duplicate"))) {
+            // Handle potential duplicate submission race conditions caught by UNIQUE constraint (1062)
+            if (e.getErrorCode() == 1062 || (e.getMessage() != null && e.getMessage().contains("Duplicate entry"))) {
                 request.setAttribute("isDuplicate", true);
-                request.setAttribute("previousChoice", selectedOption);
-                request.setAttribute("wasCorrect", false);
-                request.setAttribute("errorMessage", "Per CodeQuest rules, only one official evaluation attempt is permitted per mission. Your prior submission has already been logged.");
-            } else {
-                request.setAttribute("errorMessage", "Database transaction aborted: " + e.getMessage());
+                request.setAttribute("newLevel", oldLevel);
+                request.setAttribute("newTotalXp", newTotalXp);
+                request.setAttribute("errorMessage", "Duplicate submission attempt rejected. Single-attempt rule strictly enforced.");
+                request.getRequestDispatcher("/mission-result.jsp").forward(request, response);
+                return;
             }
+
+            response.sendRedirect(request.getContextPath() + "/missions?error=Submission+failed.+Please+retry.");
+            return;
         } finally {
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
-                } catch (SQLException ignored) {}
+                } catch (SQLException e) {
+                    // ignore
+                }
             }
-            DBConnection.close(rsCheck, rsMission, rsUser, checkSubStmt, missionStmt, insertSubStmt, userStmt, updateUserStmt, conn);
+            DBConnection.close(rsUser, updateUserStmt, null);
+            DBConnection.close(rsCheck, checkSubStmt, null);
+            DBConnection.close(rsMission, missionStmt, null);
+            DBConnection.close(insertSubStmt, userStmt, conn);
         }
 
-        // Forward outcome data to mission-result.jsp
-        request.setAttribute("mission", mission);
-        request.setAttribute("selectedOption", selectedOption);
+        request.setAttribute("isDuplicate", false);
         request.setAttribute("isCorrect", isCorrect);
         request.setAttribute("xpAwarded", xpAwarded);
         request.setAttribute("newTotalXp", newTotalXp);
         request.setAttribute("oldLevel", oldLevel);
         request.setAttribute("newLevel", newLevel);
         request.setAttribute("leveledUp", leveledUp);
+        request.setAttribute("selectedOption", selectedOption);
         request.setAttribute("judgeEngine", engineName);
+        request.setAttribute("mission", mission);
 
         request.getRequestDispatcher("/mission-result.jsp").forward(request, response);
     }

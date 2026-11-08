@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.ServletException;
-
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +17,7 @@ import com.codequest.model.Mission;
 import com.codequest.util.DBConnection;
 
 public class ViewQuestionsServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -29,20 +28,8 @@ public class ViewQuestionsServlet extends HttpServlet {
             return;
         }
 
-        String action = request.getParameter("action");
-        String idParam = request.getParameter("id");
-
-        // Optional Delete Action
-        if ("delete".equalsIgnoreCase(action) && idParam != null) {
-            try {
-                int missionId = Integer.parseInt(idParam.trim());
-                deleteMission(missionId);
-                response.sendRedirect(request.getContextPath() + "/view-questions?deleted=true");
-                return;
-            } catch (Exception e) {
-                request.setAttribute("errorMessage", "Failed to delete mission: " + e.getMessage());
-            }
-        }
+        // Deletion via GET is intentionally removed to prevent CSRF vulnerabilities.
+        // All destructive administrative operations must be processed via POST.
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -51,7 +38,8 @@ public class ViewQuestionsServlet extends HttpServlet {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT id, title, description, category, difficulty, option_a, option_b, option_c, option_d, correct_option, xp_reward, created_at "
+            String sql = "SELECT id, title, description, category, difficulty, type, function_name, language, "
+                       + "starter_code, test_cases, option_a, option_b, option_c, option_d, correct_option, xp_reward, created_at "
                        + "FROM missions ORDER BY id DESC";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
@@ -63,6 +51,11 @@ public class ViewQuestionsServlet extends HttpServlet {
                     rs.getString("description"),
                     rs.getString("category"),
                     rs.getString("difficulty"),
+                    rs.getString("type"),
+                    rs.getString("function_name"),
+                    rs.getString("language"),
+                    rs.getString("starter_code"),
+                    rs.getString("test_cases"),
                     rs.getString("option_a"),
                     rs.getString("option_b"),
                     rs.getString("option_c"),
@@ -105,8 +98,11 @@ public class ViewQuestionsServlet extends HttpServlet {
                 deleteMission(missionId);
                 response.sendRedirect(request.getContextPath() + "/view-questions?deleted=true");
                 return;
-            } catch (Exception e) {
-                System.err.println("[Delete Mission Error] " + e.getMessage());
+            } catch (NumberFormatException nfe) {
+                request.setAttribute("errorMessage", "Invalid mission identifier for deletion.");
+            } catch (SQLException sqle) {
+                System.err.println("[Delete Mission Error] " + sqle.getMessage());
+                request.setAttribute("errorMessage", "Database error while deleting mission: " + sqle.getMessage());
             }
         }
         doGet(request, response);
@@ -126,4 +122,3 @@ public class ViewQuestionsServlet extends HttpServlet {
         }
     }
 }
-

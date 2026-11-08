@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jakarta.servlet.ServletException;
-
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +19,7 @@ import com.codequest.model.Mission;
 import com.codequest.util.DBConnection;
 
 public class MissionServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -34,6 +33,7 @@ public class MissionServlet extends HttpServlet {
         int userId = (Integer) session.getAttribute("userId");
         String categoryFilter = request.getParameter("category");
         String difficultyFilter = request.getParameter("difficulty");
+        String typeFilter = request.getParameter("type");
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -42,24 +42,29 @@ public class MissionServlet extends HttpServlet {
         ResultSet rsSub = null;
 
         List<Mission> missionsList = new ArrayList<>();
-        // Map of missionId -> submitted selected option (to track completed quests)
+        // Map of missionId -> submitted selected option / code submission status
         Map<Integer, String> solvedMap = new HashMap<>();
 
         try {
             conn = DBConnection.getConnection();
 
             // 1. Fetch user's prior submissions to flag solved quests
-            String subSql = "SELECT mission_id, selected_option FROM mission_submissions WHERE user_id = ?";
+            String subSql = "SELECT mission_id, selected_option, submitted_code FROM mission_submissions WHERE user_id = ?";
             subStmt = conn.prepareStatement(subSql);
             subStmt.setInt(1, userId);
             rsSub = subStmt.executeQuery();
             while (rsSub.next()) {
-                solvedMap.put(rsSub.getInt("mission_id"), rsSub.getString("selected_option"));
+                String choice = rsSub.getString("selected_option");
+                if (choice == null || choice.trim().isEmpty()) {
+                    choice = "SOLVED";
+                }
+                solvedMap.put(rsSub.getInt("mission_id"), choice);
             }
 
             // 2. Fetch missions according to filters
             StringBuilder sql = new StringBuilder(
-                "SELECT id, title, description, category, difficulty, option_a, option_b, option_c, option_d, xp_reward, created_at "
+                "SELECT id, title, description, category, difficulty, type, function_name, language, "
+                + "starter_code, test_cases, option_a, option_b, option_c, option_d, xp_reward, created_at "
                 + "FROM missions WHERE 1=1 "
             );
 
@@ -71,6 +76,10 @@ public class MissionServlet extends HttpServlet {
             if (difficultyFilter != null && !difficultyFilter.trim().isEmpty() && !"All".equalsIgnoreCase(difficultyFilter)) {
                 sql.append("AND difficulty = ? ");
                 params.add(difficultyFilter.trim());
+            }
+            if (typeFilter != null && !typeFilter.trim().isEmpty() && !"All".equalsIgnoreCase(typeFilter)) {
+                sql.append("AND type = ? ");
+                params.add(typeFilter.trim().toLowerCase());
             }
 
             sql.append("ORDER BY id ASC");
@@ -90,6 +99,11 @@ public class MissionServlet extends HttpServlet {
                     rs.getString("description"),
                     rs.getString("category"),
                     rs.getString("difficulty"),
+                    rs.getString("type"),
+                    rs.getString("function_name"),
+                    rs.getString("language"),
+                    rs.getString("starter_code"),
+                    rs.getString("test_cases"),
                     rs.getString("option_a"),
                     rs.getString("option_b"),
                     rs.getString("option_c"),
@@ -112,6 +126,7 @@ public class MissionServlet extends HttpServlet {
             request.setAttribute("missionsList", missionsList);
             request.setAttribute("selectedCategory", categoryFilter != null ? categoryFilter : "All");
             request.setAttribute("selectedDifficulty", difficultyFilter != null ? difficultyFilter : "All");
+            request.setAttribute("selectedType", typeFilter != null ? typeFilter : "All");
             request.setAttribute("totalCount", missionsList.size());
             request.setAttribute("solvedCount", solvedMap.size());
 
@@ -132,4 +147,3 @@ public class MissionServlet extends HttpServlet {
         doGet(request, response);
     }
 }
-

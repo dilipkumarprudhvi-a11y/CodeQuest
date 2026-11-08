@@ -14,11 +14,13 @@
     User student = (User) request.getAttribute("student");
     Integer completedMissionsObj = (Integer) request.getAttribute("completedMissions");
     Integer totalAvailableObj = (Integer) request.getAttribute("totalAvailableMissions");
+    Integer userRankObj = (Integer) request.getAttribute("userRank");
     List<Submission> recentSubmissions = (List<Submission>) request.getAttribute("recentSubmissions");
     String errorMessage = (String) request.getAttribute("errorMessage");
 
     int completedCount = (completedMissionsObj != null) ? completedMissionsObj : 0;
     int totalCount = (totalAvailableObj != null) ? totalAvailableObj : 0;
+    int userRank = (userRankObj != null) ? userRankObj : 1;
 
     if (student == null) {
         // Fallback to session values if direct navigation occurred
@@ -41,6 +43,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= student.getUsername() %> - Student Cockpit - CodeQuest</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23000000'/%3E%3Ctext x='50' y='65' font-family='sans-serif' font-size='50' font-weight='900' fill='%23FFFF00' text-anchor='middle'%3ECQ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <canvas id="cyber-canvas"></canvas>
@@ -71,7 +74,6 @@
             <div class="container">
                 <% if (errorMessage != null && !errorMessage.trim().isEmpty()) { %>
                     <div class="alert alert-danger">
-                        
                         <div><%= errorMessage %></div>
                     </div>
                 <% } %>
@@ -111,6 +113,10 @@
                         <div class="stat-block">
                             <div class="stat-block-num cyan"><%= completedCount %> / <%= totalCount %></div>
                             <div class="stat-block-text">Missions Conquered</div>
+                        </div>
+                        <div class="stat-block">
+                            <div class="stat-block-num gold">#<%= userRank %></div>
+                            <div class="stat-block-text">Global Standing</div>
                         </div>
                     </div>
                 </div>
@@ -157,7 +163,7 @@
                                     <thead>
                                         <tr>
                                             <th>Mission</th>
-                                            <th>Choice</th>
+                                            <th>Mode / Choice</th>
                                             <th>Evaluation</th>
                                             <th>XP Gain</th>
                                         </tr>
@@ -178,9 +184,13 @@
                                                     <% } %>
                                                 </td>
                                                 <td>
-                                                    <span style="font-family: var(--font-code); color: var(--cyber-cyan); font-weight: 700;">
-                                                        [<%= sub.getSelectedOption() %>]
-                                                    </span>
+                                                    <% if ("code".equalsIgnoreCase(sub.getType())) { %>
+                                                        <span style="font-family: var(--font-code); color: var(--neon-cyan); font-weight: 700;">[CODE ARENA]</span>
+                                                    <% } else { %>
+                                                        <span style="font-family: var(--font-code); color: var(--cyber-cyan); font-weight: 700;">
+                                                            [<%= (sub.getSelectedOption() != null ? sub.getSelectedOption() : "-") %>]
+                                                        </span>
+                                                    <% } %>
                                                 </td>
                                                 <td>
                                                     <% if (sub.isCorrect()) { %>
@@ -205,42 +215,62 @@
                             </div>
                         <% } else { %>
                             <div class="empty-state" style="padding: 2.5rem 1rem;">
-                                <div class="empty-state-icon" style="font-size: 1.2rem; font-weight: 800;">NONE</div>
-                                <h4 style="color: var(--text-pure); margin-bottom: 0.5rem; font-family: var(--font-heading);">
-                                    Zero Quests Undertaken
-                                </h4>
-                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.25rem;">
-                                    Your combat log is empty. Deploy to the Programming Missions arena to test your skills!
+                                <div class="empty-state-icon">ARENA</div>
+                                <h4 style="color: var(--text-pure); margin-bottom: 0.4rem;">Zero Combat Telemetry</h4>
+                                <p style="color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.9rem;">
+                                    You have not engaged in algorithmic combat yet. Enter the Arena to harvest XP!
                                 </p>
-                                <a href="missions" class="btn btn-primary btn-sm">Launch Available Missions</a>
+                                <a href="missions" class="btn btn-primary btn-sm">Start First Mission</a>
                             </div>
                         <% } %>
                     </div>
 
-                    <!-- Right: Quick Navigation Card -->
-                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                        <div class="card" style="padding: 1.75rem; background: linear-gradient(180deg, rgba(0,245,160,0.06), var(--bg-surface));">
-                            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--neon-emerald); margin-bottom: 0.75rem;">
-                                Deploy to Missions
-                            </h3>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
-                                Ready to earn more XP? Solve Java syntax puzzles, SQL transaction problems, and algorithmic benchmarks.
-                            </p>
-                            <a href="missions" class="btn btn-primary" style="width: 100%;">
-                                Launch Missions Deck
-                            </a>
-                        </div>
+                    <!-- Right: Rank Progression Roadmap -->
+                    <div class="card" style="padding: 1.75rem;">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.35rem; color: var(--text-pure); margin-bottom: 1.25rem;">
+                            Cadet Tier Hierarchy
+                        </h3>
 
-                        <div class="card" style="padding: 1.75rem; background: linear-gradient(180deg, rgba(255,184,0,0.06), var(--bg-surface));">
-                            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--solar-gold); margin-bottom: 0.75rem;">
-                                Global Ranking
-                            </h3>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
-                                Check your placement on the global leaderboard against all registered warriors.
-                            </p>
-                            <a href="leaderboard" class="btn btn-outline" style="width: 100%; border-color: var(--border-gold); color: var(--solar-gold);">
-                                Inspect Leaderboard
-                            </a>
+                        <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 6px; background: <%= student.getLevel() >= 1 ? "rgba(0, 245, 160, 0.08)" : "transparent" %>; border-left: 3px solid <%= student.getLevel() >= 1 ? "var(--neon-emerald)" : "var(--border-subtle)" %>;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-pure);">Level 1: Novice Cadet</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">0 - 99 XP</div>
+                                </div>
+                                <% if (student.getLevel() >= 1) { %><span style="color: var(--neon-emerald); font-size: 0.8rem; font-weight: 700;">CURRENT</span><% } %>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 6px; background: <%= student.getLevel() >= 2 ? "rgba(0, 245, 160, 0.08)" : "transparent" %>; border-left: 3px solid <%= student.getLevel() >= 2 ? "var(--neon-emerald)" : "var(--border-subtle)" %>;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-pure);">Level 2: Syntax Apprentice</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">100 - 199 XP</div>
+                                </div>
+                                <% if (student.getLevel() >= 2) { %><span style="color: var(--neon-emerald); font-size: 0.8rem; font-weight: 700;">CURRENT</span><% } %>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 6px; background: <%= student.getLevel() >= 3 ? "rgba(0, 245, 160, 0.08)" : "transparent" %>; border-left: 3px solid <%= student.getLevel() >= 3 ? "var(--neon-emerald)" : "var(--border-subtle)" %>;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-pure);">Level 3: Kernel Warrior</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">200 - 299 XP</div>
+                                </div>
+                                <% if (student.getLevel() >= 3) { %><span style="color: var(--neon-emerald); font-size: 0.8rem; font-weight: 700;">CURRENT</span><% } %>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 6px; background: <%= student.getLevel() >= 4 ? "rgba(0, 245, 160, 0.08)" : "transparent" %>; border-left: 3px solid <%= student.getLevel() >= 4 ? "var(--neon-emerald)" : "var(--border-subtle)" %>;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-pure);">Level 4: Code Vanguard</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">300 - 399 XP</div>
+                                </div>
+                                <% if (student.getLevel() >= 4) { %><span style="color: var(--neon-emerald); font-size: 0.8rem; font-weight: 700;">CURRENT</span><% } %>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 6px; background: <%= student.getLevel() >= 5 ? "rgba(0, 245, 160, 0.08)" : "transparent" %>; border-left: 3px solid <%= student.getLevel() >= 5 ? "var(--solar-gold)" : "var(--border-subtle)" %>;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-pure);">Level 5: Cyber Grandmaster</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">400+ XP (Apex Tier)</div>
+                                </div>
+                                <% if (student.getLevel() >= 5) { %><span style="color: var(--solar-gold); font-size: 0.8rem; font-weight: 700;">APEX</span><% } %>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -248,7 +278,7 @@
         </main>
 
         <footer class="footer">
-            <p>&copy; 2026 CodeQuest Learning Game. Module 8: Student Dashboard &amp; Progress Tracking.</p>
+            <p>&copy; 2026 CodeQuest Learning Game. Module 8: Cadet Cockpit Telemetry.</p>
         </footer>
     </div>
 
@@ -256,4 +286,3 @@
     <script src="js/game-fx.js"></script>
 </body>
 </html>
-
