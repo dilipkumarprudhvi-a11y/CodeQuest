@@ -24,3 +24,4 @@ RUN printf '#!/bin/sh\nif [ -n "$PORT" ]; then\n  sed -i "s/port=\\"8080\\"/port
 
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
+

@@ -944,6 +944,61 @@
         resetDefaultMissions: function () {
             saveMissions(DEFAULT_MISSIONS);
             return DEFAULT_MISSIONS;
+        },
+
+        // Mobile Collapsible Mission Briefing Toggle
+        injectMobileBriefingToggles: function (rootElement) {
+            const root = rootElement || (typeof document !== 'undefined' ? document : null);
+            if (!root) return;
+
+            const descriptions = root.querySelectorAll('.quest-desc');
+            descriptions.forEach(function (desc) {
+                // Prevent duplicate injection
+                const prev = desc.previousElementSibling;
+                if (prev && prev.classList && prev.classList.contains('mobile-briefing-toggle')) {
+                    return;
+                }
+
+                const toggleBtn = document.createElement('button');
+                toggleBtn.type = 'button';
+                toggleBtn.className = 'mobile-briefing-toggle';
+                toggleBtn.setAttribute('aria-expanded', 'true');
+                toggleBtn.innerHTML = '<span>MISSION BRIEFING</span><span class="toggle-state-label">[- HIDE BRIEFING]</span>';
+
+                toggleBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isCollapsed = desc.classList.toggle('mission-desc-collapsed');
+                    toggleBtn.setAttribute('aria-expanded', (!isCollapsed).toString());
+                    const stateLabel = toggleBtn.querySelector('.toggle-state-label');
+                    if (stateLabel) {
+                        stateLabel.textContent = isCollapsed ? '[+ SHOW BRIEFING]' : '[- HIDE BRIEFING]';
+                    }
+                });
+
+                desc.parentNode.insertBefore(toggleBtn, desc);
+            });
         }
     };
+
+    // Automatically inject mobile briefing toggles on DOM ready and observe dynamic container updates
+    if (typeof document !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', function () {
+            if (CodeQuestEngine && CodeQuestEngine.injectMobileBriefingToggles) {
+                CodeQuestEngine.injectMobileBriefingToggles();
+            }
+
+            const targetContainer = document.getElementById('missions-container') ||
+                                    document.querySelector('.missions-deck') ||
+                                    document.querySelector('.quests-deck');
+            if (targetContainer && window.MutationObserver) {
+                const observer = new MutationObserver(function () {
+                    if (CodeQuestEngine && CodeQuestEngine.injectMobileBriefingToggles) {
+                        CodeQuestEngine.injectMobileBriefingToggles(targetContainer);
+                    }
+                });
+                observer.observe(targetContainer, { childList: true, subtree: true });
+            }
+        });
+    }
 })(window);
