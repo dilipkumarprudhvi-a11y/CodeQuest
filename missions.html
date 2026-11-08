@@ -382,6 +382,10 @@
 
                     container.appendChild(card);
                 });
+
+                if (CodeQuestEngine.injectMobileBriefingToggles) {
+                    CodeQuestEngine.injectMobileBriefingToggles(container);
+                }
             }
 
             function renderTestResults(targetEl, result) {
