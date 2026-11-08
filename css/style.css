@@ -1849,31 +1849,135 @@ textarea.form-control {
     }
 }
 
+/* ========================================================
+   RESPONSIVE DESIGN & MOBILE ENHANCEMENTS
+   ======================================================== */
 @media (max-width: 820px) {
     .navbar {
-        border-radius: 20px;
-        top: 10px;
-        width: calc(100% - 1.25rem);
-        padding: 0.45rem 0.85rem;
+        border-radius: 16px;
+        top: 6px;
+        width: calc(100% - 0.75rem);
+        padding: 0.4rem 0.6rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
-    .nav-links {
+    .brand-badge {
         display: none;
     }
 
+    .nav-links {
+        display: flex !important;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 0.25rem;
+        width: 100%;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .nav-links::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-links a {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+
     .content-wrapper {
-        padding-top: 76px;
+        padding-top: 105px;
+    }
+
+    .hero-title {
+        font-size: 2.3rem;
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-grid-2,
+    .form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
-.hero-title {
-    font-size: 2.2rem;
+@media (max-width: 580px) {
+    .hero-title {
+        font-size: 1.85rem;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .missions-deck,
+    .quests-deck {
+        grid-template-columns: 1fr;
+    }
+
+    .code-editor-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .code-actions-bar {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .code-actions-bar .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-responsive,
+    .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-actions {
+        gap: 0.35rem;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+    }
 }
 
-.hero-stats {
-    grid-template-columns: 1fr;
+/* ========================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ======================================================== */
+:focus-visible {
+    outline: 3px solid var(--neon-cyan, #00f0ff) !important;
+    outline-offset: 2px !important;
 }
 
-.form-grid-2 {
-    grid-template-columns: 1fr;
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    #cyber-canvas {
+        display: none !important;
+    }
 }
