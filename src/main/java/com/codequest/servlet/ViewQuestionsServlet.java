@@ -20,7 +20,7 @@ public class ViewQuestionsServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("adminId") == null) {
@@ -39,31 +39,30 @@ public class ViewQuestionsServlet extends HttpServlet {
         try {
             conn = DBConnection.getConnection();
             String sql = "SELECT id, title, description, category, difficulty, type, function_name, language, "
-                       + "starter_code, test_cases, option_a, option_b, option_c, option_d, correct_option, xp_reward, created_at "
-                       + "FROM missions ORDER BY id DESC";
+                    + "starter_code, test_cases, option_a, option_b, option_c, option_d, correct_option, xp_reward, created_at "
+                    + "FROM missions ORDER BY id DESC";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Mission m = new Mission(
-                    rs.getInt("id"),
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("category"),
-                    rs.getString("difficulty"),
-                    rs.getString("type"),
-                    rs.getString("function_name"),
-                    rs.getString("language"),
-                    rs.getString("starter_code"),
-                    rs.getString("test_cases"),
-                    rs.getString("option_a"),
-                    rs.getString("option_b"),
-                    rs.getString("option_c"),
-                    rs.getString("option_d"),
-                    rs.getString("correct_option"),
-                    rs.getInt("xp_reward"),
-                    rs.getTimestamp("created_at")
-                );
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getString("difficulty"),
+                        rs.getString("type"),
+                        rs.getString("function_name"),
+                        rs.getString("language"),
+                        rs.getString("starter_code"),
+                        rs.getString("test_cases"),
+                        rs.getString("option_a"),
+                        rs.getString("option_b"),
+                        rs.getString("option_c"),
+                        rs.getString("option_d"),
+                        rs.getString("correct_option"),
+                        rs.getInt("xp_reward"),
+                        rs.getTimestamp("created_at"));
                 missionsList.add(m);
             }
 
@@ -81,7 +80,7 @@ public class ViewQuestionsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("adminId") == null) {

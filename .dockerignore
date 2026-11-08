@@ -1,0 +1,9 @@
+.git
+.idea
+.vscode
+target
+docs
+scratch
+*.zip
+*.log
+*.tmp
