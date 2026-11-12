@@ -28,19 +28,24 @@
         <param-value>admin@codequest.dev</param-value>
     </context-param>
 
-    <!-- MySQL Database Connection Parameters -->
+    <!-- Production MySQL / TiDB Cloud Connection Parameters -->
     <context-param>
         <param-name>db.url</param-name>
-        <param-value>jdbc:mysql://localhost:3306/codequest_db?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8</param-value>
+        <param-value>jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/codequest_db?useSSL=true&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8</param-value>
     </context-param>
     <context-param>
         <param-name>db.user</param-name>
-        <param-value>root</param-value>
+        <param-value>38AoYnra5uUE3k9.root</param-value>
     </context-param>
     <context-param>
         <param-name>db.password</param-name>
-        <param-value>@123Kumar</param-value>
+        <param-value>0YzGWKOyksUpTdpN</param-value>
     </context-param>
+
+    <!-- Application Lifecycle Listener -->
+    <listener>
+        <listener-class>com.codequest.util.AppContextListener</listener-class>
+    </listener>
 
     <!-- Security Headers Filter -->
     <filter>
@@ -49,6 +54,7 @@
     </filter>
     <filter-mapping>
         <filter-name>SecurityHeadersFilter</filter-name>
+        <filter-class>com.codequest.filter.SecurityHeadersFilter</filter-class>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

@@ -119,7 +119,8 @@ public class RegisterServlet extends HttpServlet {
 
         } catch (SQLException e) {
             System.err.println("[RegisterServlet Error] " + e.getMessage());
-            request.setAttribute("errorMessage", "Database transaction failed. Please try again later.");
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Database transaction failed: " + e.getMessage());
             request.getRequestDispatcher("/register.jsp").forward(request, response);
         } finally {
             DBConnection.close(rs, checkStmt, insertStmt, conn);

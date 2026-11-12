@@ -124,7 +124,8 @@ public class LoginServlet extends HttpServlet {
 
         } catch (SQLException e) {
             System.err.println("[LoginServlet Error] " + e.getMessage());
-            request.setAttribute("errorMessage", "Authentication service error. Please try again.");
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Authentication service error: " + e.getMessage());
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         } finally {
             DBConnection.close(rs, stmt, conn);

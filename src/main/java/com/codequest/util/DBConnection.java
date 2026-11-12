@@ -8,18 +8,20 @@ import java.sql.SQLException;
 /**
  * Reusable Database Connection Manager for CodeQuest
  * Implements cloud-aware JDBC connection management supporting:
- * 1. Railway native environment variables (MYSQLHOST, MYSQLPORT, MYSQLUSER, MYSQLPASSWORD, MYSQLDATABASE)
- * 2. Standard connection URIs (MYSQL_URL, DATABASE_URL)
- * 3. Standard JDBC environment variables (DB_URL, DB_USER, DB_PASSWORD)
- * 4. Local developer MySQL fallback
+ * 1. Cloud environment variables (DB_URL, DB_USER, DB_PASSWORD)
+ * 2. Railway / Heroku connection URIs (MYSQL_URL, DATABASE_URL)
+ * 3. Individual cloud host parameters (MYSQLHOST, MYSQLPORT, MYSQLUSER, MYSQLPASSWORD, MYSQLDATABASE)
+ * 4. Context parameters configured via web.xml or AppContextListener
+ * 5. Production cloud cluster fallback (TiDB Cloud Serverless / MySQL 8.0)
  */
 public class DBConnection {
 
-    private static final String DEFAULT_HOST = "localhost";
-    private static final String DEFAULT_PORT = "3306";
+    // Default Production Cloud Cluster (TiDB Cloud Serverless)
+    private static final String DEFAULT_HOST = "gateway01.ap-southeast-1.prod.aws.tidbcloud.com";
+    private static final String DEFAULT_PORT = "4000";
     private static final String DEFAULT_DB = "codequest_db";
-    private static final String DEFAULT_USER = "root";
-    private static final String DEFAULT_PASS = "@123Kumar"; // Local developer fallback
+    private static final String DEFAULT_USER = "38AoYnra5uUE3k9.root";
+    private static final String DEFAULT_PASS = "0YzGWKOyksUpTdpN";
 
     private static String configuredUrl = null;
     private static String configuredUser = null;
@@ -37,7 +39,7 @@ public class DBConnection {
     }
 
     /**
-     * Manually configure credentials at runtime
+     * Manually configure credentials at runtime (e.g. from web.xml context-params)
      */
     public static void configure(String url, String user, String pass) {
         if (url != null && !url.trim().isEmpty()) configuredUrl = url.trim();
@@ -46,9 +48,7 @@ public class DBConnection {
     }
 
     public static String getDbUrl() {
-        if (configuredUrl != null) return configuredUrl;
-
-        // 1. Direct explicit DB_URL
+        // 1. Direct explicit DB_URL from environment variable or system property
         String env = System.getenv("DB_URL");
         if (env != null && !env.trim().isEmpty()) return env.trim();
         String prop = System.getProperty("DB_URL");
@@ -68,7 +68,8 @@ public class DBConnection {
                     String host = uri.getHost();
                     int port = uri.getPort() > 0 ? uri.getPort() : 3306;
                     String path = uri.getPath() != null && uri.getPath().length() > 1 ? uri.getPath().substring(1) : DEFAULT_DB;
-                    return "jdbc:mysql://" + host + ":" + port + "/" + path + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
+                    String ssl = isLocal(host) ? "useSSL=false" : "useSSL=true";
+                    return "jdbc:mysql://" + host + ":" + port + "/" + path + "?" + ssl + "&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
                 }
             } catch (Exception e) {
                 System.err.println("[DBConnection] Could not parse raw connection URI: " + e.getMessage());
@@ -83,16 +84,18 @@ public class DBConnection {
         if (host != null && !host.trim().isEmpty()) {
             if (port == null || port.trim().isEmpty()) port = DEFAULT_PORT;
             if (dbName == null || dbName.trim().isEmpty()) dbName = DEFAULT_DB;
-            return "jdbc:mysql://" + host.trim() + ":" + port.trim() + "/" + dbName.trim() + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
+            String ssl = isLocal(host) ? "useSSL=false" : "useSSL=true";
+            return "jdbc:mysql://" + host.trim() + ":" + port.trim() + "/" + dbName.trim() + "?" + ssl + "&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
         }
 
-        // 4. Fallback to local default URL
-        return "jdbc:mysql://" + DEFAULT_HOST + ":" + DEFAULT_PORT + "/" + DEFAULT_DB + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
+        // 4. Runtime configured URL from web.xml context parameter
+        if (configuredUrl != null) return configuredUrl;
+
+        // 5. Default fallback to production cloud cluster
+        return "jdbc:mysql://" + DEFAULT_HOST + ":" + DEFAULT_PORT + "/" + DEFAULT_DB + "?useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8";
     }
 
     public static String getDbUser() {
-        if (configuredUser != null) return configuredUser;
-
         // 1. Direct explicit DB_USER
         String env = System.getenv("DB_USER");
         if (env != null && !env.trim().isEmpty()) return env.trim();
@@ -116,12 +119,13 @@ public class DBConnection {
             } catch (Exception ignored) {}
         }
 
+        // 4. Runtime configured user from web.xml
+        if (configuredUser != null) return configuredUser;
+
         return DEFAULT_USER;
     }
 
     public static String getDbPassword() {
-        if (configuredPassword != null) return configuredPassword;
-
         // 1. Direct explicit DB_PASSWORD
         String env = System.getenv("DB_PASSWORD");
         if (env != null) return env.trim();
@@ -129,7 +133,7 @@ public class DBConnection {
         if (prop != null) return prop.trim();
 
         // 2. Cloud parameter fallbacks (Railway, etc.)
-        String pass = getEnvAny("MYSQLPASSWORD", "MYSQL_PASSWORD");
+        String pass = getEnvAny("MYSQLPASSWORD", "MYSQL_PASSWORD", "DB_PASS");
         if (pass != null) return pass.trim();
 
         // 3. Parse from MYSQL_URL or DATABASE_URL if present
@@ -145,7 +149,16 @@ public class DBConnection {
             } catch (Exception ignored) {}
         }
 
+        // 4. Runtime configured password from web.xml
+        if (configuredPassword != null) return configuredPassword;
+
         return DEFAULT_PASS;
+    }
+
+    private static boolean isLocal(String host) {
+        if (host == null) return false;
+        String h = host.trim().toLowerCase();
+        return h.equals("localhost") || h.equals("127.0.0.1") || h.equals("::1");
     }
 
     private static String getEnvAny(String... keys) {
