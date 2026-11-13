@@ -150,12 +150,36 @@
                             <% } %>
                         </p>
 
+                        <%-- Show correct answer reveal for MCQ missions --%>
+                        <% if (!isCodeSubmission && mission != null && mission.getCorrectOption() != null) {
+                            String correctOpt = mission.getCorrectOption().toUpperCase();
+                            String correctText = "";
+                            if ("A".equals(correctOpt) && mission.getOptionA() != null) correctText = mission.getOptionA();
+                            else if ("B".equals(correctOpt) && mission.getOptionB() != null) correctText = mission.getOptionB();
+                            else if ("C".equals(correctOpt) && mission.getOptionC() != null) correctText = mission.getOptionC();
+                            else if ("D".equals(correctOpt) && mission.getOptionD() != null) correctText = mission.getOptionD();
+                        %>
+                        <div style="background: rgba(0, 255, 136, 0.06); border: 1.5px solid rgba(0, 255, 136, 0.35); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; text-align: left;">
+                            <h4 style="color: var(--neon-emerald); font-family: var(--font-heading); margin-bottom: 0.5rem; font-size: 0.85rem; letter-spacing: 0.08em;">
+                                CORRECT ANSWER REVEALED:
+                            </h4>
+                            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                <span style="background: var(--neon-emerald); color: #000; font-weight: 900; font-family: var(--font-heading); font-size: 0.95rem; padding: 0.2rem 0.6rem; border-radius: 4px; flex-shrink: 0;">
+                                    Option <%= SecurityUtil.encodeHtml(correctOpt) %>
+                                </span>
+                                <span style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5;">
+                                    <%= SecurityUtil.encodeHtml(correctText) %>
+                                </span>
+                            </div>
+                        </div>
+                        <% } %>
+
                         <div style="background: rgba(255, 51, 102, 0.08); border: 1px solid rgba(255, 51, 102, 0.25); border-radius: 10px; padding: 1.25rem; margin-bottom: 2rem; text-align: left;">
                             <h4 style="color: var(--danger-crimson); font-family: var(--font-heading); margin-bottom: 0.35rem;">
                                 Technical Debrief:
                             </h4>
                             <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
-                                Zero XP was awarded for this attempt. Per project rules, your attempt has been recorded. Review core language concepts, analyze memory diagrams, and conquer the remaining missions!
+                                Zero XP was awarded for this attempt. Per project rules, your attempt has been recorded. Study the correct answer above, review core language concepts, and conquer the remaining missions!
                             </p>
                         </div>
 
